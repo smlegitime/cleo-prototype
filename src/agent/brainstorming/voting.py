@@ -59,20 +59,20 @@ def _advance_setup_stage_fully(setup_stage: str | None, config: dict, classifica
         stage = nxt
 
 
-def approvals_needed(non_ai_member_count: int) -> int:
-    """How many approvals carry a vote: a majority of non-AI members, or one in small channels.
+def approvals_needed(voting_member_count: int) -> int:
+    """How many approvals carry a vote: a majority of voting members, or one in small channels.
 
     The counterpart of _threshold_met — same rule, stated as a number so CLEO can tell the group
     what a pending vote is still waiting on.
     """
-    if non_ai_member_count > MAJORITY_THRESHOLD:
-        return non_ai_member_count // 2 + 1
+    if voting_member_count > MAJORITY_THRESHOLD:
+        return voting_member_count // 2 + 1
     return 1
 
 
-def _threshold_met(approved_by: list, non_ai_member_count: int) -> bool:
+def _threshold_met(approved_by: list, voting_member_count: int) -> bool:
     """Majority of non-AI members, or a single approval in small channels."""
-    return len(approved_by) >= approvals_needed(non_ai_member_count)
+    return len(approved_by) >= approvals_needed(voting_member_count)
 
 
 def superseded_entries(suggestions: dict | None, keep_message_id: str) -> dict:
@@ -122,7 +122,7 @@ async def process_approval_vote(
     channel_id: str,
     message_id: str,
     reactor_user_id: str,
-    non_ai_member_count: int,) -> str | None:
+    voting_member_count: int,) -> str | None:
     """Record an approval vote and apply the proposal if the threshold is met.
 
     Returns "proposal" or "rules" indicating what kind of suggestion was applied,
@@ -162,11 +162,11 @@ async def process_approval_vote(
         {state_key: {message_id: {**suggestion, "approved_by": approved_by}}},
     )
 
-    threshold_met = _threshold_met(approved_by, non_ai_member_count)
+    threshold_met = _threshold_met(approved_by, voting_member_count)
 
     logger.info(
         "Vote on message %s (%s): %d/%d approvals (threshold_met=%s)",
-        message_id, kind, len(approved_by), non_ai_member_count, threshold_met,
+        message_id, kind, len(approved_by), voting_member_count, threshold_met,
     )
 
     if not threshold_met:
@@ -254,7 +254,7 @@ async def process_preview_approval(
     channel_id: str,
     message_id: str,
     reactor_user_id: str,
-    non_ai_member_count: int,
+    voting_member_count: int,
 ) -> bool:
     """Record an approval reaction on the preview-approval message; advance to bundle generation if met.
 
@@ -274,14 +274,14 @@ async def process_preview_approval(
 
     approved_by = list(set(pending.get("approved_by", []) + [reactor_user_id]))
 
-    if not _threshold_met(approved_by, non_ai_member_count):
+    if not _threshold_met(approved_by, voting_member_count):
         await asyncio.to_thread(
             graph.update_state, config,
             {"pending_preview_approval": {**pending, "approved_by": approved_by}},
         )
         logger.info(
             "Preview-approval vote on %s: %d/%d approvals (not yet met)",
-            message_id, len(approved_by), non_ai_member_count,
+            message_id, len(approved_by), voting_member_count,
         )
         return False
 
@@ -301,7 +301,7 @@ async def process_deploy_approval(
     channel_id: str,
     message_id: str,
     reactor_user_id: str,
-    non_ai_member_count: int,
+    voting_member_count: int,
 ) -> bool:
     """Record a reaction on the ship-gate anchor; advance generate -> deploy if the threshold is met.
 
@@ -322,14 +322,14 @@ async def process_deploy_approval(
 
     approved_by = list(set(pending.get("approved_by", []) + [reactor_user_id]))
 
-    if not _threshold_met(approved_by, non_ai_member_count):
+    if not _threshold_met(approved_by, voting_member_count):
         await asyncio.to_thread(
             graph.update_state, config,
             {"pending_deploy_approval": {**pending, "approved_by": approved_by}},
         )
         logger.info(
             "Deploy-approval vote on %s: %d/%d approvals (not yet met)",
-            message_id, len(approved_by), non_ai_member_count,
+            message_id, len(approved_by), voting_member_count,
         )
         return False
 
@@ -354,7 +354,7 @@ async def process_guide_choice(
     channel_id: str,
     message_id: str,
     reactor_user_id: str,
-    non_ai_member_count: int,
+    voting_member_count: int,
 ) -> bool:
     """Record a reaction on the maintenance-guide anchor; report whether the group has chosen it.
 
@@ -377,14 +377,14 @@ async def process_guide_choice(
 
     approved_by = list(set(pending.get("approved_by", []) + [reactor_user_id]))
 
-    if not _threshold_met(approved_by, non_ai_member_count):
+    if not _threshold_met(approved_by, voting_member_count):
         await asyncio.to_thread(
             graph.update_state, config,
             {"pending_guide_choice": {**pending, "approved_by": approved_by}},
         )
         logger.info(
             "Guide-path vote on %s: %d/%d approvals (not yet met)",
-            message_id, len(approved_by), non_ai_member_count,
+            message_id, len(approved_by), voting_member_count,
         )
         return False
 
@@ -424,7 +424,7 @@ async def process_provision_approval(
     channel_id: str,
     message_id: str,
     reactor_user_id: str,
-    non_ai_member_count: int,
+    voting_member_count: int,
 ) -> bool:
     """Record a reaction on the go-live anchor; advance deploy -> provision if the threshold is met.
 
@@ -443,14 +443,14 @@ async def process_provision_approval(
 
     approved_by = list(set(pending.get("approved_by", []) + [reactor_user_id]))
 
-    if not _threshold_met(approved_by, non_ai_member_count):
+    if not _threshold_met(approved_by, voting_member_count):
         await asyncio.to_thread(
             graph.update_state, config,
             {"pending_provision_approval": {**pending, "approved_by": approved_by}},
         )
         logger.info(
             "Go-live vote on %s: %d/%d approvals (not yet met)",
-            message_id, len(approved_by), non_ai_member_count,
+            message_id, len(approved_by), voting_member_count,
         )
         return False
 
@@ -470,7 +470,7 @@ async def process_governance_approval(
     channel_id: str,
     message_id: str,
     reactor_user_id: str,
-    non_ai_member_count: int,
+    voting_member_count: int,
 ) -> dict | None:
     """Record a reaction on a governance confirm card; commit the answers if the threshold is met.
 
@@ -492,14 +492,14 @@ async def process_governance_approval(
 
     approved_by = list(set(pending.get("approved_by", []) + [reactor_user_id]))
 
-    if not _threshold_met(approved_by, non_ai_member_count):
+    if not _threshold_met(approved_by, voting_member_count):
         await asyncio.to_thread(
             graph.update_state, config,
             {"pending_governance_suggestions": {message_id: {**pending, "approved_by": approved_by}}},
         )
         logger.info(
             "Governance vote on %s: %d/%d approvals (not yet met)",
-            message_id, len(approved_by), non_ai_member_count,
+            message_id, len(approved_by), voting_member_count,
         )
         return None
 

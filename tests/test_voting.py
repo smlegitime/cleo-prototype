@@ -84,12 +84,12 @@ async def test_majority_required_in_large_channel():
     """Channel with > MAJORITY_THRESHOLD members: majority needed, 1 vote is not enough."""
     suggestion = {"proposal": PROPOSAL, "approved_by": []}
     state = _make_state({MESSAGE_ID: suggestion})
-    non_ai_count = MAJORITY_THRESHOLD + 2  # e.g. 5
+    voting_count = MAJORITY_THRESHOLD + 2  # e.g. 5
 
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal") as mock_commit:
         mock_graph.get_state.return_value = state
-        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", non_ai_count)
+        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", voting_count)
 
     assert result is None
     mock_commit.assert_not_called()
@@ -98,7 +98,7 @@ async def test_majority_required_in_large_channel():
 @pytest.mark.asyncio
 async def test_majority_vote_applies_when_threshold_met():
     """Majority vote met in a large channel applies the proposal."""
-    non_ai_count = MAJORITY_THRESHOLD + 2  # 5
+    voting_count = MAJORITY_THRESHOLD + 2  # 5
     # 3 existing approvals already puts us over 50% of 5
     suggestion = {"proposal": PROPOSAL, "approved_by": ["user-1", "user-2", "user-3"]}
     state = _make_state({MESSAGE_ID: suggestion})
@@ -106,7 +106,7 @@ async def test_majority_vote_applies_when_threshold_met():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal", return_value=PROPOSAL) as mock_commit:
         mock_graph.get_state.return_value = state
-        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-4", non_ai_count)
+        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-4", voting_count)
 
     assert result == "proposal"
     mock_commit.assert_called_once()
@@ -117,13 +117,13 @@ async def test_duplicate_vote_not_counted_twice():
     """The same user voting twice should not increase the approval count."""
     suggestion = {"proposal": PROPOSAL, "approved_by": ["user-1"]}
     state = _make_state({MESSAGE_ID: suggestion})
-    non_ai_count = MAJORITY_THRESHOLD + 2  # 5, needs >2.5 = 3 approvals
+    voting_count = MAJORITY_THRESHOLD + 2  # 5, needs >2.5 = 3 approvals
 
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal") as mock_commit:
         mock_graph.get_state.return_value = state
         # user-1 votes again — still only 1 unique approval
-        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", non_ai_count)
+        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", voting_count)
 
     assert result is None
     mock_commit.assert_not_called()
@@ -372,12 +372,12 @@ async def test_stage_advance_does_not_run_before_threshold_met():
     """No commit, no stage write, when the majority threshold isn't met."""
     suggestion = {"proposal": PROPOSAL, "approved_by": []}
     state = _make_state({MESSAGE_ID: suggestion}, setup_stage="content")
-    non_ai_count = MAJORITY_THRESHOLD + 2
+    voting_count = MAJORITY_THRESHOLD + 2
 
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal"):
         mock_graph.get_state.return_value = state
-        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", non_ai_count)
+        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", voting_count)
 
     assert result is None
     assert _stage_written(mock_graph) == "NOT_WRITTEN"
@@ -485,10 +485,10 @@ async def test_preview_approval_advances_to_generate():
 @pytest.mark.asyncio
 async def test_preview_approval_below_threshold_records_vote_only():
     state = _preview_state({"message_id": PREVIEW_MSG, "approved_by": []})
-    non_ai_count = MAJORITY_THRESHOLD + 2  # needs a majority, one vote isn't enough
+    voting_count = MAJORITY_THRESHOLD + 2  # needs a majority, one vote isn't enough
     with patch("src.agent.brainstorming.voting.graph") as mock_graph:
         mock_graph.get_state.return_value = state
-        advanced = await process_preview_approval(CHANNEL_ID, PREVIEW_MSG, "user-1", non_ai_count)
+        advanced = await process_preview_approval(CHANNEL_ID, PREVIEW_MSG, "user-1", voting_count)
 
     assert advanced is False
     assert _lifecycle_written(mock_graph) == "NOT_WRITTEN"

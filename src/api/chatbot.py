@@ -53,6 +53,7 @@ from src.api.stream import (
     _slug,
     channel_user_id,
     get_stream_client,
+    is_voting_member,
     resolve_channel,
 )
 
@@ -344,6 +345,17 @@ async def new_message(request: Request):
 
         # Only approval reactions trigger the vote check
         if reaction_type != APPROVAL_REACTION:
+            return {"status": "ok"}
+
+        # A facilitator sits in on the conversation but the decisions aren't theirs. Dropped here,
+        # AFTER the reaction is written to state above: the research record should still show they
+        # reacted, it just can't move a card. This is the numerator half of the same rule
+        # _ensure_ai_member applies to the denominator — excluded from one side only, a facilitator
+        # plus a single member could carry a decision the group never reached.
+        if not is_voting_member(reactor_user_id):
+            logger.info(
+                "Ignoring approval from non-voting member %s on %s", reactor_user_id, message_id
+            )
             return {"status": "ok"}
 
         # Resolve the vote under a per-channel lock so concurrent 👍🏾 reactions serialize their

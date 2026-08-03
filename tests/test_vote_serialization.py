@@ -30,14 +30,14 @@ async def test_concurrent_votes_are_all_counted_under_lock():
     channel_id = "vote-race"
     message_id = "m1"
     config = {"configurable": {"thread_id": channel_id}}
-    # Seed a pending proposal. non_ai_count=5 => threshold is >2.5 (needs 3), so two votes accumulate
+    # Seed a pending proposal. voting_count=5 => threshold is >2.5 (needs 3), so two votes accumulate
     # without committing — isolating the approved_by read-modify-write we care about.
     graph.update_state(config, {"pending_suggestions": {message_id: {"proposal": PROPOSAL, "approved_by": []}}})
 
     async def vote(user_id: str):
         # Mirror the webhook's serialization of the vote tally.
         async with chatbot._vote_locks[channel_id]:
-            return await process_approval_vote(channel_id, message_id, user_id, non_ai_member_count=5)
+            return await process_approval_vote(channel_id, message_id, user_id, voting_member_count=5)
 
     await asyncio.gather(vote("user-a"), vote("user-b"))
 
@@ -55,7 +55,7 @@ async def test_same_member_double_react_counts_once():
 
     async def vote():
         async with chatbot._vote_locks[channel_id]:
-            return await process_approval_vote(channel_id, message_id, "user-a", non_ai_member_count=5)
+            return await process_approval_vote(channel_id, message_id, "user-a", voting_member_count=5)
 
     await asyncio.gather(vote(), vote())
 

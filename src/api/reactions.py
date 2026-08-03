@@ -48,6 +48,7 @@ from src.api.stream import (
     APPROVAL_APPROVED,
     approval_anchor,
     get_stream_client,
+    is_voting_member,
     set_approval_state,
 )
 from src.config import FRONTEND_URL
@@ -67,12 +68,12 @@ async def _process_approval_reaction(
     """Tally an approval (👍🏾) reaction and, if the threshold is met, commit the change and hand off
     to the next stage. The caller serializes this per channel (see _vote_locks) so the read-modify-
     write of the vote tally in process_* can't interleave with another concurrent vote."""
-    # Fetch non-AI member count then delegate to voting logic
+    # Fetch the voting member count then delegate to voting logic
     client = get_stream_client()
     channel = client.channel(channel_type, channel_id)
     result = await asyncio.to_thread(channel.query)
     members = result.get("members", [])
-    non_ai_count = len([m for m in members if not m["user_id"].startswith("ai-")])
+    voting_count = len([m for m in members if is_voting_member(m["user_id"])])
 
     # Capture the setup stage before the vote so we can tell whether this approval
     # advanced the group into a new stage (e.g. content -> rules).
@@ -81,7 +82,7 @@ async def _process_approval_reaction(
     pre_stage = pre_state.values.get("setup_stage")
     pre_lifecycle = pre_state.values.get("lifecycle_stage")
 
-    approved_kind = await process_approval_vote(channel_id, message_id, reactor_user_id, non_ai_count)
+    approved_kind = await process_approval_vote(channel_id, message_id, reactor_user_id, voting_count)
 
     if approved_kind:
         # The card the group just carried. Retagged before anything else so the bubble settles at
@@ -148,19 +149,19 @@ async def _process_approval_reaction(
         # ship approval on the quality report (generate -> deploy). Each gate checks its own
         # pending anchor + lifecycle stage, so they're mutually exclusive; try them in order.
         # Whichever one fires, message_id IS that gate's anchor, so it's the bubble to retag.
-        advanced = await process_preview_approval(channel_id, message_id, reactor_user_id, non_ai_count)
+        advanced = await process_preview_approval(channel_id, message_id, reactor_user_id, voting_count)
         if advanced:
             await set_approval_state(message_id, APPROVAL_APPROVED)
             await asyncio.to_thread(channel.send_message, {"text": SANDBOX_STAGE_INTRO}, AI_USER_ID)
             # Kick off the generate stage (corpus sourcing) in the background so the webhook
             # returns promptly; it reports the outcome back into the channel when done.
             asyncio.create_task(_run_generate_and_report(channel_type, channel_id))
-        elif await process_deploy_approval(channel_id, message_id, reactor_user_id, non_ai_count):
+        elif await process_deploy_approval(channel_id, message_id, reactor_user_id, voting_count):
             await set_approval_state(message_id, APPROVAL_APPROVED)
             await asyncio.to_thread(channel.send_message, {"text": BUNDLE_STAGE_INTRO}, AI_USER_ID)
             # Materialize the sandbox bundle in the background; reports the outcome when done.
             asyncio.create_task(_run_deploy_and_report(channel_type, channel_id))
-        elif await process_provision_approval(channel_id, message_id, reactor_user_id, non_ai_count):
+        elif await process_provision_approval(channel_id, message_id, reactor_user_id, voting_count):
             # Go-live gate: opens the governance questions. Nothing is created by advancing here.
             await set_approval_state(message_id, APPROVAL_APPROVED)
             # The fork is decided — the guide half must stop being reactable, or a later 👍🏾 on it
@@ -170,7 +171,7 @@ async def _process_approval_reaction(
                 GUIDE_PATH_CLOSED_NOTE.format(guide_url=f"{FRONTEND_URL}/?guide={channel_id}"),
             )
             asyncio.create_task(_run_provision_and_report(channel_type, channel_id))
-        elif await process_guide_choice(channel_id, message_id, reactor_user_id, non_ai_count):
+        elif await process_guide_choice(channel_id, message_id, reactor_user_id, voting_count):
             # The other half of the same fork. Advances nothing: the labeler stays in the sandbox
             # and the channel stays at `deploy`, so this posts the guide and closes going-live.
             await set_approval_state(message_id, APPROVAL_APPROVED)
@@ -187,7 +188,7 @@ async def _process_approval_reaction(
             # commits an artifact, so it reports what was recorded (and, once all three are in,
             # says plainly that this is as far as the system goes).
             merged = await process_governance_approval(
-                channel_id, message_id, reactor_user_id, non_ai_count
+                channel_id, message_id, reactor_user_id, voting_count
             )
             if merged is not None:
                 await set_approval_state(message_id, APPROVAL_APPROVED)

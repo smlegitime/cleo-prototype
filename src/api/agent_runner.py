@@ -107,7 +107,7 @@ async def _run_ai_agent(channel_type: str, channel_id: str, force_respond: bool 
             client = get_stream_client()
             channel = client.channel(channel_type, channel_id)
 
-            non_ai_member_count = await _ensure_ai_member(channel)
+            voting_member_count = await _ensure_ai_member(channel)
 
             history = await asyncio.to_thread(get_last_messages_from_channel, channel, 20)
             logger.info("Fetched %d messages from channel", len(history))
@@ -134,7 +134,7 @@ async def _run_ai_agent(channel_type: str, channel_id: str, force_respond: bool 
                     "messages": langchain_messages,
                     "force_respond": force_respond,
                     # Roster-derived, so it can't be read from the checkpoint — recomputed per run.
-                    "approvals_needed": approvals_needed(non_ai_member_count),
+                    "approvals_needed": approvals_needed(voting_member_count),
                 }
 
                 if not existing_state.values:

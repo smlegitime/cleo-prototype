@@ -38,6 +38,18 @@ AI_USER_NAME = os.environ.get("AI_USER_NAME", "AI Assistant")
 STREAM_DEBOUNCE_SECONDS = 0.15  # 150ms ceiling for partial updates
 SUMMON_REACTION = "summon"  # 🤖
 
+# Members who take part in the conversation but not in its decisions — a researcher or facilitator
+# sitting in on a pilot group. Comma-separated Stream user ids; ids are deterministic
+# (channel_user_id -> "<channel>-<name>", e.g. "dev3-sybille"), so they can be listed up front.
+#
+# Deliberately NOT the `ai-` prefix. That prefix also routes a member's messages into the graph as
+# CLEO's own words (helpers.messages_to_langchain), drops their messages as agent triggers, skips
+# their welcome, and ignores their 🤖 summon — a facilitator wants every one of those to behave
+# like any other member. The only thing that changes is the vote.
+FACILITATOR_USER_IDS = {
+    u.strip() for u in os.environ.get("FACILITATOR_USER_IDS", "").split(",") if u.strip()
+}
+
 if not STREAM_API_KEY or not STREAM_API_SECRET:
     raise RuntimeError("STREAM_API_KEY and STREAM_API_SECRET must be set")
 
@@ -45,6 +57,17 @@ if not STREAM_API_KEY or not STREAM_API_SECRET:
 @lru_cache(maxsize=1)
 def get_stream_client() -> StreamChat:
     return StreamChat(api_key=STREAM_API_KEY, api_secret=STREAM_API_SECRET)
+
+
+def is_voting_member(user_id: str) -> bool:
+    """True for members who both SET the vote threshold and can carry it with a 👍🏾.
+
+    The single definition of who the vote belongs to — excluded on both sides, so a facilitator can
+    neither raise the bar by being present nor help clear it by reacting. Used by _ensure_ai_member
+    for the denominator and by the reaction webhook for the numerator; they must agree, or CLEO
+    announces a threshold different from the one it enforces.
+    """
+    return not user_id.startswith("ai-") and user_id not in FACILITATOR_USER_IDS
 
 
 def _slug(name: str) -> str:
@@ -78,10 +101,11 @@ def channel_user_id(channel_id: str, name: str) -> str:
 
 
 async def _ensure_ai_member(channel) -> int:
-    """Ensure the AI user exists and is a member of the channel; return the non-AI member count.
+    """Ensure the AI user exists and is a member of the channel; return the VOTING member count.
 
     The count falls out of the roster query this already makes, and is what the vote threshold is
-    computed from — so returning it saves the caller a second round trip to Stream.
+    computed from — so returning it saves the caller a second round trip to Stream. Excludes CLEO
+    and any facilitators (see is_voting_member).
     """
     client = get_stream_client()
 
@@ -93,7 +117,7 @@ async def _ensure_ai_member(channel) -> int:
     if AI_USER_ID not in member_ids:
         await asyncio.to_thread(channel.add_members, [AI_USER_ID])
 
-    return len([m for m in member_ids if not m.startswith("ai-")])
+    return len([m for m in member_ids if is_voting_member(m)])
 
 
 async def _set_ai_indicator(channel, state: str) -> None:
