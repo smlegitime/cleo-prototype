@@ -1,0 +1,28 @@
+.tut__composer-container {
+	display: flex;
+	justify-content: center;
+	padding: 1rem;
+	scrollbar-gutter: stable;
+	scrollbar-width: thin;
+	overflow-y: hidden;
+	flex-shrink: 0;
+}
+
+.aicr__ai-message-composer__form {
+	max-width: 800px;
+	width: 100%;
+}
+
+/* Auto-grow the message input as lines are added, up to a cap, then scroll — instead of a fixed
+   height. `field-sizing: content` sizes the textarea to its text (min one line, capped at 40vh).
+   The channel is a flex column with the message list at flex:1 and this composer at flex-shrink:0,
+   so as the input grows the message list is pushed up rather than the input overflowing.
+   Composer.css is imported unlayered, so these win over Stream's layered defaults. */
+.aicr__ai-message-composer__form textarea,
+.str-chat__message-input textarea {
+	field-sizing: content;
+	min-height: 2.5rem;
+	max-height: 40vh;
+	overflow-y: auto;
+	resize: none;
+}

@@ -1,0 +1,10 @@
+We are a group of LGBTQ+ artists on Bluesky building a community safety labeler. Here is a record of our design discussion:
+
+Can we have one label that's a positive badge and another that's a warning?
+We want to call the labeler 'Queer Arts Collective — Community Safety.' The description should make clear it's community-operated and updated regularly.
+We want a label for verified community members. Verification requires vouching from two existing verified members.
+The description should mention that verification can be revoked if a member is later found to have acted in bad faith.
+We also need a label for accounts flagged for harassment or impersonation. Subscribers should see a warning by default.
+What blur setting makes sense for the harassment label? We don't want to hide the account entirely, just flag it.
+
+Based on this discussion, please generate a complete Bluesky labeler configuration in ATProto schema format.

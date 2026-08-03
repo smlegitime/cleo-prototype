@@ -1,0 +1,154 @@
+[
+  {
+    "id": "9a5b58ac-bf43-47cb-b6e4-c924339e23d9",
+    "role": "user",
+    "user_id": "sammy-mlrfiesw",
+    "user_name": "sammy",
+    "text": "hey y'all",
+    "created_at": "2026-03-12T05:30:17.351471Z"
+  },
+  {
+    "id": "59d18697-fbdc-4ef4-99ce-58f6d6d9ea35",
+    "role": "user",
+    "user_id": "sybille-mlrf3hth",
+    "user_name": "sybille",
+    "text": "hi everyone",
+    "created_at": "2026-03-12T05:30:31.924751Z"
+  },
+  {
+    "id": "7590351c-2811-4d2d-81a0-286c5bb9d6d9",
+    "role": "user",
+    "user_id": "marie",
+    "user_name": "marie",
+    "text": "let's not forget the AI, lol. Hello AI",
+    "created_at": "2026-03-12T05:30:48.784859Z"
+  },
+  {
+    "id": "a9dd6db8-54f0-4c60-92ce-d315e3d8c78b",
+    "role": "assistant",
+    "user_id": "ai-assistant",
+    "user_name": "AI Assistant",
+    "text": "Hello! 👋 I'm here to help you design and configure Bluesky labelers. \n\nIf you're new to this, a labeler is a service that can apply custom labels to content on Bluesky — useful for content moderation, categorization, or helping users filter their feeds.\n\nWhat would you like to work on? I can help you:\n- Create a new labeler from scratch\n- Define custom labels and their behaviors\n- Configure moderation rules\n- Or answer any questions about how labelers work",
+    "created_at": "2026-03-12T05:30:49.611735Z"
+  },
+  {
+    "id": "48b34318-71ad-476c-a45d-12d68354c020",
+    "role": "user",
+    "user_id": "sybille-mlrf3hth",
+    "user_name": "sybille",
+    "text": "Can we have one label that's a positive badge and another that's a warning?",
+    "created_at": "2026-03-12T05:31:31.65445Z"
+  },
+  {
+    "id": "3004c320-f1ff-4234-8b17-f873f66e24d3",
+    "role": "assistant",
+    "user_id": "ai-assistant",
+    "user_name": "AI Assistant",
+    "text": "Yes, absolutely! You can mix both types in the same labeler.\n\nFor the **positive badge** (like verification or quality indicator):\n- Set `blurs` to `\"none\"` so it doesn't hide anything\n- Set `severity` to `\"inform\"` (just informational)\n- Set `defaultSetting` to `\"ignore\"` so users see it without any filtering\n\nFor the **warning label**:\n- Set `blurs` to `\"content\"` or `\"media\"` to blur what's flagged\n- Set `severity` to `\"alert\"` or `\"inform\"`\n- Set `defaultSetting` to `\"warn\"` or `\"hide\"` to notify users or hide by default\n\nHere's a working example:\n\n```json\n{\n  \"labels\": [\n    {\n      \"identifier\": \"verified-creator\",\n      \"severity\": \"inform\",\n      \"blurs\": \"none\",\n      \"defaultSetting\": \"ignore\",\n      \"locales\": [\n        {\n          \"lang\": \"en\",\n          \"name\": \"Verified Creator\",\n          \"description\": \"This account is a verified content creator\"\n        }\n      ]\n    },\n    {\n      \"identifier\": \"potential-spam\",\n      \"severity\": \"alert\",\n      \"blurs\": \"content\",\n      \"defaultSetting\": \"warn\",\n      \"locales\": [\n        {\n          \"lang\": \"en\",\n          \"name\": \"Potential Spam\",\n          \"description\": \"This content may be spam\"\n        }\n      ]\n    }\n  ]\n}\n```\n\nWhat type of badge and warning did you have in mind?",
+    "created_at": "2026-03-12T05:31:32.395663Z"
+  },
+  {
+    "id": "55714964-ce59-4e1b-9d3d-817ad8ca17e4",
+    "role": "user",
+    "user_id": "sammy-mlrfiesw",
+    "user_name": "sammy",
+    "text": "We want to call the labeler 'Queer Arts Collective — Community Safety.' The description should make clear it's community-operated and updated regularly. Can you draft that?",
+    "created_at": "2026-03-12T05:32:33.79895Z"
+  },
+  {
+    "id": "862c5011-21ee-47fc-9e43-9166559818f0",
+    "role": "assistant",
+    "user_id": "ai-assistant",
+    "user_name": "AI Assistant",
+    "text": "I can help you set up the labeler with that name and description! However, I need to know what labels you want to include in this configuration before I can finalize it.\n\nWhat types of content do you want to label? For example:\n- Are you labeling harmful content (like harassment, hate speech, etc.)?\n- Are you marking safe/verified content from community members?\n- Are you categorizing content types (like art, events, resources)?\n- Something else?\n\nLet me know what you're trying to moderate or organize, and I'll create the complete configuration for you.",
+    "created_at": "2026-03-12T05:32:34.514972Z"
+  },
+  {
+    "id": "37d88a3c-2c15-4fc7-afc1-0fed227f5e43",
+    "role": "user",
+    "user_id": "marie",
+    "user_name": "marie",
+    "text": "\"We want a label for verified community members. Verification requires vouching from two existing verified members.\"",
+    "created_at": "2026-03-12T05:33:23.109407Z"
+  },
+  {
+    "id": "c6786412-7833-489f-ab0c-52a12de0d877",
+    "role": "assistant",
+    "user_id": "ai-assistant",
+    "user_name": "AI Assistant",
+    "text": "Perfect! I've staged your labeler configuration for approval:\n\n**Labeler:** Queer Arts Collective — Community Safety\n\n**Description:** Community-operated labeler for the Queer Arts Collective. Verification and safety labels are maintained and updated regularly by community moderators.\n\n**Label:**\n- **Verified Member** — For accounts verified through vouching by two existing verified members. This label will display on posts without hiding or blurring anything, serving as a trust indicator for your community.\n\nThe configuration is now ready for your group to review and approve!\n\n────────────────────────────────────────\n📋 **Proposed update**\n\n**Labeler:** Queer Arts Collective — Community Safety\n**Description:** Community-operated labeler for the Queer Arts Collective. Verification and safety labels are maintained and updated regularly by community moderators.\n\n**Labels:**\n\n• **Verified Member** `verified_member`\n  severity: none  |  blurs: none  |  default: ignore\n  *This account has been verified by the Queer Arts Collective community through vouching by two existing verified members.*\n\nReact with 👍🏾 to approve this change.\n────────────────────────────────────────",
+    "created_at": "2026-03-12T05:33:24.02183Z"
+  },
+  {
+    "id": "12a67f2a-de81-437a-9071-7a6d5fe2a574",
+    "role": "user",
+    "user_id": "sammy-mlrfiesw",
+    "user_name": "sammy",
+    "text": "Actually, the description should mention that verification can be revoked if a member is later found to have acted in bad faith",
+    "created_at": "2026-03-12T05:34:31.33443Z"
+  },
+  {
+    "id": "47df166f-2f50-440c-b333-5796adcad257",
+    "role": "assistant",
+    "user_id": "ai-assistant",
+    "user_name": "AI Assistant",
+    "text": "Perfect! I've updated the configuration with the revised description that now mentions verification can be revoked for bad faith actions. The complete labeler is staged and ready for your group's approval.\n\n────────────────────────────────────────\n📋 **Proposed update**\n\n**Labeler:** Queer Arts Collective — Community Safety\n**Description:** Community-operated labeler for the Queer Arts Collective. Verification and safety labels are maintained and updated regularly by community moderators. Verification can be revoked if a member is later found to have acted in bad faith.\n\n**Labels:**\n\n• **Verified Member** `verified_member`\n  severity: none  |  blurs: none  |  default: ignore\n  *Verified through vouching by two existing verified members*\n\nReact with 👍🏾 to approve this change.\n────────────────────────────────────────",
+    "created_at": "2026-03-12T05:34:32.773348Z"
+  },
+  {
+    "id": "145788da-93c8-4456-bcc7-3e6be9946bb7",
+    "role": "user",
+    "user_id": "sybille-mlrf3hth",
+    "user_name": "sybille",
+    "text": "hmm... I think we also need a label for accounts flagged for harassment or impersonation. Subscribers should see a warning by default.",
+    "created_at": "2026-03-12T05:35:08.423875Z"
+  },
+  {
+    "id": "4fef15da-b06e-4e7e-882b-215867ad88fd",
+    "role": "assistant",
+    "user_id": "ai-assistant",
+    "user_name": "AI Assistant",
+    "text": "Perfect! I've updated the configuration to include both labels:\n\n**Labeler:** Queer Arts Collective — Community Safety\n\n**Labels:**\n1. **Verified Member** — For accounts verified through vouching by two existing verified members (displays normally)\n2. **Harassment or Impersonation** — For accounts flagged for harassment or impersonation (shows a warning by default)\n\nThe complete configuration is now staged for your group's approval!\n\n────────────────────────────────────────\n📋 **Proposed update**\n\n**Labeler:** Queer Arts Collective — Community Safety\n**Description:** Community-operated labeler for the Queer Arts Collective. Verification and safety labels are maintained and updated regularly by community moderators. Verification can be revoked if a member is later found to have acted in bad faith.\n\n**Labels:**\n\n• **Verified Member** `verified_member`\n  severity: none  |  blurs: none  |  default: ignore\n  *Account verified through vouching by two existing verified members*\n\n• **Harassment or Impersonation** `harassment_or_impersonation`\n  severity: alert  |  blurs: none  |  default: warn\n  *Account flagged for harassment or impersonation*\n\nReact with 👍🏾 to approve this change.\n────────────────────────────────────────",
+    "created_at": "2026-03-12T05:35:09.693365Z"
+  },
+  {
+    "id": "1a525f7b-5a9d-4860-8349-1e98bd5ea969",
+    "role": "user",
+    "user_id": "marie",
+    "user_name": "marie",
+    "text": "What blur setting makes sense here? We don't want to hide the account entirely, just flag it.",
+    "created_at": "2026-03-12T05:35:42.394597Z"
+  },
+  {
+    "id": "11b2c573-02f2-4209-a532-3996a39c2064",
+    "role": "assistant",
+    "user_id": "ai-assistant",
+    "user_name": "AI Assistant",
+    "text": "For the harassment/impersonation label, since you want to flag but not hide the account entirely, the current setting is right:\n\n**`blurs: \"none\"`** with **`defaultSetting: \"warn\"`**\n\nThis combination means:\n- Users will see a warning interstitial before viewing the account\n- The content itself won't be blurred\n- Users can click through the warning to view if they choose\n- Good balance between alerting people and allowing access\n\nAlternative if you want more protection:\n**`blurs: \"content\"`** would blur posts/replies from the account (users can click to reveal), but this might be too restrictive since you said \"just flag it.\"\n\nThe current setup gives subscribers a clear heads-up without completely hiding the account, which sounds like what you're looking for. Does that work for your community's needs?",
+    "created_at": "2026-03-12T05:35:43.703395Z"
+  },
+  {
+    "id": "9513ddb9-e343-4ccc-8278-1d40db1928cc",
+    "role": "user",
+    "user_id": "marie",
+    "user_name": "marie",
+    "text": "sounds good to me",
+    "created_at": "2026-03-12T05:37:14.358033Z"
+  },
+  {
+    "id": "28ac5a59-571d-4c6a-acc4-21e8f65f8a94",
+    "role": "user",
+    "user_id": "sybille-mlrf3hth",
+    "user_name": "sybille",
+    "text": "same, we can vote now i think",
+    "created_at": "2026-03-12T05:37:28.37587Z"
+  },
+  {
+    "id": "3bb30a3d-5997-4c91-8230-41c36e99d8e1",
+    "role": "assistant",
+    "user_id": "ai-assistant",
+    "user_name": "AI Assistant",
+    "text": "✅ Proposal approved! *Queer Arts Collective — Community Safety* has been updated (2 labels configured).",
+    "created_at": "2026-03-12T05:38:18.972715Z"
+  }
+]

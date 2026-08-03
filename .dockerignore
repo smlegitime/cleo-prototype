@@ -1,0 +1,10 @@
+.git
+.env
+.example.env
+frontend/
+tests/
+**/__pycache__
+**/*.pyc
+**/*.pyo
+*.egg-info
+.vscode

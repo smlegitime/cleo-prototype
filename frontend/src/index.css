@@ -1,0 +1,281 @@
+@layer stream, stream-overrides, stream-ai;
+
+@import "material-symbols/rounded.css";
+@import url("stream-chat-react/dist/css/v2/index.css") layer(stream);
+@import url("@stream-io/chat-react-ai/styles/index.css") layer(stream-ai);
+
+@import url("./components/Composer.css");
+@import url("./components/ChannelListItem.css");
+
+:root {
+	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	color-scheme: light dark;
+	color: rgba(255, 255, 255, 0.87);
+	background-color: #242424;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	margin: 0;
+}
+
+#root {
+	display: flex;
+	height: 100vh;
+	width: 100%;
+}
+
+/* Layout: channel list (left) + chat window (right) in one row */
+.app {
+	display: flex;
+	flex-direction: row;
+	flex: 1;
+	min-width: 0;
+	min-height: 0;
+	width: 100%;
+}
+
+@layer stream-overrides {
+	.str-chat__channel-list {
+		flex: 0 0 auto;
+		width: 280px;
+		min-width: 0;
+	}
+
+	.str-chat__channel {
+		flex: 1 1 auto;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.str-chat__message-list-scroll {
+		max-width: 800px;
+		width: 100%;
+	}
+
+	.str-chat__list {
+		display: flex;
+		justify-content: center;
+		scrollbar-gutter: stable;
+		scrollbar-width: thin;
+	}
+
+	.str-chat__message-bubble {
+		position: relative;
+		padding-bottom: 0.25rem;
+		padding-right: 3.5rem;
+		min-width: 8rem;
+	}
+
+	.str-chat__message--other .str-chat__message-bubble {
+		max-width: unset;
+	}
+
+	.str-chat__message--other .str-chat__message-inner {
+		margin-inline-end: 0;
+	}
+
+	/* Message row: avatar + content so users are easy to tell apart */
+	.str-chat__message {
+		display: flex;
+		gap: 0.5rem;
+	}
+	.str-chat__message--me {
+		flex-direction: row-reverse;
+	}
+	.str-chat__message--me .str-chat__message-avatar {
+		margin-inline-end: 0;
+		margin-inline-start: 0.5rem;
+	}
+	.str-chat__message-inner {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.str-chat__message--me .str-chat__message-inner {
+		align-items: flex-end;
+	}
+	.str-chat__message-avatar {
+		flex-shrink: 0;
+		align-self: flex-end;
+		margin-inline-end: 0.5rem;
+	}
+
+	.str-chat__message-avatar--ai {
+		width: 32px;
+		height: 32px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.25rem;
+		border-radius: 50%;
+	}
+
+	/* Bubble row — actions float above the bubble, don't affect its width */
+	.str-chat__message-bubble-row {
+		position: relative;
+		display: flex;
+		align-items: flex-end;
+		max-width: 100%;
+	}
+	.str-chat__message-actions-wrapper {
+		position: absolute;
+		top: -1.5rem;
+		right: 0;
+		opacity: 0;
+		transition: opacity 0.15s ease;
+		z-index: 1;
+	}
+	.str-chat__message--me .str-chat__message-actions-wrapper {
+		right: unset;
+		left: 0;
+	}
+	.str-chat__message:hover .str-chat__message-actions-wrapper,
+	.str-chat__message:focus-within .str-chat__message-actions-wrapper,
+	.str-chat__message-actions-wrapper:has(.str-chat__message-options--active) {
+		opacity: 1;
+	}
+	/* Reactions below the message */
+	.str-chat__message-reactions-host {
+		margin-top: 0.35rem;
+	}
+	/* Reaction total count (class from stream-chat-react, not in our source) */
+	.str-chat__message-reaction-count {
+		color: #ffffff;
+		font-weight: 700;
+	}
+
+	.str-chat__message-bubble code,
+	.str-chat__message-text code,
+	.str-chat__message-simple__content code,
+	.aicr__code {
+		/* background-color: rgba(0, 0, 0, 0.35); */
+		color: #cbd5e1;
+		padding: 0.15em 0.4em;
+		border-radius: 4px;
+		font-size: 0.875em;
+		font-family: ui-monospace, monospace;
+	}
+
+.str-chat__message-sender-name {
+		display: block;
+		font-size: 0.75rem;
+		font-weight: 600;
+		margin-bottom: 0.25rem;
+		opacity: 0.85;
+	}
+
+	.str-chat__message--me .str-chat__message-sender-name {
+		color: var(--str-chat__primary-color, #005fff);
+	}
+
+	.str-chat__message-timestamp {
+		position: absolute;
+		bottom: 0.3rem;
+		right: 0.5rem;
+		font-size: 0.7rem;
+		opacity: 0.6;
+	}
+
+	.str-chat__channel-members {
+		padding: 0.5rem 1rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		flex-shrink: 0;
+	}
+
+	.str-chat__channel-members-title {
+		margin: 0 0 0.25rem 0;
+		font-size: 0.75rem;
+		opacity: 0.8;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
+	}
+
+	.str-chat__channel-members-list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 1rem;
+		font-size: 0.875rem;
+	}
+
+	.str-chat__channel-members-item {
+		opacity: 0.9;
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+	}
+
+	.str-chat__channel-members-ai-badge {
+		font-size: 0.65rem;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		padding: 0.1rem 0.35rem;
+		border-radius: 999px;
+		background-color: var(--str-chat__primary-color, #005fff);
+		color: #fff;
+		line-height: 1.4;
+	}
+
+	/* --- Approval anchors ----------------------------------------------------------------
+	   Cards the group has to vote on: proposals, classification rules, and each lifecycle gate.
+	   Marked with an inline-start bar plus a faint wash rather than a recolored bubble — a long
+	   rules card would otherwise become a solid block of color, and this leaves the bubble's own
+	   background (and so all text contrast) untouched. The state comes from the backend's
+	   approval_state field and is retagged when the vote resolves, so the amber only ever means
+	   "still waiting on the group". */
+	.cleo-message--approval-pending .str-chat__message-bubble,
+	.cleo-message--approval-approved .str-chat__message-bubble,
+	.cleo-message--approval-superseded .str-chat__message-bubble {
+		border-inline-start: 3px solid var(--cleo-approval-accent);
+		border-start-start-radius: 4px;
+		border-end-start-radius: 4px;
+		/* background-IMAGE, so the wash layers over the bubble's existing color instead of
+		   replacing it and having to re-derive it per theme. */
+		background-image: linear-gradient(
+			to inline-end,
+			color-mix(in srgb, var(--cleo-approval-accent) 14%, transparent),
+			transparent 55%
+		);
+	}
+
+	.cleo-message--approval-pending {
+		--cleo-approval-accent: #f0b429;
+	}
+
+	.cleo-message--approval-approved {
+		--cleo-approval-accent: #3fb950;
+	}
+
+	.cleo-message--approval-superseded {
+		--cleo-approval-accent: #6e7681;
+	}
+
+	/* Dead card: reacting here does nothing, so it recedes rather than competing with the live
+	   anchor further down. Pairs with the superseded note the backend appends to the text. */
+	.cleo-message--approval-superseded .str-chat__message-bubble {
+		opacity: 0.6;
+	}
+}
+
+/* Unlayered — overrides stream-ai layer styles */
+.aicr__streaming-message > p .aicr__code {
+	font-size: .85rem;
+	background-color: rgba(0, 0, 0, 0.35);
+	padding: .1rem .25rem;
+	border-radius: .5rem;
+	font-family: monospace;
+}

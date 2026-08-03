@@ -1,0 +1,77 @@
+# Render Blueprint — deploys the backend (FastAPI, Docker) + the frontend (Vite static site).
+# Import at https://dashboard.render.com/blueprints (New > Blueprint > this repo).
+#
+# Secrets (sync: false below) are NOT stored in this file — set them in the Render dashboard after
+# the blueprint creates the services. Verify field names against the current Render Blueprint docs
+# (https://render.com/docs/blueprint-spec) if a deploy is rejected.
+#
+# After the first deploy, wire the two URLs together (they aren't known until the services exist):
+#   - backend  FRONTEND_URL          = the frontend service URL   (for preview/guide links in chat)
+#   - frontend VITE_AI_ASSISTANT_URL = the backend service URL    (where the app calls the API)
+# Then register the Stream webhook to  https://<backend-url>/new-message  (Stream dashboard, or
+# scripts/register_stream_webhook.py). CORS is already open (allow_origins=["*"]).
+
+services:
+  # ---- Backend: FastAPI over the Docker image ----
+  - type: web
+    name: cleo-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter            # persistent disk requires a paid instance. For a free deploy: set
+                             # plan: free AND delete the `disk:` block below (state becomes ephemeral —
+                             # checkpoints + bundles reset on every restart/redeploy).
+    region: oregon
+    healthCheckPath: /docs
+    autoDeploy: true
+    disk:
+      name: cleo-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      # Persist per-channel state + materialized bundles on the mounted disk (survives redeploys).
+      - key: CHECKPOINT_DB_PATH
+        value: /data/checkpoints.sqlite
+      - key: LABELER_BUNDLES_DIR
+        value: /data/bundles
+      # Channel behavior (see chatbot.py)
+      - key: STREAM_CHANNELS
+        value: dev2,general
+      - key: PROTECTED_CHANNELS
+        value: dev2
+      - key: MODEL_PROVIDER
+        value: anthropic
+      # Secrets — set these in the Render dashboard (never commit them)
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY          # also required (embeddings for the RAG knowledge base)
+        sync: false
+      - key: STREAM_API_KEY
+        sync: false
+      - key: STREAM_API_SECRET
+        sync: false
+      - key: BSKY_HANDLE             # throwaway read-only account for the corpus fetch
+        sync: false
+      - key: BSKY_APP_PASSWORD
+        sync: false
+      - key: CLEO_ADMIN_TOKEN       # operator export gate; generate with `openssl rand -hex 32`.
+        sync: false                 # UNSET = /export-state is disabled (503), never open.
+      - key: FRONTEND_URL            # set to the frontend service URL after first deploy
+        sync: false
+
+  # ---- Frontend: Vite build served as a static site (SPA) ----
+  - type: web
+    name: cleo-frontend
+    runtime: static
+    buildCommand: cd frontend && npm ci && npm run build
+    staticPublishPath: frontend/dist
+    routes:
+      - type: rewrite         # SPA: serve index.html for every path
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_STREAM_API_KEY     # same value as the backend's STREAM_API_KEY
+        sync: false
+      - key: VITE_AI_ASSISTANT_URL   # set to the backend service URL after first deploy
+        sync: false
+      - key: VITE_PROTECTED_CHANNELS
+        value: dev2

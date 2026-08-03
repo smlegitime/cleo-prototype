@@ -1,0 +1,24 @@
+__pycache__
+.DS_Store
+.env
+.ipynb_checkpoints
+.langgraph-data
+.langgraph_api
+.vscode
+.deepeval/
+
+# LangGraph SQLite checkpointer (persistent per-channel state)
+checkpoints.sqlite
+checkpoints.sqlite-wal
+checkpoints.sqlite-shm
+
+# Frontend
+frontend/node_modules
+frontend/dist
+frontend/.env
+
+# labeler-engine compiled interpreter (Node). Rebuild: ./scripts/build_labeler_engine.sh
+labeler-engine/dist
+
+# Materialized per-channel labeler bundles (deploy stage). Content-addressed runtime artifacts.
+bundles/

@@ -1,0 +1,15 @@
+{
+  "//": "Build config for running the engine under Node (the batch entrypoint the Python generate step shells out to). Emits plain JS to dist/ so the backend needs only `node`, not tsc. The frontend does NOT use this — it consumes the .ts source directly via a Vite alias. Rebuild with: frontend/node_modules/.bin/tsc -p labeler-engine/tsconfig.build.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "declaration": false,
+    "sourceMap": false,
+    "strict": true,
+    "skipLibCheck": true,
+    "types": []
+  },
+  "include": ["index.ts", "spec.ts", "evaluate.ts", "batch.ts", "execute.ts"]
+}

@@ -1,0 +1,775 @@
+2026-07-26T00:20:52.323047906Z USER_AGENT environment variable not set, consider setting it to identify your requests.
+2026-07-26T00:20:53.131735133Z INFO:     Started server process [7]
+2026-07-26T00:20:53.131848255Z INFO:     Waiting for application startup.
+2026-07-26T00:20:53.237405699Z INFO:src.api.chatbot:SQLite checkpointer attached — conversation state persists across restarts
+2026-07-26T00:20:53.237498732Z INFO:     Application startup complete.
+2026-07-26T00:20:53.237890191Z INFO:     Uvicorn running on http://0.0.0.0:10000 (Press CTRL+C to quit)
+2026-07-26T00:20:56.363662312Z INFO:     10.30.236.131:0 - "OPTIONS /token HTTP/1.1" 200 OK
+2026-07-26T00:20:56.894185068Z INFO:     10.30.236.131:0 - "POST /token HTTP/1.1" 200 OK
+2026-07-26T00:20:57.081887908Z INFO:src.api.chatbot:Webhook received: type=member.added
+2026-07-26T00:20:57.082041201Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T00:20:57.096198713Z INFO:src.api.chatbot:Webhook received: type=member.added
+2026-07-26T00:20:57.096333136Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T00:20:57.349204734Z /usr/local/lib/python3.12/site-packages/pydantic/v1/main.py:1054: UserWarning: LangSmith now uses UUID v7 for run and trace identifiers. This warning appears when passing custom IDs. Please use: from langsmith import uuid7
+2026-07-26T00:20:57.349241445Z             id = uuid7()
+2026-07-26T00:20:57.349245895Z Future versions will require UUID v7.
+2026-07-26T00:20:57.349248545Z   input_data = validator(cls_, input_data)
+2026-07-26T00:20:57.419250376Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T00:20:57.419394579Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T00:20:58.726017258Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T00:20:58.951474333Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T00:20:58.951630066Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T01:38:40.902765871Z ==> Deploying...
+2026-07-26T01:38:40.970352146Z ==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+2026-07-26T01:39:08.456812017Z USER_AGENT environment variable not set, consider setting it to identify your requests.
+2026-07-26T01:39:09.055038299Z INFO:     Started server process [7]
+2026-07-26T01:39:09.055063601Z INFO:     Waiting for application startup.
+2026-07-26T01:39:09.158613562Z INFO:src.api.chatbot:SQLite checkpointer attached — conversation state persists across restarts
+2026-07-26T01:39:09.158759951Z INFO:     Application startup complete.
+2026-07-26T01:39:09.15903837Z INFO:     Uvicorn running on http://0.0.0.0:10000 (Press CTRL+C to quit)
+2026-07-26T01:39:10.108263731Z INFO:     127.0.0.1:54540 - "HEAD / HTTP/1.1" 404 Not Found
+2026-07-26T01:39:11.747634646Z ==> Your service is live 🎉
+2026-07-26T01:39:11.828164718Z INFO:     10.31.154.19:0 - "GET / HTTP/1.1" 404 Not Found
+2026-07-26T01:39:11.865589985Z ==> 
+2026-07-26T01:39:11.868197974Z ==> ///////////////////////////////////////////////////////////
+2026-07-26T01:39:11.870973672Z ==> 
+2026-07-26T01:39:11.873664406Z ==> Available at your primary URL https://cleo-prototype-backend.onrender.com
+2026-07-26T01:39:11.876410222Z ==> 
+2026-07-26T01:39:11.878971998Z ==> ///////////////////////////////////////////////////////////
+2026-07-26T01:42:32.387831541Z ==> Deploying...
+2026-07-26T01:42:32.472688007Z ==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+2026-07-26T01:42:59.762521752Z USER_AGENT environment variable not set, consider setting it to identify your requests.
+2026-07-26T01:43:00.364147741Z INFO:     Started server process [7]
+2026-07-26T01:43:00.364168331Z INFO:     Waiting for application startup.
+2026-07-26T01:43:00.38598411Z INFO:src.api.chatbot:SQLite checkpointer attached — conversation state persists across restarts
+2026-07-26T01:43:00.386028341Z INFO:     Application startup complete.
+2026-07-26T01:43:00.386389781Z INFO:     Uvicorn running on http://0.0.0.0:10000 (Press CTRL+C to quit)
+2026-07-26T01:43:01.330690222Z INFO:     127.0.0.1:32782 - "HEAD / HTTP/1.1" 404 Not Found
+2026-07-26T01:43:03.26648287Z ==> Your service is live 🎉
+2026-07-26T01:43:03.346485215Z INFO:     10.31.154.19:0 - "GET / HTTP/1.1" 404 Not Found
+2026-07-26T01:43:03.396866154Z ==> 
+2026-07-26T01:43:03.405924032Z ==> ///////////////////////////////////////////////////////////
+2026-07-26T01:43:03.410459861Z ==> 
+2026-07-26T01:43:03.416788824Z ==> Available at your primary URL https://cleo-prototype-backend.onrender.com
+2026-07-26T01:43:03.42076044Z ==> 
+2026-07-26T01:43:03.425948035Z ==> ///////////////////////////////////////////////////////////
+2026-07-26T01:43:22.229637849Z INFO:     10.25.2.132:0 - "OPTIONS /token HTTP/1.1" 200 OK
+2026-07-26T01:43:22.871209103Z INFO:     10.25.2.132:0 - "POST /token HTTP/1.1" 200 OK
+2026-07-26T01:48:05.164836318Z ==> Detected service running on port 10000
+2026-07-26T01:48:05.264507587Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2026-07-26T02:24:55.99588492Z ==> Deploying...
+2026-07-26T02:24:56.054750047Z ==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+2026-07-26T02:25:23.382159109Z USER_AGENT environment variable not set, consider setting it to identify your requests.
+2026-07-26T02:25:24.078210556Z INFO:     Started server process [7]
+2026-07-26T02:25:24.078227507Z INFO:     Waiting for application startup.
+2026-07-26T02:25:24.193422597Z INFO:src.api.chatbot:SQLite checkpointer attached — conversation state persists across restarts
+2026-07-26T02:25:24.193528109Z INFO:     Application startup complete.
+2026-07-26T02:25:24.193888349Z INFO:     Uvicorn running on http://0.0.0.0:10000 (Press CTRL+C to quit)
+2026-07-26T02:25:24.919033116Z INFO:     127.0.0.1:39272 - "HEAD / HTTP/1.1" 404 Not Found
+2026-07-26T02:25:26.812911976Z ==> Your service is live 🎉
+2026-07-26T02:25:26.891536465Z ==> 
+2026-07-26T02:25:26.894039544Z ==> ///////////////////////////////////////////////////////////
+2026-07-26T02:25:26.897958896Z ==> 
+2026-07-26T02:25:26.898133706Z INFO:     10.30.236.131:0 - "GET / HTTP/1.1" 404 Not Found
+2026-07-26T02:25:26.900440285Z ==> Available at your primary URL https://cleo-prototype-backend.onrender.com
+2026-07-26T02:25:26.902709918Z ==> 
+2026-07-26T02:25:26.905015452Z ==> ///////////////////////////////////////////////////////////
+2026-07-26T02:27:46.725302043Z INFO:     10.25.2.132:0 - "OPTIONS /token HTTP/1.1" 200 OK
+2026-07-26T02:27:47.320685854Z INFO:     10.25.2.132:0 - "POST /token HTTP/1.1" 200 OK
+2026-07-26T02:27:47.510380798Z INFO:src.api.chatbot:Webhook received: type=member.added
+2026-07-26T02:27:47.510567903Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:27:47.514062504Z INFO:src.api.chatbot:Webhook received: type=member.added
+2026-07-26T02:27:47.514188338Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:27:47.745375266Z /usr/local/lib/python3.12/site-packages/pydantic/v1/main.py:1054: UserWarning: LangSmith now uses UUID v7 for run and trace identifiers. This warning appears when passing custom IDs. Please use: from langsmith import uuid7
+2026-07-26T02:27:47.745400137Z             id = uuid7()
+2026-07-26T02:27:47.745405547Z Future versions will require UUID v7.
+2026-07-26T02:27:47.745409727Z   input_data = validator(cls_, input_data)
+2026-07-26T02:27:47.806127053Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:27:47.806279847Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:27:48.859685291Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:27:48.984006818Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:27:48.984187643Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:29:34.21076333Z ==> Deploying...
+2026-07-26T02:29:34.31654181Z ==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+2026-07-26T02:30:05.307890061Z ==> Your service is live 🎉
+2026-07-26T02:30:05.439560385Z ==> 
+2026-07-26T02:30:05.44613846Z ==> ///////////////////////////////////////////////////////////
+2026-07-26T02:30:05.452478878Z ==> 
+2026-07-26T02:30:05.457489376Z ==> Available at your primary URL https://cleo-prototype-backend.onrender.com
+2026-07-26T02:30:05.461392998Z ==> 
+2026-07-26T02:30:05.466321214Z ==> ///////////////////////////////////////////////////////////
+2026-07-26T02:31:05.949624524Z /usr/local/lib/python3.12/site-packages/pydantic/v1/main.py:1054: UserWarning: LangSmith now uses UUID v7 for run and trace identifiers. This warning appears when passing custom IDs. Please use: from langsmith import uuid7
+2026-07-26T02:31:05.949663556Z             id = uuid7()
+2026-07-26T02:31:05.949670226Z Future versions will require UUID v7.
+2026-07-26T02:31:05.949674597Z   input_data = validator(cls_, input_data)
+2026-07-26T02:31:06.02077558Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:31:06.021032564Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:31:06.878310213Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:31:07.188880052Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:31:07.188895183Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:31:52.521045424Z INFO:     10.30.236.131:0 - "OPTIONS /token HTTP/1.1" 200 OK
+2026-07-26T02:31:53.203538733Z INFO:src.api.chatbot:Webhook received: type=member.added
+2026-07-26T02:31:53.203693952Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:31:53.372097026Z INFO:     10.31.154.19:0 - "POST /token HTTP/1.1" 200 OK
+2026-07-26T02:31:53.389320833Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:31:53.389321944Z INFO:src.api.chatbot:Webhook received: type=member.added
+2026-07-26T02:31:53.512970409Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:31:53.51316425Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:31:53.672050854Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:31:53.672089696Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:31:54.419486935Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:31:54.532768374Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:31:54.532901711Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:31:54.548746662Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:31:54.660254833Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:31:54.660451934Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:32:38.430466327Z INFO:     10.30.236.131:0 - "OPTIONS /token HTTP/1.1" 200 OK
+2026-07-26T02:32:38.95387866Z INFO:src.api.chatbot:Webhook received: type=member.added
+2026-07-26T02:32:38.95422733Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:32:39.089582076Z INFO:     10.31.154.19:0 - "POST /token HTTP/1.1" 200 OK
+2026-07-26T02:32:39.106684837Z INFO:src.api.chatbot:Webhook received: type=member.added
+2026-07-26T02:32:39.106987714Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:32:39.222535899Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:32:39.222863007Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:32:39.371394936Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:32:39.371741535Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:32:40.076501892Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:32:40.180265172Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:32:40.189926389Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:32:40.190212095Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:32:40.300215941Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:32:40.30054419Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:33:12.674514066Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:33:12.675145561Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:33:12.675545343Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:33:12.964182462Z INFO:src.api.chatbot:Fetched 7 messages from channel
+2026-07-26T02:33:12.964459548Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:33:12.970988261Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:33:12.971345291Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:33:12.971357721Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:33:12.999467484Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:33:18.449561035Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T02:33:18.449705703Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:33:28.736506758Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:33:28.736506908Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:33:28.736533539Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:33:29.030032058Z INFO:src.api.chatbot:Fetched 8 messages from channel
+2026-07-26T02:33:29.03005202Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:33:29.039155326Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:33:29.039865045Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:33:29.039878546Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:33:29.062873104Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:34:17.397098146Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:34:17.397334169Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:34:17.397695689Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:34:17.695204621Z INFO:src.api.chatbot:Fetched 9 messages from channel
+2026-07-26T02:34:17.695329028Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:34:17.702137947Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:34:17.70256065Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:34:17.702632114Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:34:17.724743374Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:34:42.423272592Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:34:42.423454152Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:34:42.423698336Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:34:42.725007669Z INFO:src.api.chatbot:Fetched 10 messages from channel
+2026-07-26T02:34:42.725151677Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:34:42.730306684Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:34:42.730655923Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:34:42.730713046Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:34:42.753170835Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:34:56.205967038Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:34:56.206244334Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:34:56.206608144Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:34:56.497964584Z INFO:src.api.chatbot:Fetched 11 messages from channel
+2026-07-26T02:34:56.498117902Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:34:56.503201795Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:34:56.5036604Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:34:56.503734945Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:34:56.524686899Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:35:09.474276197Z ==> Detected service running on port 10000
+2026-07-26T02:35:09.563121867Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2026-07-26T02:35:29.62593351Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:35:29.626062707Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:35:29.626319101Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=True
+2026-07-26T02:35:29.928242858Z INFO:src.api.chatbot:Fetched 12 messages from channel
+2026-07-26T02:35:29.929079445Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:35:29.937342844Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:35:29.93834068Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:35:29.938360161Z INFO:src.agent.brainstorming.nodes:Router decision: RESPOND (deterministic pre-check)
+2026-07-26T02:35:29.943078603Z INFO:src.api.chatbot:→ node: validate_and_classify
+2026-07-26T02:35:30.118848646Z INFO:src.api.chatbot:→ node: validate_and_classify
+2026-07-26T02:35:30.118869067Z INFO:src.api.chatbot:  llm call: validate_and_classify
+2026-07-26T02:35:30.30165322Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:35:30.302076534Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:35:31.517977309Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:35:32.391956982Z INFO:src.api.chatbot:→ node: provide_feedback
+2026-07-26T02:35:32.392175304Z INFO:src.agent.brainstorming.nodes:provide_feedback: setup_stage=purpose lifecycle_stage=None (designing config)
+2026-07-26T02:35:32.420489109Z INFO:src.api.chatbot:→ node: provide_feedback
+2026-07-26T02:35:32.44120033Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:35:32.445080676Z INFO:src.api.chatbot:  llm call: agent
+2026-07-26T02:35:33.697490091Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:35:38.037502068Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:35:38.052071358Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: hey y'all
+2026-07-26T02:35:38.052092699Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: okay we've put this off long enough. we keep saying our community has a certain way of doing things, and new folks have no way of knowing what that is. let's actually encode it.
+2026-07-26T02:35:38.05210646Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: agreed, but carefully. I want this to help people understand our norms, not slap a scarlet letter on everyone who's new.
+2026-07-26T02:35:38.05211263Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: two things I'd want marked. posts that fit our "from-scratch" ethos so people can find the good stuff. And the drive-by product spam that has nothing to do with our culture.
+2026-07-26T02:35:38.052154233Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: yeah those are the two. one's a positive marker, one's a "this isn't us" marker.
+2026-07-26T02:35:38.052174164Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: @CLEO can we get started?
+2026-07-26T02:35:38.052261659Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': 'Absolutely! Let\'s get started. I need to understand a bit more about your labeler\'s purpose before we design the labels.\n\n**What community is this for, and who\'s the intended audience?** \n\nI\'m picking up that you have a "from-scratch ethos" and want to help newcomers understand your norms while flagging product spam that doesn\'t fit your culture. But I need to know:\n\n- What kind of community is this? (e.g., a crafting community, a cooking community, a DIY/maker space, a gardening group?)\n- Who will subscribe to this labeler — just your community members, or are you hoping to help a broader audience find content that aligns with these values?\n\nThis context will help me design labels that truly serve your moderation goal and speak to your audience in the right way.', 'type': 'text', 'index': 0}]
+2026-07-26T02:35:38.055481887Z INFO:src.api.chatbot:→ node: draft_response
+2026-07-26T02:35:38.13233014Z INFO:src.api.chatbot:Draft was not streamed — sending from state fallback
+2026-07-26T02:35:38.245744306Z INFO:src.api.chatbot:Graph streaming complete, total chars: 0
+2026-07-26T02:36:41.804852113Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:36:41.805106717Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:36:41.805585514Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:36:42.113359306Z INFO:src.api.chatbot:Fetched 14 messages from channel
+2026-07-26T02:36:42.113683564Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:36:42.119784343Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:36:42.12009055Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:36:42.120105741Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:36:42.14094145Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:37:35.084386746Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:37:35.084595267Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:37:35.084842401Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:37:35.377038697Z INFO:src.api.chatbot:Fetched 15 messages from channel
+2026-07-26T02:37:35.377211126Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:37:35.383258762Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:37:35.383606942Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:37:35.383624303Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:37:35.404127093Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:37:45.967105689Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:37:45.967275119Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:37:45.967585816Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:37:46.267015914Z INFO:src.api.chatbot:Fetched 16 messages from channel
+2026-07-26T02:37:46.267195614Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:37:46.27413447Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:37:46.274822878Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:37:46.274837069Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:37:46.296822411Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:39:59.42088137Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:39:59.421088682Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:39:59.421382928Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:39:59.717532493Z INFO:src.api.chatbot:Fetched 17 messages from channel
+2026-07-26T02:39:59.717670981Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:39:59.723742426Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:39:59.724120287Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:39:59.724259924Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:39:59.746060118Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:42:29.396903567Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:42:29.397083667Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:42:29.397407905Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:42:29.698819924Z INFO:src.api.chatbot:Fetched 15 messages from channel
+2026-07-26T02:42:29.698974803Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:42:29.705921556Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:42:29.706212912Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:42:29.706227543Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:42:29.727243004Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:44:50.405160027Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:44:50.405344197Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:44:50.405644254Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:44:50.696764978Z INFO:src.api.chatbot:Fetched 16 messages from channel
+2026-07-26T02:44:50.69698561Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:44:50.702791821Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:44:50.703158741Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:44:50.703173282Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:44:50.724574194Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:45:16.986163107Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T02:45:16.986338896Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:45:16.986668105Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=True
+2026-07-26T02:45:17.292147073Z INFO:src.api.chatbot:Fetched 16 messages from channel
+2026-07-26T02:45:17.292352604Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:45:17.299030563Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:45:17.299460026Z INFO:src.agent.brainstorming.nodes:Current setup_stage: purpose
+2026-07-26T02:45:17.299485328Z INFO:src.agent.brainstorming.nodes:Router decision: RESPOND (deterministic pre-check)
+2026-07-26T02:45:17.301739132Z INFO:src.api.chatbot:→ node: validate_and_classify
+2026-07-26T02:45:17.511640323Z INFO:src.api.chatbot:→ node: validate_and_classify
+2026-07-26T02:45:17.511662164Z INFO:src.api.chatbot:  llm call: validate_and_classify
+2026-07-26T02:45:17.576529176Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:45:17.576734537Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:45:18.398591098Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:45:19.393381229Z INFO:src.api.chatbot:→ node: provide_feedback
+2026-07-26T02:45:19.393793212Z INFO:src.agent.brainstorming.nodes:provide_feedback: setup_stage=purpose lifecycle_stage=None (designing config)
+2026-07-26T02:45:19.417626038Z INFO:src.api.chatbot:→ node: provide_feedback
+2026-07-26T02:45:19.429671853Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:45:19.432250956Z INFO:src.api.chatbot:  llm call: agent
+2026-07-26T02:45:20.430689568Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:45:25.506850807Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:45:25.518695931Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: hey y'all
+2026-07-26T02:45:25.518718232Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: okay we've put this off long enough. we keep saying our community has a certain way of doing things, and new folks have no way of knowing what that is. let's actually encode it.
+2026-07-26T02:45:25.518733853Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: agreed, but carefully. I want this to help people understand our norms, not slap a scarlet letter on everyone who's new.
+2026-07-26T02:45:25.518738463Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: two things I'd want marked. posts that fit our "from-scratch" ethos so people can find the good stuff. And the drive-by product spam that has nothing to do with our culture.
+2026-07-26T02:45:25.518748194Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: yeah those are the two. one's a positive marker, one's a "this isn't us" marker.
+2026-07-26T02:45:25.518764235Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: @CLEO can we get started?
+2026-07-26T02:45:25.518841219Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': 'Absolutely! Let\'s get started. I need to understand a bit more about your labeler\'s purpose before we design the labels.\n\n**What community is this for, and who\'s the intended audience?** \n\nI\'m picking up that you have a "from-scratch ethos" and want to help newcomers understand your norms while flagging product spam that doesn\'t fit your culture. But I need to know:\n\n- What kind of community is this? (e.g., a crafting community, a cooking community, a DIY/maker space, a gardening group?)\n- Who will subscribe to this labeler — just your community members, or are you hoping to help a broader audience find content that aligns with these values?\n\nThis context will help me design labels that truly serve your moderation goal and speak to your audience in the right way.', 'type': 'text', 'index': 0}]
+2026-07-26T02:45:25.518870501Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: we're a home baking community of about 300 people on bluesky
+2026-07-26T02:45:25.518887431Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: yea, our content is cnetered on home milling, naturally-leavened bread
+2026-07-26T02:45:25.518894432Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: and sourdough
+2026-07-26T02:45:25.518916863Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: we want this labeler to help both our current members, and potential newcomers
+2026-07-26T02:45:25.518926364Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: this group is about naturally-leavened, from-scratch baking. home-milled flour, wild starter, the slow way
+2026-07-26T02:45:25.518961196Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: we want this moderation service to help newcomers and existing members alike
+2026-07-26T02:45:25.519002168Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': 'Perfect! A home baking community focused on naturally-leavened bread, home-milled flour, and the slow, from-scratch approach. That\'s beautifully specific.\n\nNow let\'s define the labels — the categories you want to flag and how each should be handled:\n\n**1. Posts that embody your "from-scratch" ethos** (naturally-leavened, home-milled, slow baking)\n   - How should these be marked? Just a positive/informational label that stays visible on the post so people can spot the good examples? Or something else?\n\n**2. Drive-by product spam** that doesn\'t fit your culture\n   - How should these be handled? Should they be hidden behind a click-through warning, or just carry a warning label while staying visible, or something else?\n\nOnce I know how you want each category treated, I\'ll design the complete labeler configuration for your approval.', 'type': 'text', 'index': 0}]
+2026-07-26T02:45:25.521435822Z INFO:src.api.chatbot:→ node: draft_response
+2026-07-26T02:45:25.541660689Z INFO:src.api.chatbot:Draft was not streamed — sending from state fallback
+2026-07-26T02:45:25.962207401Z INFO:src.api.chatbot:Graph streaming complete, total chars: 0
+2026-07-26T02:48:58.275032259Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:48:58.2752283Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:48:58.275552648Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:48:58.568201552Z INFO:src.api.chatbot:Fetched 18 messages from channel
+2026-07-26T02:48:58.568392563Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:48:58.574879991Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:48:58.575279103Z INFO:src.agent.brainstorming.nodes:Current setup_stage: content
+2026-07-26T02:48:58.575292254Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:48:58.597635118Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:49:08.673791484Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:49:08.673983134Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:49:08.67426033Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:49:08.965543789Z INFO:src.api.chatbot:Fetched 19 messages from channel
+2026-07-26T02:49:08.96575579Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:49:08.973503329Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:49:08.97389091Z INFO:src.agent.brainstorming.nodes:Current setup_stage: content
+2026-07-26T02:49:08.973924752Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:49:09.022017918Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:49:26.904395109Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:49:26.904580969Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:49:26.904853874Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:49:27.201224925Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:49:27.201390584Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:49:27.207406126Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:49:27.207755346Z INFO:src.agent.brainstorming.nodes:Current setup_stage: content
+2026-07-26T02:49:27.207779227Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:49:27.227520817Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:50:11.708363689Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:50:11.708599462Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:50:11.70891196Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:50:12.015893307Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:50:12.015912508Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:50:12.024055998Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:50:12.024070489Z INFO:src.agent.brainstorming.nodes:Current setup_stage: content
+2026-07-26T02:50:12.024155663Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:50:12.05124496Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:50:19.827393075Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:50:19.827447878Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:50:19.827705872Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:50:20.112050639Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:50:20.114253491Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:50:20.120559009Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:50:20.120896848Z INFO:src.agent.brainstorming.nodes:Current setup_stage: content
+2026-07-26T02:50:20.120909819Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:50:20.661079638Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:50:36.551888251Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:50:36.55204745Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:50:36.552383799Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:50:36.84386022Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:50:36.844043651Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:50:36.850679167Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:50:36.851106551Z INFO:src.agent.brainstorming.nodes:Current setup_stage: content
+2026-07-26T02:50:36.851125922Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:50:36.872313592Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:50:49.931757982Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T02:50:49.931942832Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:50:49.932312563Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=True
+2026-07-26T02:50:50.227291108Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:50:50.22732586Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:50:50.238610804Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:50:50.239310232Z INFO:src.agent.brainstorming.nodes:Current setup_stage: content
+2026-07-26T02:50:50.239376866Z INFO:src.agent.brainstorming.nodes:Router decision: RESPOND (deterministic pre-check)
+2026-07-26T02:50:50.242718551Z INFO:src.api.chatbot:→ node: validate_and_classify
+2026-07-26T02:50:50.517023194Z INFO:src.api.chatbot:→ node: validate_and_classify
+2026-07-26T02:50:50.517064796Z INFO:src.api.chatbot:  llm call: validate_and_classify
+2026-07-26T02:50:50.735035537Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:50:50.735218187Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:50:52.003261597Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:50:53.220216865Z INFO:src.api.chatbot:→ node: provide_feedback
+2026-07-26T02:50:53.220651289Z INFO:src.agent.brainstorming.nodes:provide_feedback: setup_stage=content lifecycle_stage=None (designing config)
+2026-07-26T02:50:53.222031605Z INFO:src.api.chatbot:→ node: provide_feedback
+2026-07-26T02:50:53.235341711Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:50:53.319817117Z INFO:src.api.chatbot:  llm call: agent
+2026-07-26T02:50:54.629502658Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:51:01.645178445Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:51:01.727670072Z INFO:src.api.chatbot:→ node: tools
+2026-07-26T02:51:01.743050112Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:51:01.749032072Z INFO:src.api.chatbot:  llm call: agent
+2026-07-26T02:51:02.851549579Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:51:08.464298067Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:51:08.476802038Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: hey y'all
+2026-07-26T02:51:08.476953686Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: okay we've put this off long enough. we keep saying our community has a certain way of doing things, and new folks have no way of knowing what that is. let's actually encode it.
+2026-07-26T02:51:08.477043001Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: agreed, but carefully. I want this to help people understand our norms, not slap a scarlet letter on everyone who's new.
+2026-07-26T02:51:08.477128376Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: two things I'd want marked. posts that fit our "from-scratch" ethos so people can find the good stuff. And the drive-by product spam that has nothing to do with our culture.
+2026-07-26T02:51:08.477176068Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: yeah those are the two. one's a positive marker, one's a "this isn't us" marker.
+2026-07-26T02:51:08.477284134Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: @CLEO can we get started?
+2026-07-26T02:51:08.517079583Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': 'Absolutely! Let\'s get started. I need to understand a bit more about your labeler\'s purpose before we design the labels.\n\n**What community is this for, and who\'s the intended audience?** \n\nI\'m picking up that you have a "from-scratch ethos" and want to help newcomers understand your norms while flagging product spam that doesn\'t fit your culture. But I need to know:\n\n- What kind of community is this? (e.g., a crafting community, a cooking community, a DIY/maker space, a gardening group?)\n- Who will subscribe to this labeler — just your community members, or are you hoping to help a broader audience find content that aligns with these values?\n\nThis context will help me design labels that truly serve your moderation goal and speak to your audience in the right way.', 'type': 'text', 'index': 0}]
+2026-07-26T02:51:08.517103334Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: we're a home baking community of about 300 people on bluesky
+2026-07-26T02:51:08.517108994Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: yea, our content is cnetered on home milling, naturally-leavened bread
+2026-07-26T02:51:08.517122765Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: and sourdough
+2026-07-26T02:51:08.517742149Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: we want this labeler to help both our current members, and potential newcomers
+2026-07-26T02:51:08.5177533Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: this group is about naturally-leavened, from-scratch baking. home-milled flour, wild starter, the slow way
+2026-07-26T02:51:08.51775719Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: we want this moderation service to help newcomers and existing members alike
+2026-07-26T02:51:08.51776259Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': 'Perfect! A home baking community focused on naturally-leavened bread, home-milled flour, and the slow, from-scratch approach. That\'s beautifully specific.\n\nNow let\'s define the labels — the categories you want to flag and how each should be handled:\n\n**1. Posts that embody your "from-scratch" ethos** (naturally-leavened, home-milled, slow baking)\n   - How should these be marked? Just a positive/informational label that stays visible on the post so people can spot the good examples? Or something else?\n\n**2. Drive-by product spam** that doesn\'t fit your culture\n   - How should these be handled? Should they be hidden behind a click-through warning, or just carry a warning label while staying visible, or something else?\n\nOnce I know how you want each category treated, I\'ll design the complete labeler configuration for your approval.', 'type': 'text', 'index': 0}]
+2026-07-26T02:51:08.517768001Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: the from-scratch one should just be a visible badge. it's a signal, a little "this exemplifies our values" marker. nothing hidden, obviously. we want people to see it.
+2026-07-26T02:51:08.517772001Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: definitely visible. it's a badge of belonging, not a warning.
+2026-07-26T02:51:08.517776721Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: the second thing is the dropshipper spam. accounts show up posting "PROFESSIONAL DUTCH OVEN 60% OFF LINK IN BIO," "DM me for artisan banneton wholesale". brand-new accounts blasting product links. that's the opposite of our culture. it's not against a safety rule, it's just categorically not what this community is.
+2026-07-26T02:51:08.517788822Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: hide the out-of-bounds spam fully. it's categorically not us, nobody needs it in the feed. bury it behind a click-through.
+2026-07-26T02:51:08.517792212Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: yeah, hide the spam
+2026-07-26T02:51:08.517795652Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: works for me
+2026-07-26T02:51:08.517800542Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': "Perfect! I've got everything I need. Let me stage the complete labeler configuration for your approval:\n\n**Two labels:**\n1. **From-scratch badge** — a visible, positive marker for posts that exemplify your naturally-leavened, home-milled, slow-baking values\n2. **Product spam filter** — hides drive-by dropshipper posts (professional equipment sales, wholesale pitches, link-in-bio spam) behind a click-through so your feed stays focused on your culture\n\nLet me finalize this now:", 'type': 'text', 'index': 0}, {'id': 'toolu_01SnG6EPdNUxacErjQ26UbFx', 'input': {}, 'name': 'finalize_proposal', 'type': 'tool_use', 'caller': {'type': 'direct'}, 'index': 1, 'partial_json': '{"display_name": "From-Scratch Baking Community", "description": "A moderation service for the home baking community focused on naturally-leavened bread, home-milled flour, and slow, from-scratch methods. Highlights posts that embody these values and filters out product spam.", "labels": [{"identifier":"from_scratch_baking","severity":"inform","blurs":"none","locales":[{"lang":"en","name":"From-Scratch Baking","description":"Content that exemplifies naturally-leavened, home-milled, slow-baking values"}]},{"identifier":"product_spam","severity":"inform","blurs":"content","locales":[{"lang":"en","name":"Product Spam","description":"Drive-by product promotion unrelated to from-scratch baking culture"}]}]}'}]
+2026-07-26T02:51:08.51847633Z INFO:src.agent.brainstorming.nodes:feedback graph message [tool]: Proposal staged successfully.
+2026-07-26T02:51:08.518495171Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': '**✓ Configuration staged for approval!**\n\nYour labeler now has:\n\n1. **From-Scratch Baking** — A visible badge (no hiding, just an informational label) for posts that exemplify your naturally-leavened, home-milled, slow-baking ethos. Members and newcomers can spot the good examples at a glance.\n\n2. **Product Spam** — Hides drive-by dropshipper posts behind a click-through. When someone posts "PROFESSIONAL DUTCH OVEN 60% OFF" or wholesale banneton pitches, subscribers won\'t see it in their feed unless they choose to click through.\n\n**What\'s next:** The group will review and approve this configuration. Once approved, you\'ll move on to defining the *classification rules* — the specific signals (keywords, patterns, account traits) that determine which posts get which label. That\'s where you\'ll specify things like "brand-new accounts posting product links" or the markers of authentic from-scratch content.', 'type': 'text', 'index': 0}]
+2026-07-26T02:51:08.52119561Z INFO:src.api.chatbot:→ node: draft_response
+2026-07-26T02:51:08.536490485Z INFO:src.api.chatbot:Draft was not streamed — sending from state fallback
+2026-07-26T02:51:08.720032204Z INFO:src.api.chatbot:Graph streaming complete, total chars: 0
+2026-07-26T02:51:08.731948522Z INFO:src.api.chatbot:Staged pending suggestion under message_id=393e256b-3d63-4345-b29b-10e2b46497de
+2026-07-26T02:52:19.068158089Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T02:52:19.08175764Z INFO:src.api.chatbot:Stored reaction 'like' on AI message 393e256b-3d63-4345-b29b-10e2b46497de
+2026-07-26T02:52:19.173201392Z INFO:src.agent.brainstorming.voting:Vote on message 393e256b-3d63-4345-b29b-10e2b46497de (proposal): 1/3 approvals (threshold_met=False)
+2026-07-26T02:52:19.17696688Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:52:27.538998563Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:52:27.539100498Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:52:27.539432437Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:52:27.838590225Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:52:27.838767065Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:52:27.846568646Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:52:27.846914525Z INFO:src.agent.brainstorming.nodes:Current setup_stage: content
+2026-07-26T02:52:27.846937536Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:52:27.922738974Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:52:31.751082668Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T02:52:31.763532355Z INFO:src.api.chatbot:Stored reaction 'like' on AI message 393e256b-3d63-4345-b29b-10e2b46497de
+2026-07-26T02:52:31.88144031Z INFO:src.agent.brainstorming.voting:Vote on message 393e256b-3d63-4345-b29b-10e2b46497de (proposal): 2/3 approvals (threshold_met=True)
+2026-07-26T02:52:31.892698022Z INFO:src.agent.brainstorming.voting:Labeler config updated after majority approval on message 393e256b-3d63-4345-b29b-10e2b46497de (setup_stage: content -> rules)
+2026-07-26T02:52:32.098906585Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:52:32.15999477Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:52:32.160143658Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:52:32.209913878Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:52:32.210087118Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:53:12.635774311Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:53:12.636090569Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:53:12.636710723Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:53:12.940309087Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:53:12.940469986Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:53:12.992720263Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:53:12.995111695Z INFO:src.agent.brainstorming.nodes:Current setup_stage: rules
+2026-07-26T02:53:12.995125106Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:53:13.045396124Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:53:52.792635081Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:53:52.79280304Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:53:52.793106277Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:53:53.082861008Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:53:53.08308856Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:53:53.091172837Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:53:53.091517646Z INFO:src.agent.brainstorming.nodes:Current setup_stage: rules
+2026-07-26T02:53:53.091688225Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:53:53.12687954Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:53:57.562629158Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:53:57.562904203Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:53:57.563272493Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:53:57.86093258Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:53:57.861144302Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:53:57.870098997Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:53:57.870497709Z INFO:src.agent.brainstorming.nodes:Current setup_stage: rules
+2026-07-26T02:53:57.870523601Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:53:57.940493747Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:54:29.745692835Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:54:29.745922928Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:54:29.746211574Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:54:30.037770174Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:54:30.037946224Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:54:30.045001964Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:54:30.045461309Z INFO:src.agent.brainstorming.nodes:Current setup_stage: rules
+2026-07-26T02:54:30.04547782Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:54:30.055951019Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:55:09.830549702Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:55:09.830760743Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:55:09.83106828Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:55:10.115875839Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:55:10.11609011Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:55:10.123656539Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:55:10.123980506Z INFO:src.agent.brainstorming.nodes:Current setup_stage: rules
+2026-07-26T02:55:10.124013678Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:55:10.135558006Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:55:17.210610636Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T02:55:17.210791166Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:55:17.211322325Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=True
+2026-07-26T02:55:17.512089166Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:55:17.512305527Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:55:17.520569834Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:55:17.520964126Z INFO:src.agent.brainstorming.nodes:Current setup_stage: rules
+2026-07-26T02:55:17.520981517Z INFO:src.agent.brainstorming.nodes:Router decision: RESPOND (deterministic pre-check)
+2026-07-26T02:55:17.523098034Z INFO:src.api.chatbot:→ node: validate_and_classify
+2026-07-26T02:55:17.799662907Z INFO:src.api.chatbot:→ node: validate_and_classify
+2026-07-26T02:55:17.799688419Z INFO:src.api.chatbot:  llm call: validate_and_classify
+2026-07-26T02:55:17.821225839Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:55:17.821454341Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:55:19.233399686Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:55:20.218663342Z INFO:src.api.chatbot:→ node: provide_feedback
+2026-07-26T02:55:20.219074615Z INFO:src.agent.brainstorming.nodes:provide_feedback: setup_stage=rules lifecycle_stage=None (deriving rules)
+2026-07-26T02:55:20.220485743Z INFO:src.api.chatbot:→ node: provide_feedback
+2026-07-26T02:55:20.228239582Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:55:20.232158138Z INFO:src.api.chatbot:  llm call: agent
+2026-07-26T02:55:21.384521808Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:55:27.585768175Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:55:27.592892829Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: agreed, but carefully. I want this to help people understand our norms, not slap a scarlet letter on everyone who's new.
+2026-07-26T02:55:27.59291409Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: two things I'd want marked. posts that fit our "from-scratch" ethos so people can find the good stuff. And the drive-by product spam that has nothing to do with our culture.
+2026-07-26T02:55:27.592927651Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: yeah those are the two. one's a positive marker, one's a "this isn't us" marker.
+2026-07-26T02:55:27.592935021Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: @CLEO can we get started?
+2026-07-26T02:55:27.592983184Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': 'Absolutely! Let\'s get started. I need to understand a bit more about your labeler\'s purpose before we design the labels.\n\n**What community is this for, and who\'s the intended audience?** \n\nI\'m picking up that you have a "from-scratch ethos" and want to help newcomers understand your norms while flagging product spam that doesn\'t fit your culture. But I need to know:\n\n- What kind of community is this? (e.g., a crafting community, a cooking community, a DIY/maker space, a gardening group?)\n- Who will subscribe to this labeler — just your community members, or are you hoping to help a broader audience find content that aligns with these values?\n\nThis context will help me design labels that truly serve your moderation goal and speak to your audience in the right way.', 'type': 'text', 'index': 0}]
+2026-07-26T02:55:27.593005075Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: we're a home baking community of about 300 people on bluesky
+2026-07-26T02:55:27.593021506Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: yea, our content is cnetered on home milling, naturally-leavened bread
+2026-07-26T02:55:27.59309005Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: and sourdough
+2026-07-26T02:55:27.59310532Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: we want this labeler to help both our current members, and potential newcomers
+2026-07-26T02:55:27.593151633Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: this group is about naturally-leavened, from-scratch baking. home-milled flour, wild starter, the slow way
+2026-07-26T02:55:27.593171584Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: we want this moderation service to help newcomers and existing members alike
+2026-07-26T02:55:27.593219267Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': 'Perfect! A home baking community focused on naturally-leavened bread, home-milled flour, and the slow, from-scratch approach. That\'s beautifully specific.\n\nNow let\'s define the labels — the categories you want to flag and how each should be handled:\n\n**1. Posts that embody your "from-scratch" ethos** (naturally-leavened, home-milled, slow baking)\n   - How should these be marked? Just a positive/informational label that stays visible on the post so people can spot the good examples? Or something else?\n\n**2. Drive-by product spam** that doesn\'t fit your culture\n   - How should these be handled? Should they be hidden behind a click-through warning, or just carry a warning label while staying visible, or something else?\n\nOnce I know how you want each category treated, I\'ll design the complete labeler configuration for your approval.', 'type': 'text', 'index': 0}]
+2026-07-26T02:55:27.593251768Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: the from-scratch one should just be a visible badge. it's a signal, a little "this exemplifies our values" marker. nothing hidden, obviously. we want people to see it.
+2026-07-26T02:55:27.593287821Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: definitely visible. it's a badge of belonging, not a warning.
+2026-07-26T02:55:27.593327653Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: the second thing is the dropshipper spam. accounts show up posting "PROFESSIONAL DUTCH OVEN 60% OFF LINK IN BIO," "DM me for artisan banneton wholesale". brand-new accounts blasting product links. that's the opposite of our culture. it's not against a safety rule, it's just categorically not what this community is.
+2026-07-26T02:55:27.593341333Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: hide the out-of-bounds spam fully. it's categorically not us, nobody needs it in the feed. bury it behind a click-through.
+2026-07-26T02:55:27.593389076Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: yeah, hide the spam
+2026-07-26T02:55:27.593395916Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: works for me
+2026-07-26T02:55:27.593487652Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': '**✓ Configuration staged for approval!**\n\nYour labeler now has:\n\n1. **From-Scratch Baking** — A visible badge (no hiding, just an informational label) for posts that exemplify your naturally-leavened, home-milled, slow-baking ethos. Members and newcomers can spot the good examples at a glance.\n\n2. **Product Spam** — Hides drive-by dropshipper posts behind a click-through. When someone posts "PROFESSIONAL DUTCH OVEN 60% OFF" or wholesale banneton pitches, subscribers won\'t see it in their feed unless they choose to click through.\n\n**What\'s next:** The group will review and approve this configuration. Once approved, you\'ll move on to defining the *classification rules* — the specific signals (keywords, patterns, account traits) that determine which posts get which label. That\'s where you\'ll specify things like "brand-new accounts posting product links" or the markers of authentic from-scratch content.', 'type': 'text', 'index': 0}]
+2026-07-26T02:55:27.593515893Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: [Group decision: the labeler configuration you staged were put to a vote and APPROVED. They are now committed and are the current labeler configuration shown in your system prompt. This is done — do not ask the group to approve them again, and do not re-stage them unchanged.]
+2026-07-26T02:55:27.593555335Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: perf
+2026-07-26T02:55:27.593592127Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: the vocabulary is pretty consistent for the from-scratch marker. "wild yeast," "naturally leavened," "home-milled," "fresh-milled flour," "levain," "no commercial yeast," "100% whole grain," that kind of language. people describing the slow process.
+2026-07-26T02:55:27.593659741Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: "starter" and "sourdough" alone are too broad
+2026-07-26T02:55:27.593669702Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: everyone says those. it's the from-scratch vocabulary that marks the real thing.
+2026-07-26T02:55:27.593724315Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: and please, this is a positive label, so worst case it's just missing from a post that deserved it. I'd rather it under-mark than slap the badge on something ironically. keep it to the genuine from-scratch language
+2026-07-26T02:55:27.593741536Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: that's right. cleo, keep it to the real from-scratch vocabulary.
+2026-07-26T02:55:27.593789518Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': 'Got it. For the **From-Scratch Baking** label, I\'ll catch posts that use the genuine from-scratch vocabulary — "wild yeast," "naturally leavened," "home-milled," "fresh-milled flour," "levain," "no commercial yeast," "100% whole grain" — the language that signals someone is actually doing the slow, from-scratch work.\n\nI\'ll skip "starter" and "sourdough" alone since everyone uses those. This way the badge only appears on posts that truly exemplify your values, not on every casual mention.\n\n**Now for the Product Spam label** — what should I look for to catch those drive-by dropshipper posts? You mentioned brand-new accounts posting things like "PROFESSIONAL DUTCH OVEN 60% OFF LINK IN BIO" or "DM me for artisan banneton wholesale."\n\nShould I flag:\n- Product/sales language (discount codes, "link in bio," "DM me," wholesale pitches) from brand-new accounts?\n- Any other signals that mark the drive-by spam as distinct from a community member occasionally mentioning a tool they like?\n\nWhat makes it spam versus a genuine recommendation in your community?', 'type': 'text', 'index': 0}]
+2026-07-26T02:55:27.618710975Z INFO:src.api.chatbot:→ node: draft_response
+2026-07-26T02:55:27.63164063Z INFO:src.api.chatbot:Draft was not streamed — sending from state fallback
+2026-07-26T02:55:27.721684296Z INFO:src.api.chatbot:Graph streaming complete, total chars: 0
+2026-07-26T02:56:04.506790649Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:56:04.506802049Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:56:04.506821231Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:56:04.801193519Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:56:04.801367358Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:56:04.81082114Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:56:04.811376091Z INFO:src.agent.brainstorming.nodes:Current setup_stage: rules
+2026-07-26T02:56:04.811389692Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:56:04.822953761Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:56:28.966473518Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:56:28.966727122Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:56:28.96796039Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:56:29.259982459Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:56:29.260002989Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:56:29.270052105Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:56:29.270081437Z INFO:src.agent.brainstorming.nodes:Current setup_stage: rules
+2026-07-26T02:56:29.270393474Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:56:29.319155279Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:56:50.702800314Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:56:50.702992054Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:56:50.70328401Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:56:50.996954331Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:56:50.99711978Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:56:51.005200067Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:56:51.005689994Z INFO:src.agent.brainstorming.nodes:Current setup_stage: rules
+2026-07-26T02:56:51.005724545Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:56:51.025273276Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:57:05.377427517Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T02:57:05.377582995Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:57:05.377907133Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=True
+2026-07-26T02:57:05.676620752Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:57:05.676818633Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:57:05.683709364Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:57:05.683955447Z INFO:src.agent.brainstorming.nodes:Current setup_stage: rules
+2026-07-26T02:57:05.683969078Z INFO:src.agent.brainstorming.nodes:Router decision: RESPOND (deterministic pre-check)
+2026-07-26T02:57:05.686152999Z INFO:src.api.chatbot:→ node: validate_and_classify
+2026-07-26T02:57:05.904499276Z INFO:src.api.chatbot:→ node: validate_and_classify
+2026-07-26T02:57:05.904517548Z INFO:src.api.chatbot:  llm call: validate_and_classify
+2026-07-26T02:57:05.926691313Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:57:05.926863442Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:57:07.332982675Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:57:08.422277558Z INFO:src.api.chatbot:→ node: provide_feedback
+2026-07-26T02:57:08.4226742Z INFO:src.agent.brainstorming.nodes:provide_feedback: setup_stage=rules lifecycle_stage=None (deriving rules)
+2026-07-26T02:57:08.423820493Z INFO:src.api.chatbot:→ node: provide_feedback
+2026-07-26T02:57:08.42972989Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:57:08.523022436Z INFO:src.api.chatbot:  llm call: agent
+2026-07-26T02:57:09.752707018Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:57:24.824738523Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:57:24.828271508Z INFO:src.api.chatbot:→ node: tools
+2026-07-26T02:57:24.923194575Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:57:24.926132087Z INFO:src.api.chatbot:  llm call: agent
+2026-07-26T02:57:26.002488226Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:57:26.057448104Z INFO:src.api.chatbot:→ node: agent
+2026-07-26T02:57:26.064358395Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: and sourdough
+2026-07-26T02:57:26.064378086Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: we want this labeler to help both our current members, and potential newcomers
+2026-07-26T02:57:26.064384527Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: this group is about naturally-leavened, from-scratch baking. home-milled flour, wild starter, the slow way
+2026-07-26T02:57:26.064402178Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: we want this moderation service to help newcomers and existing members alike
+2026-07-26T02:57:26.064430299Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': 'Perfect! A home baking community focused on naturally-leavened bread, home-milled flour, and the slow, from-scratch approach. That\'s beautifully specific.\n\nNow let\'s define the labels — the categories you want to flag and how each should be handled:\n\n**1. Posts that embody your "from-scratch" ethos** (naturally-leavened, home-milled, slow baking)\n   - How should these be marked? Just a positive/informational label that stays visible on the post so people can spot the good examples? Or something else?\n\n**2. Drive-by product spam** that doesn\'t fit your culture\n   - How should these be handled? Should they be hidden behind a click-through warning, or just carry a warning label while staying visible, or something else?\n\nOnce I know how you want each category treated, I\'ll design the complete labeler configuration for your approval.', 'type': 'text', 'index': 0}]
+2026-07-26T02:57:26.06444309Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: the from-scratch one should just be a visible badge. it's a signal, a little "this exemplifies our values" marker. nothing hidden, obviously. we want people to see it.
+2026-07-26T02:57:26.064539565Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: definitely visible. it's a badge of belonging, not a warning.
+2026-07-26T02:57:26.064549736Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: the second thing is the dropshipper spam. accounts show up posting "PROFESSIONAL DUTCH OVEN 60% OFF LINK IN BIO," "DM me for artisan banneton wholesale". brand-new accounts blasting product links. that's the opposite of our culture. it's not against a safety rule, it's just categorically not what this community is.
+2026-07-26T02:57:26.064591268Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: hide the out-of-bounds spam fully. it's categorically not us, nobody needs it in the feed. bury it behind a click-through.
+2026-07-26T02:57:26.06461946Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: yeah, hide the spam
+2026-07-26T02:57:26.064668032Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: works for me
+2026-07-26T02:57:26.064694494Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': '**✓ Configuration staged for approval!**\n\nYour labeler now has:\n\n1. **From-Scratch Baking** — A visible badge (no hiding, just an informational label) for posts that exemplify your naturally-leavened, home-milled, slow-baking ethos. Members and newcomers can spot the good examples at a glance.\n\n2. **Product Spam** — Hides drive-by dropshipper posts behind a click-through. When someone posts "PROFESSIONAL DUTCH OVEN 60% OFF" or wholesale banneton pitches, subscribers won\'t see it in their feed unless they choose to click through.\n\n**What\'s next:** The group will review and approve this configuration. Once approved, you\'ll move on to defining the *classification rules* — the specific signals (keywords, patterns, account traits) that determine which posts get which label. That\'s where you\'ll specify things like "brand-new accounts posting product links" or the markers of authentic from-scratch content.', 'type': 'text', 'index': 0}]
+2026-07-26T02:57:26.064766288Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: [Group decision: the labeler configuration you staged were put to a vote and APPROVED. They are now committed and are the current labeler configuration shown in your system prompt. This is done — do not ask the group to approve them again, and do not re-stage them unchanged.]
+2026-07-26T02:57:26.064775098Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: perf
+2026-07-26T02:57:26.064826231Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: the vocabulary is pretty consistent for the from-scratch marker. "wild yeast," "naturally leavened," "home-milled," "fresh-milled flour," "levain," "no commercial yeast," "100% whole grain," that kind of language. people describing the slow process.
+2026-07-26T02:57:26.064845972Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: "starter" and "sourdough" alone are too broad
+2026-07-26T02:57:26.064885874Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: everyone says those. it's the from-scratch vocabulary that marks the real thing.
+2026-07-26T02:57:26.064901345Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: and please, this is a positive label, so worst case it's just missing from a post that deserved it. I'd rather it under-mark than slap the badge on something ironically. keep it to the genuine from-scratch language
+2026-07-26T02:57:26.064935017Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: that's right. cleo, keep it to the real from-scratch vocabulary.
+2026-07-26T02:57:26.06498955Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': 'Got it. For the **From-Scratch Baking** label, I\'ll catch posts that use the genuine from-scratch vocabulary — "wild yeast," "naturally leavened," "home-milled," "fresh-milled flour," "levain," "no commercial yeast," "100% whole grain" — the language that signals someone is actually doing the slow, from-scratch work.\n\nI\'ll skip "starter" and "sourdough" alone since everyone uses those. This way the badge only appears on posts that truly exemplify your values, not on every casual mention.\n\n**Now for the Product Spam label** — what should I look for to catch those drive-by dropshipper posts? You mentioned brand-new accounts posting things like "PROFESSIONAL DUTCH OVEN 60% OFF LINK IN BIO" or "DM me for artisan banneton wholesale."\n\nShould I flag:\n- Product/sales language (discount codes, "link in bio," "DM me," wholesale pitches) from brand-new accounts?\n- Any other signals that mark the drive-by spam as distinct from a community member occasionally mentioning a tool they like?\n\nWhat makes it spam versus a genuine recommendation in your community?', 'type': 'text', 'index': 0}]
+2026-07-26T02:57:26.064999341Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: now the out-of-community spam. same tell every time: a product-pitch phrase plus it's a brand-new account with basically no followers. "link in bio," "DM for wholesale," "60% off," "limited stock", plus a follower count near zero. actual members who mention a link have hundreds of followers. it's the combination that marks it as not-us.
+2026-07-26T02:57:26.065037953Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: yeah, the combination feels safe. an established member sharing a link won't get caught because they've got followers.
+2026-07-26T02:57:26.065062404Z INFO:src.agent.brainstorming.nodes:feedback graph message [human]: so it's the sales phrase AND the low follower count together. either alone would catch real people
+2026-07-26T02:57:26.065157219Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: [{'text': 'Perfect — so **Product Spam** fires when a post has BOTH:\n- Sales/promo language ("link in bio," "DM for wholesale," "60% off," "limited stock," etc.)\n- AND it\'s from a brand-new account with very low followers (basically zero)\n\nEither signal alone would catch real community members, but together they mark the drive-by dropshippers who aren\'t part of your culture.\n\n---\n\n**Here are the complete rules for both labels:**\n\n**From-Scratch Baking** will catch posts using genuine from-scratch vocabulary — "wild yeast," "naturally leavened," "home-milled," "fresh-milled flour," "levain," "no commercial yeast," "100% whole grain." It skips broad terms like "starter" or "sourdough" alone, so the badge only appears on posts that truly exemplify your slow, from-scratch values.\n\n**Product Spam** will catch posts that combine sales pitches ("link in bio," "DM me," discount percentages, "limited stock," "wholesale") with very low follower counts (10 or fewer). Established members sharing a link won\'t be flagged because they have followers; it\'s the combination that marks the drive-by spam.\n\nI\'ve staged these rules — react 👍🏾 to approve, or just tell me what to change.', 'type': 'text', 'index': 0}, {'id': 'toolu_01DzRJmdmPFUeXs69mXPeTyn', 'input': {}, 'name': 'finalize_rules', 'type': 'tool_use', 'caller': {'type': 'direct'}, 'index': 1, 'partial_json': '{"rules": [{"label_identifier":"from_scratch_baking","include_groups":[{"all_of":[{"type":"pattern","value":"\\\\b(wild yeast|naturally leavened|naturally-leavened|home-milled|home milled|fresh-milled|fresh milled|levain|no commercial yeast|100% whole grain)\\\\b","plain_name":"from-scratch baking vocabulary"}]}],"exclude_signals":[],"notes":"Catches posts using genuine from-scratch vocabulary like \'wild yeast,\' \'naturally leavened,\' \'home-milled,\' \'fresh-milled flour,\' \'levain,\' \'no commercial yeast,\' or \'100% whole grain.\' Skips broad terms like \'starter\' or \'sourdough\' alone so the badge only appears on posts that truly exemplify slow, from-scratch values."},{"label_identifier":"product_spam","include_groups":[{"all_of":[{"type":"pattern","value":"\\\\b(link in bio|dm (me|for)|\\\\d+%\\\\s*off|limited stock|wholesale|discount code|promo code|shop now|buy now|order now)\\\\b","plain_name":"sales or promo language"},{"type":"account","value":"follower_count <= 10","plain_name":"brand-new account with very few followers"}]}],"exclude_signals":[],"notes":"Catches posts combining sales pitches (link in bio, DM me, discount percentages, limited stock, wholesale) with very low follower counts (10 or fewer). Established members sharing a link won\'t be flagged because they have followers; it\'s the combination that marks drive-by dropshipper spam."}]}'}]
+2026-07-26T02:57:26.065184971Z INFO:src.agent.brainstorming.nodes:feedback graph message [tool]: Rules staged for approval (2 label(s)).
+2026-07-26T02:57:26.065224413Z INFO:src.agent.brainstorming.nodes:feedback graph message [ai]: []
+2026-07-26T02:57:26.06806793Z INFO:src.api.chatbot:→ node: draft_response
+2026-07-26T02:57:26.124836098Z INFO:src.api.chatbot:Draft was not streamed — sending from state fallback
+2026-07-26T02:57:26.216308793Z INFO:src.api.chatbot:Graph streaming complete, total chars: 0
+2026-07-26T02:57:26.22710733Z INFO:src.api.chatbot:Staged pending rule suggestion under message_id=5d94d583-054a-4bf8-b05d-29da08803319
+2026-07-26T02:58:48.098857324Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:58:48.099084437Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:58:48.099451777Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:58:48.394894667Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:58:48.395167552Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:58:48.418833111Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:58:48.419309417Z INFO:src.agent.brainstorming.nodes:Current setup_stage: rules
+2026-07-26T02:58:48.419332248Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:58:48.430715607Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:59:05.055961539Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:59:05.056198172Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:59:05.056564322Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T02:59:05.353621382Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T02:59:05.353807833Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T02:59:05.361851747Z INFO:src.api.chatbot:→ node: router
+2026-07-26T02:59:05.362139693Z INFO:src.agent.brainstorming.nodes:Current setup_stage: rules
+2026-07-26T02:59:05.362146584Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP (in setup, awaiting explicit trigger)
+2026-07-26T02:59:05.417190836Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T02:59:10.101002414Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T02:59:10.112305929Z INFO:src.api.chatbot:Stored reaction 'like' on AI message 5d94d583-054a-4bf8-b05d-29da08803319
+2026-07-26T02:59:10.208179159Z INFO:src.agent.brainstorming.voting:Vote on message 5d94d583-054a-4bf8-b05d-29da08803319 (rules): 1/3 approvals (threshold_met=False)
+2026-07-26T02:59:10.222068026Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:59:19.361839683Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T02:59:19.369017289Z INFO:src.api.chatbot:Stored reaction 'like' on AI message 5d94d583-054a-4bf8-b05d-29da08803319
+2026-07-26T02:59:19.457053636Z INFO:src.agent.brainstorming.voting:Vote on message 5d94d583-054a-4bf8-b05d-29da08803319 (rules): 2/3 approvals (threshold_met=True)
+2026-07-26T02:59:19.463351484Z INFO:src.agent.brainstorming.voting:Classification rules updated after majority approval on message 5d94d583-054a-4bf8-b05d-29da08803319 (setup_stage: rules -> complete, lifecycle_stage: preview)
+2026-07-26T02:59:19.67079104Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:59:19.670926288Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:59:19.701338209Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:59:19.717171994Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T02:59:19.717310592Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T02:59:33.014394535Z INFO:     10.25.2.132:0 - "GET /labeler-spec/pilot HTTP/1.1" 200 OK
+2026-07-26T02:59:48.59088794Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T02:59:48.603510317Z INFO:     10.30.236.131:0 - "GET /preview-posts/pilot HTTP/1.1" 200 OK
+2026-07-26T02:59:52.963502928Z INFO:     10.31.154.19:0 - "GET /labeler-spec/pilot HTTP/1.1" 200 OK
+2026-07-26T02:59:52.965652107Z INFO:     10.25.2.132:0 - "GET /preview-posts/pilot HTTP/1.1" 200 OK
+2026-07-26T03:01:24.289408929Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:01:24.289627461Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:01:24.289960669Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T03:01:24.577071682Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T03:01:24.577259372Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T03:01:24.586594728Z INFO:src.api.chatbot:→ node: router
+2026-07-26T03:01:24.587032442Z INFO:src.agent.brainstorming.nodes:Current setup_stage: complete
+2026-07-26T03:01:24.589056494Z INFO:src.api.chatbot:  llm call: router
+2026-07-26T03:01:25.315574729Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T03:01:25.364147204Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP
+2026-07-26T03:01:25.373165113Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T03:01:36.008867105Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:01:36.009092358Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:01:36.009443467Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T03:01:36.309047471Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T03:01:36.30922319Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T03:01:36.320276491Z INFO:src.api.chatbot:→ node: router
+2026-07-26T03:01:36.320808461Z INFO:src.agent.brainstorming.nodes:Current setup_stage: complete
+2026-07-26T03:01:36.323599495Z INFO:src.api.chatbot:  llm call: router
+2026-07-26T03:01:36.806325092Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T03:01:36.850614721Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP
+2026-07-26T03:01:36.858233482Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T03:04:34.021761019Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T03:04:34.03516296Z INFO:src.api.chatbot:Stored reaction 'like' on AI message 9f02465c-4996-4c02-bb4f-522db7872904
+2026-07-26T03:04:34.158618497Z INFO:src.agent.brainstorming.voting:Preview-approval vote on 9f02465c-4996-4c02-bb4f-522db7872904: 1/3 approvals (not yet met)
+2026-07-26T03:04:34.223522706Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:04:45.972617351Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T03:04:45.981375055Z INFO:src.api.chatbot:Stored reaction 'like' on AI message 9f02465c-4996-4c02-bb4f-522db7872904
+2026-07-26T03:04:46.119860092Z INFO:src.agent.brainstorming.voting:Preview approved on message 9f02465c-4996-4c02-bb4f-522db7872904 — lifecycle preview -> generate
+2026-07-26T03:04:46.218965432Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:04:46.318289525Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:04:46.318548829Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:04:46.675870187Z INFO:httpx:HTTP Request: POST https://bsky.social/xrpc/com.atproto.server.createSession "HTTP/1.1 200 OK"
+2026-07-26T03:04:46.804488349Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=no+commercial+yeast&limit=25&lang=en "HTTP/1.1 200 OK"
+2026-07-26T03:04:46.991365133Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=100%25+whole+grain&limit=25&lang=en "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.053816406Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=naturally+leavened&limit=25&lang=en "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.132130706Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=fresh+milled&limit=25&lang=en "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.199149522Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=home+milled&limit=25&lang=en "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.267055177Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=wild+yeast&limit=25&lang=en "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.331396875Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=limited+stock&limit=25&lang=en "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.41450343Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=discount+code&limit=25&lang=en "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.461969935Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.actor.getProfiles?actors=danielrlevy88.bsky.social&actors=xpeachheart.bsky.social&actors=notthegiraffe.bsky.social&actors=nickdiak.com&actors=cappuccinocrafts.bsky.social&actors=abbaetha.bsky.social&actors=nekotachis.bsky.social&actors=ecosnippets.bsky.social&actors=quant-hub.bsky.social&actors=critical-tomato.bsky.social&actors=danielbolnick.bsky.social&actors=bluemeridian.bsky.social&actors=transmutrix.bsky.social&actors=wtopnews.bsky.social&actors=bdha.bsky.social&actors=bassdokter.bsky.social&actors=macdoug.com&actors=australiangroan.bsky.social&actors=erinacean.bsky.social&actors=nicosan1.bsky.social&actors=generalmonkey.bsky.social&actors=eatyourgarden.bsky.social&actors=dianaforte.bsky.social&actors=longtail-news.bsky.social&actors=melapoly.bsky.social "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.505057547Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.actor.getProfiles?actors=filmfreewaycodes.bsky.social&actors=enchanted1956.bsky.social&actors=joeknittingmama.bsky.social&actors=theironleaf.bsky.social&actors=pauljwhite.eurosky.social&actors=acidrainstorm.bsky.social&actors=northernnerd.bsky.social&actors=ellyzoe.bsky.social&actors=zachtherobot.bsky.social&actors=talkingpicturestv.bsky.social&actors=scottofclarita.bsky.social&actors=itsjameswhite.bsky.social&actors=niftymitch.bsky.social&actors=rfdrelay.bsky.social&actors=s4ltorii.bsky.social&actors=mikamarye.bsky.social&actors=karamcnair.bsky.social&actors=mjensen22.bsky.social&actors=junehawk.bsky.social&actors=irisfenby.bsky.social&actors=rockhyrax0.bsky.social&actors=nancyluis.bsky.social&actors=americanfietser.bsky.social&actors=nuclearanthro.bsky.social&actors=snowintheair.bsky.social "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.541030716Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.actor.getProfiles?actors=groku.bsky.social&actors=agavegator.bsky.social&actors=patrickpoet.bsky.social&actors=msnightmantis.bsky.social&actors=castawayfarmtoo.bsky.social&actors=a573r.bsky.social&actors=mrpeabody323.bsky.social&actors=pdxveg.bsky.social&actors=offcolorbrewing.bsky.social&actors=navinpokala.bsky.social&actors=ngsdetroit.bsky.social&actors=discontinuedfoods.bsky.social&actors=jesseraub.online&actors=kristinespinos.bsky.social&actors=darj9.bsky.social&actors=bencasselman.bsky.social&actors=averagepenny.bsky.social&actors=vanadissaves.bsky.social&actors=karenskitchen.bsky.social&actors=casaciterone.bsky.social&actors=stevepurnell.bsky.social&actors=pinksalad.bsky.social&actors=rnaboursiii.bsky.social&actors=missvivienne.bsky.social&actors=raechitmerch.bsky.social "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.586329211Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.actor.getProfiles?actors=dadshredded.bsky.social&actors=sidewalkpirate.bsky.social&actors=nowcowan.bsky.social&actors=mrpow.bsky.social&actors=msawu.bsky.social&actors=nerdtothecore.com&actors=alex-mcd.bsky.social&actors=roguechocolate.bsky.social&actors=wolfperson1.bsky.social&actors=mubashariqbal.com&actors=baseball-broad.bsky.social&actors=bellalaane.bsky.social&actors=evshift.bsky.social&actors=ladyboygold.bsky.social&actors=aamas739.bsky.social&actors=callgespenst.bsky.social&actors=adamweintraub.bsky.social&actors=waldo.net&actors=plagueoffur.bsky.social&actors=luxalptraum.com&actors=awosome.bsky.social&actors=sourdough2021.bsky.social&actors=breadhiking.com&actors=vicente-gonzales.bsky.social&actors=drdpaweston.bsky.social "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.629235064Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.actor.getProfiles?actors=ruthless74.bsky.social&actors=fangandfable.com&actors=suredontknow.bsky.social&actors=dcellgames.com&actors=foodcoop.bsky.social&actors=misspedagogue.bsky.social&actors=aeronaute.bsky.social&actors=daotoad.bsky.social&actors=roxanne72.bsky.social&actors=puptechnic.bsky.social&actors=advantage87.bsky.social&actors=jasonwilliamsny.bsky.social&actors=struggalo.bsky.social&actors=mutedog.mastodon.social.ap.brid.gy&actors=artemisiayoru.bsky.social&actors=randyfromm.bsky.social&actors=mediasca.skyfleet.blue&actors=pukadon.bsky.social&actors=xdsopl.bsky.social&actors=strangerthanrecs.bsky.social&actors=sambestock.bsky.social&actors=shelbienameless.bsky.social&actors=cameronmaltby.bsky.social&actors=ronkrebs.bsky.social&actors=joeligo.bsky.social "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.668353037Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.actor.getProfiles?actors=wordyqwerty.bsky.social&actors=aliexpressdeals.bsky.social&actors=adalbertbruce.bsky.social&actors=mordantmuppetry.bsky.social&actors=mooeena.site&actors=freeformchris.bsky.social&actors=genshinwhales.bsky.social&actors=napochem.bsky.social&actors=nikkiserenity.bsky.social&actors=robertarkowitz.bsky.social&actors=greatmed.bsky.social&actors=xowngoals.com&actors=fwdparty.bsky.social&actors=petegreensolo.com&actors=chukchan.bsky.social&actors=twhite10.bsky.social&actors=us-news.bsky.social&actors=itsyaboinb.bsky.social&actors=danyhoodieusa.bsky.social&actors=dmonbeer.bsky.social&actors=emanonamai.bsky.social&actors=kellyscaletta.bsky.social&actors=simkatstudios.com&actors=eu-gb.bsky.social&actors=larsga.bsky.social "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.711321743Z INFO:httpx:HTTP Request: GET https://api.bsky.app/xrpc/app.bsky.actor.getProfiles?actors=proflhunter.bsky.social&actors=riversaredamp.bsky.social&actors=jaustamerhist.bsky.social&actors=melba75.bsky.social&actors=janeduffus.bsky.social&actors=pelops.bsky.social&actors=jennay.bsky.social&actors=blurses.bsky.social&actors=reverenddave1.bsky.social&actors=cyclelicious.bsky.social&actors=analoggamesmn.bsky.social&actors=holympus.bsky.social "HTTP/1.1 200 OK"
+2026-07-26T03:04:47.713699694Z INFO:src.agent.corpus:Fetched 200 posts across 15 queries for corpus:sha256:e94bcbf0bd58288b75001f2cc465739f4178721ec39afa140a5534e0095c29db
+2026-07-26T03:04:47.728874023Z INFO:src.agent.lifecycle:Sourced corpus corpus:sha256:e94bcbf0bd58288b75001f2cc465739f4178721ec39afa140a5534e0095c29db (200 posts) for pilot
+2026-07-26T03:04:49.12169577Z INFO:src.agent.lifecycle:Quality report ready for pilot: 77/200 posts matched
+2026-07-26T03:04:49.25479185Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:04:49.255060924Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:04:49.351719999Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:04:49.351885999Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:05:43.092186333Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:05:43.092286378Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:05:43.092480969Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T03:05:43.407141799Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T03:05:43.40733569Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T03:05:43.418629264Z INFO:src.api.chatbot:→ node: router
+2026-07-26T03:05:43.419057048Z INFO:src.agent.brainstorming.nodes:Current setup_stage: complete
+2026-07-26T03:05:43.420286066Z INFO:src.api.chatbot:  llm call: router
+2026-07-26T03:05:43.945302658Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T03:05:43.994220884Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP
+2026-07-26T03:05:44.074549516Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T03:08:06.090979012Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:08:06.091164842Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:08:06.092002068Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T03:08:06.460850358Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T03:08:06.460872729Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T03:08:06.517769166Z INFO:src.api.chatbot:→ node: router
+2026-07-26T03:08:06.51911848Z INFO:src.agent.brainstorming.nodes:Current setup_stage: complete
+2026-07-26T03:08:06.521293051Z INFO:src.api.chatbot:  llm call: router
+2026-07-26T03:08:07.073546334Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T03:08:07.152743884Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP
+2026-07-26T03:08:07.176956423Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T03:08:16.32877987Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:08:16.328949909Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:08:16.329202233Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T03:08:16.625328741Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T03:08:16.625356492Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T03:08:16.718016387Z INFO:src.api.chatbot:→ node: router
+2026-07-26T03:08:16.718408728Z INFO:src.agent.brainstorming.nodes:Current setup_stage: complete
+2026-07-26T03:08:16.719803896Z INFO:src.api.chatbot:  llm call: router
+2026-07-26T03:08:17.158565202Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T03:08:17.201695178Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP
+2026-07-26T03:08:17.213141111Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T03:08:24.72806173Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:08:24.72826045Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:08:24.728575838Z INFO:src.api.chatbot:_run_ai_agent called: channel_type=messaging channel_id=pilot force_respond=False
+2026-07-26T03:08:25.028141356Z INFO:src.api.chatbot:Fetched 20 messages from channel
+2026-07-26T03:08:25.028362818Z INFO:src.api.chatbot:Invoking brainstorming graph via astream_events
+2026-07-26T03:08:25.037227189Z INFO:src.api.chatbot:→ node: router
+2026-07-26T03:08:25.037573088Z INFO:src.agent.brainstorming.nodes:Current setup_stage: complete
+2026-07-26T03:08:25.038605075Z INFO:src.api.chatbot:  llm call: router
+2026-07-26T03:08:25.86064775Z INFO:httpx:HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-07-26T03:08:26.048211833Z INFO:src.agent.brainstorming.nodes:Router decision: SKIP
+2026-07-26T03:08:26.057075994Z INFO:src.api.chatbot:Router skipped response — no message sent
+2026-07-26T03:08:30.332521688Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T03:08:30.342628417Z INFO:src.api.chatbot:Stored reaction 'like' on AI message 8695165a-6bf7-4f1b-b3a3-a4544a008f40
+2026-07-26T03:08:30.525536053Z INFO:src.agent.brainstorming.voting:Deploy-approval vote on 8695165a-6bf7-4f1b-b3a3-a4544a008f40: 1/3 approvals (not yet met)
+2026-07-26T03:08:30.526951072Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:08:36.416366182Z INFO:src.api.chatbot:Webhook received: type=reaction.new
+2026-07-26T03:08:36.426231748Z INFO:src.api.chatbot:Stored reaction 'like' on AI message 8695165a-6bf7-4f1b-b3a3-a4544a008f40
+2026-07-26T03:08:36.629720242Z INFO:src.agent.brainstorming.voting:Ship gate approved on message 8695165a-6bf7-4f1b-b3a3-a4544a008f40 — lifecycle generate -> deploy
+2026-07-26T03:08:36.716850321Z INFO:     10.25.2.132:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:08:36.817756402Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:08:36.817915111Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:08:36.825637418Z INFO:src.agent.lifecycle:Bundle materialized for pilot at /app/bundles/pilot/9d6bf07f8cafa9674e170e14af8020939ee1d5f2d3191bf6d7041eaa6d04c5b1 (spec sha256:9d6bf07f8cafa9674e170e14af8020939ee1d5f2d3191bf6d7041eaa6d04c5b1)
+2026-07-26T03:08:36.934125319Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:08:36.934319779Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:08:38.52127151Z INFO:src.agent.lifecycle:Sandbox run for pilot: 77 records under did:web:sandbox-cleo-07ae38b93d80
+2026-07-26T03:08:38.706000647Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:08:38.706153236Z INFO:     10.31.154.19:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:08:38.828128202Z INFO:src.api.chatbot:Webhook received: type=message.new
+2026-07-26T03:08:38.828309272Z INFO:     10.30.236.131:0 - "POST /new-message HTTP/1.1" 200 OK
+2026-07-26T03:08:56.884643642Z INFO:     10.25.2.132:0 - "GET /maintenance-guide/pilot HTTP/1.1" 200 OK

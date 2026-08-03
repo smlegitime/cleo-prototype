@@ -1,0 +1,28 @@
+.tut__channel-preview {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+}
+
+.tut__channel-preview--active {
+  background-color: var(--str-chat__primary-surface-color);
+}
+
+.tut__channel-preview__name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--str-chat__text-color);
+}
+
+.tut__channel-preview__last-message {
+  font-size: 0.8rem;
+  color: var(--str-chat__text-low-emphasis-color);
+  margin-top: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tut__channel-preview__last-message-sender {
+  font-weight: 600;
+  color: var(--str-chat__text-color);
+}

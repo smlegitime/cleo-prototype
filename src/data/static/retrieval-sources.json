@@ -1,0 +1,13 @@
+{
+    "bsky": [
+        "https://mackuba.eu/2024/02/21/bluesky-guide/",
+        "https://docs.bsky.app/docs/advanced-guides/atproto",
+        "https://docs.bsky.app/docs/advanced-guides/federation-architecture",
+        "https://docs.bsky.app/docs/advanced-guides/moderation"
+    ],
+    "skyware": [
+        "https://skyware.js.org/guides/labeler/introduction/getting-started/",
+        "https://skyware.js.org/guides/labeler/introduction/automated-labeling/",
+        "https://skyware.js.org/guides/labeler/glossary/"
+    ]
+}
