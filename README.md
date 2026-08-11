@@ -10,8 +10,6 @@
     />
     <img src="./frontend/public/pixel_logo_1.png" alt="CLEO logo"/>
   </picture>
-    
-  <h3 align="center">Test</h3>
 </div>
 
 A group chat AI assistant that helps teams collaboratively design [Bluesky labelers](https://docs.bsky.app/docs/advanced-guides/moderation). Through a guided setup mechanism, CLEO answers questions about Bluesky and the AT Protocol, creates and provides feedback on labeler definitions, labels, and classification rules, stages proposed labeler configuration changes for channel approval via majority vote, runs previews to support deliberation, evaluated the quality of the labeler in a sandbox environment, and offer maintenance guidance to the group.
