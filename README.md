@@ -5,9 +5,10 @@
  <div align="center">
   <picture>
     <source
-    srcset="./frontend/public/pixel_logo_1.svg"
+    srcset="./frontend/public/pixel_logo_1.png"
     width="125" height="125"
     />
+    <img src="./frontend/public/pixel_logo_1.png" alt="CLEO logo"/>
   </picture>
     
   <h3 align="center">Test</h3>
