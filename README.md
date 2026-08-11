@@ -2,6 +2,17 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+ <div align="center">
+  <picture>
+    <source
+    srcset="./frontend/public/pixel_logo_1.svg"
+    width="125" height="125"
+    />
+  </picture>
+    
+  <h3 align="center">Test</h3>
+</div>
+
 A group chat AI assistant that helps teams collaboratively design [Bluesky labelers](https://docs.bsky.app/docs/advanced-guides/moderation). Through a guided setup mechanism, CLEO answers questions about Bluesky and the AT Protocol, creates and provides feedback on labeler definitions, labels, and classification rules, stages proposed labeler configuration changes for channel approval via majority vote, runs previews to support deliberation, evaluated the quality of the labeler in a sandbox environment, and offer maintenance guidance to the group.
 <!-- <img width="756" height="391" alt="Screenshot 2026-03-09 at 6 10 52 PM" src="https://github.com/user-attachments/assets/1bf9b78e-d94a-4d47-bb3a-bedf12446d9b" /> -->
 <!-- <img width="974" height="612" alt="Screenshot 2026-04-03 at 4 42 57 PM" src="https://github.com/user-attachments/assets/d2c67e32-e8ab-4c62-bde8-7202c09b29ff" /> -->
