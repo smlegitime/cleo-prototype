@@ -91,6 +91,30 @@ _ANCHOR_ACTION = {
 _DEFAULT_ANCHOR_ACTION = "React 👍🏾 on it to approve, or tell me what to change and I'll revise it."
 
 
+def _approval_rule(state: BrainstormingAgentState) -> str:
+    """Name the rule the threshold came from, not just the number it produced.
+
+    The number can't stand in for the rule: 2 approvals is a majority in a group of three and
+    unanimity in a group of two, and a group deciding whether to wait for someone needs to know
+    which one it is. Falls back to the majority wording when the roster size is missing (a
+    checkpoint written before voting_member_count existed) — the count is only ever absent on
+    channels big enough for majority to be the right description anyway, since below that the
+    group is being told to wait for everyone by the tally itself.
+    """
+    # Imported here, not at module scope: voting.py imports this module, so the constant can only
+    # travel in this direction lazily. Worth it to keep one definition of where majority starts.
+    from src.agent.brainstorming.voting import MAJORITY_THRESHOLD
+
+    needed = state.get("approvals_needed") or 1
+    voting = state.get("voting_member_count")
+
+    if voting is not None and voting <= MAJORITY_THRESHOLD:
+        return "a single 👍🏾 carries it" if voting <= 1 else "everyone voting has to 👍🏾"
+    if needed == 1:
+        return "a single 👍🏾 carries it"
+    return "a majority of the members"
+
+
 def _live_entry(value, shape: str) -> dict | None:
     """The live record in one anchor store, or None. Committed and superseded are both dead."""
     if not value:
@@ -244,10 +268,7 @@ def _stage_context(state: BrainstormingAgentState) -> str:
         )
 
     needed = state.get("approvals_needed") or 1
-    lines.append(
-        f"Approvals a card needs in this channel: {needed} "
-        f"({'a single 👍🏾 carries it' if needed == 1 else 'a majority of the members'})."
-    )
+    lines.append(f"Approvals a card needs in this channel: {needed} ({_approval_rule(state)}).")
 
     anchor = _live_pending_anchor(state)
     if anchor is None:

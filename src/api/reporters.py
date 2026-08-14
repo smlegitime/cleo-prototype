@@ -13,6 +13,7 @@ import logging
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from src.agent.brainstorming.graph import graph
+from src.agent.brainstorming.voting import approvals_needed
 from src.agent.lifecycle import (
     capture_governance,
     run_deploy_stage,
@@ -40,6 +41,7 @@ from src.api.messages import (
     PROVISION_STOOD_DOWN_MSG,
     SANDBOX_RUN_FAILED_MSG,
     SANDBOX_RUN_REPORT,
+    THRESHOLD_CHANGED_MSG,
     UNEXPECTED_ERROR_MSG,
     provision_stage_intro,
 )
@@ -51,6 +53,7 @@ from src.api.stream import (
     _update_stream_message,
     approval_anchor,
     get_stream_client,
+    is_voting_member,
     set_approval_state,
 )
 from src.config import fast_model, FRONTEND_URL
@@ -274,6 +277,58 @@ async def _send_welcome_message(channel_type: str, channel_id: str, user_name: s
     welcome_text = (response.content or "").strip()
     if welcome_text:
         await asyncio.to_thread(channel.send_message, {"text": welcome_text}, AI_USER_ID)
+
+
+async def _announce_threshold_change(channel_type: str, channel_id: str) -> None:
+    """Say so when the roster change that just happened moved the approval threshold.
+
+    The number CLEO quotes comes from `approvals_needed` in graph state, refreshed once per agent
+    run (agent_runner); enforcement recomputes it live from the roster on every reaction
+    (reactions._process_approval_reaction). Between a join and the next run those two disagree, and
+    the stale figure is already in the scroll under cards that are still open for votes. A group
+    that arrives one at a time is told "a single 👍🏾 carries it" and then silently isn't governed
+    that way.
+
+    Deliberately read-only on graph state. Correcting the stored figure here would be a bare
+    update_state from a webhook, which is exactly the write that races an in-flight run and gets
+    erased (see agent_runner._after_run_hooks); the next run refreshes it anyway. The cost is that
+    two joins before any run each announce, which is accurate both times.
+
+    Silent before the group has started: with no stored figure, nothing has been promised yet.
+    """
+    client = get_stream_client()
+    channel = client.channel(channel_type, channel_id)
+
+    result = await asyncio.to_thread(channel.query)
+    voting_count = len([m for m in result.get("members", []) if is_voting_member(m["user_id"])])
+    needed = approvals_needed(voting_count)
+
+    state = await asyncio.to_thread(
+        graph.get_state, {"configurable": {"thread_id": channel_id}}
+    )
+    previous = state.values.get("approvals_needed")
+    if previous is None or previous == needed:
+        return
+
+    logger.info(
+        "Approval threshold for %s moved %s -> %s (%d voting members)",
+        channel_id, previous, needed, voting_count,
+    )
+    await asyncio.to_thread(
+        channel.send_message,
+        {"text": THRESHOLD_CHANGED_MSG.format(voting_count=voting_count, needed=needed)},
+        AI_USER_ID,
+    )
+
+
+async def _on_member_joined(channel_type: str, channel_id: str, user_name: str) -> None:
+    """Everything a join owes the channel, in order: the welcome, then the vote arithmetic.
+
+    Sequenced rather than spawned as two tasks so the threshold notice can't land above the
+    welcome of the person whose arrival caused it.
+    """
+    await _send_welcome_message(channel_type, channel_id, user_name)
+    await _announce_threshold_change(channel_type, channel_id)
 
 
 # Human-readable labels for the three collected answers, for the confirm card and the "still to

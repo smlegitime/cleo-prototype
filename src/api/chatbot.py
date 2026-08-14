@@ -38,9 +38,9 @@ from src.api.helpers import asks_to_go_live, message_addresses_ai
 from src.api.model import ChatRequest, ChatResponse, TokenRequest, TokenResponse
 from src.api.reactions import _process_approval_reaction, _vote_locks
 from src.api.reporters import (
+    _on_member_joined,
     _reopen_go_live_and_report,
     _run_governance_capture,
-    _send_welcome_message,
 )
 from src.api.stream import (
     AI_USER_ID,
@@ -375,7 +375,7 @@ async def new_message(request: Request):
         if user_id.startswith("ai-"):
             return {"status": "ignored"}
         
-        asyncio.create_task(_send_welcome_message(channel_type, channel_id, user_name))
+        asyncio.create_task(_on_member_joined(channel_type, channel_id, user_name))
 
         return {"status": "ok"}
 

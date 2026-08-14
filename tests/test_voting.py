@@ -49,6 +49,12 @@ def _committed_flags(mock_graph):
     return flags
 
 
+# A channel with ONE voting member, used by every test whose subject is the commit mechanics
+# rather than the threshold: one member means one approval is already unanimous, so the vote is
+# out of the way. Deliberately not 2 — a pair now has to be unanimous too, so two voting members
+# is no longer the "threshold trivially met" case it used to be.
+SOLO_CHANNEL = 1
+
 PROPOSAL = {"display_name": "Test Labeler", "description": "A test labeler", "labels": []}
 RULES_PROPOSAL = {"spam": {"label_identifier": "spam", "include_signals": [], "exclude_signals": [], "notes": None}}
 MESSAGE_ID = "msg-001"
@@ -65,15 +71,15 @@ async def test_unknown_message_id_returns_none():
 
 
 @pytest.mark.asyncio
-async def test_single_approval_applies_in_small_channel():
-    """Channel with <= MAJORITY_THRESHOLD members: 1 approval is enough."""
+async def test_single_approval_applies_in_a_one_member_channel():
+    """One voting member: their own 👍🏾 is already everyone, so it carries."""
     suggestion = {"proposal": PROPOSAL, "approved_by": []}
     state = _make_state({MESSAGE_ID: suggestion})
 
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal", return_value=PROPOSAL) as mock_commit:
         mock_graph.get_state.return_value = state
-        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", MAJORITY_THRESHOLD)
+        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     assert result == "proposal"
     mock_commit.assert_called_once_with(PROPOSAL, {})
@@ -139,7 +145,7 @@ async def test_proposal_merged_with_existing_config():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal", return_value={**existing_config, **PROPOSAL}) as mock_commit:
         mock_graph.get_state.return_value = state
-        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", MAJORITY_THRESHOLD)
+        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     mock_commit.assert_called_once_with(PROPOSAL, existing_config)
 
@@ -155,7 +161,7 @@ async def test_rule_suggestion_approval_commits_rules_not_proposal():
          patch("src.agent.brainstorming.voting.commit_rules", return_value=RULES_PROPOSAL) as mock_commit_rules, \
          patch("src.agent.brainstorming.voting.commit_proposal") as mock_commit_proposal:
         mock_graph.get_state.return_value = state
-        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", MAJORITY_THRESHOLD)
+        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     assert result == "rules"
     mock_commit_rules.assert_called_once_with(RULES_PROPOSAL, {})
@@ -176,7 +182,7 @@ async def test_committed_suggestion_is_a_noop():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal") as mock_commit:
         mock_graph.get_state.return_value = state
-        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-2", MAJORITY_THRESHOLD)
+        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-2", SOLO_CHANNEL)
 
     assert result is None
     mock_commit.assert_not_called()
@@ -192,7 +198,7 @@ async def test_commit_marks_suggestion_committed():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal", return_value=PROPOSAL):
         mock_graph.get_state.return_value = state
-        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", MAJORITY_THRESHOLD)
+        result = await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     assert result == "proposal"
     assert _committed_flags(mock_graph) == [True]
@@ -211,7 +217,7 @@ async def test_proposal_approval_advances_content_to_rules():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal", return_value=labeled_config):
         mock_graph.get_state.return_value = state
-        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", MAJORITY_THRESHOLD)
+        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     assert _stage_written(mock_graph) == "rules"
 
@@ -227,7 +233,7 @@ async def test_combined_proposal_approval_cascades_purpose_to_rules():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal", return_value=combined):
         mock_graph.get_state.return_value = state
-        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", MAJORITY_THRESHOLD)
+        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     assert _stage_written(mock_graph) == "rules"
 
@@ -243,7 +249,7 @@ async def test_rules_approval_advances_rules_to_complete():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_rules", return_value=RULES_PROPOSAL):
         mock_graph.get_state.return_value = state
-        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", MAJORITY_THRESHOLD)
+        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     assert _stage_written(mock_graph) == "complete"
 
@@ -278,7 +284,7 @@ async def test_rules_approval_opens_preview_lifecycle():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_rules", return_value=RULES_PROPOSAL):
         mock_graph.get_state.return_value = state
-        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", MAJORITY_THRESHOLD)
+        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     assert _stage_written(mock_graph) == "complete"
     assert _lifecycle_written(mock_graph) == ("preview", "pending")
@@ -299,7 +305,7 @@ async def test_preview_handoff_records_spec_id():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_rules", return_value=RULES_PROPOSAL):
         mock_graph.get_state.return_value = state
-        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", MAJORITY_THRESHOLD)
+        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     written = _spec_id_written(mock_graph)
     expected = build_spec(labeler_config, RULES_PROPOSAL)["spec_id"]
@@ -326,7 +332,7 @@ async def test_rule_edit_during_maintenance_refreshes_spec_id_without_resetting_
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_rules", return_value=RULES_PROPOSAL):
         mock_graph.get_state.return_value = state
-        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", MAJORITY_THRESHOLD)
+        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     assert _lifecycle_written(mock_graph) == "NOT_WRITTEN"
     assert _spec_id_written(mock_graph) == build_spec(labeler_config, RULES_PROPOSAL)["spec_id"]
@@ -348,7 +354,7 @@ async def test_config_edit_during_lifecycle_refreshes_spec_id():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal", return_value=merged_config):
         mock_graph.get_state.return_value = state
-        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", MAJORITY_THRESHOLD)
+        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     assert _spec_id_written(mock_graph) == build_spec(merged_config, rules)["spec_id"]
 
@@ -362,7 +368,7 @@ async def test_config_approval_during_setup_writes_no_spec_id():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal", return_value=PROPOSAL):
         mock_graph.get_state.return_value = state
-        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", MAJORITY_THRESHOLD)
+        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     assert _spec_id_written(mock_graph) == "NOT_WRITTEN"
 
@@ -407,7 +413,7 @@ async def test_approved_proposal_is_recorded_in_the_feedback_history():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal", return_value=PROPOSAL):
         mock_graph.get_state.return_value = state
-        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", 2)
+        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     markers = _feedback_markers(mock_graph)
     assert len(markers) == 1
@@ -424,7 +430,7 @@ async def test_approved_rules_are_recorded_in_the_feedback_history():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_rules", return_value=RULES_PROPOSAL):
         mock_graph.get_state.return_value = state
-        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", 2)
+        await process_approval_vote(CHANNEL_ID, MESSAGE_ID, "user-1", SOLO_CHANNEL)
 
     markers = _feedback_markers(mock_graph)
     assert len(markers) == 1
@@ -474,7 +480,7 @@ async def test_preview_approval_advances_to_generate():
     state = _preview_state({"message_id": PREVIEW_MSG, "approved_by": []})
     with patch("src.agent.brainstorming.voting.graph") as mock_graph:
         mock_graph.get_state.return_value = state
-        advanced = await process_preview_approval(CHANNEL_ID, PREVIEW_MSG, "user-1", MAJORITY_THRESHOLD)
+        advanced = await process_preview_approval(CHANNEL_ID, PREVIEW_MSG, "user-1", SOLO_CHANNEL)
 
     assert advanced is True
     # Preview approval kicks off bundle generation (sandbox path); provision runs later, not here.
@@ -500,7 +506,7 @@ async def test_preview_approval_ignores_non_anchor_message():
     state = _preview_state({"message_id": PREVIEW_MSG, "approved_by": []})
     with patch("src.agent.brainstorming.voting.graph") as mock_graph:
         mock_graph.get_state.return_value = state
-        advanced = await process_preview_approval(CHANNEL_ID, "some-other-msg", "user-1", MAJORITY_THRESHOLD)
+        advanced = await process_preview_approval(CHANNEL_ID, "some-other-msg", "user-1", SOLO_CHANNEL)
 
     assert advanced is False
     mock_graph.update_state.assert_not_called()
@@ -511,7 +517,7 @@ async def test_preview_approval_noop_once_committed():
     state = _preview_state({"message_id": PREVIEW_MSG, "approved_by": ["user-1"], "committed": True})
     with patch("src.agent.brainstorming.voting.graph") as mock_graph:
         mock_graph.get_state.return_value = state
-        advanced = await process_preview_approval(CHANNEL_ID, PREVIEW_MSG, "user-2", MAJORITY_THRESHOLD)
+        advanced = await process_preview_approval(CHANNEL_ID, PREVIEW_MSG, "user-2", SOLO_CHANNEL)
 
     assert advanced is False
     mock_graph.update_state.assert_not_called()
@@ -522,7 +528,7 @@ async def test_preview_approval_ignored_when_not_in_preview():
     state = _preview_state({"message_id": PREVIEW_MSG, "approved_by": []}, lifecycle_stage="provision")
     with patch("src.agent.brainstorming.voting.graph") as mock_graph:
         mock_graph.get_state.return_value = state
-        advanced = await process_preview_approval(CHANNEL_ID, PREVIEW_MSG, "user-1", MAJORITY_THRESHOLD)
+        advanced = await process_preview_approval(CHANNEL_ID, PREVIEW_MSG, "user-1", SOLO_CHANNEL)
 
     assert advanced is False
     mock_graph.update_state.assert_not_called()
@@ -568,7 +574,7 @@ async def test_golive_approval_advances_deploy_to_provision():
     state = _provision_state({"message_id": GOLIVE_MSG, "approved_by": []})
     with patch("src.agent.brainstorming.voting.graph") as mock_graph:
         mock_graph.get_state.return_value = state
-        advanced = await process_provision_approval(CHANNEL_ID, GOLIVE_MSG, "user-1", MAJORITY_THRESHOLD)
+        advanced = await process_provision_approval(CHANNEL_ID, GOLIVE_MSG, "user-1", SOLO_CHANNEL)
 
     assert advanced is True
     assert _lifecycle_written(mock_graph) == ("provision", "pending")
@@ -594,7 +600,7 @@ async def test_golive_approval_ignored_outside_deploy():
     state = _provision_state({"message_id": GOLIVE_MSG, "approved_by": []}, lifecycle_stage="preview")
     with patch("src.agent.brainstorming.voting.graph") as mock_graph:
         mock_graph.get_state.return_value = state
-        advanced = await process_provision_approval(CHANNEL_ID, GOLIVE_MSG, "user-1", MAJORITY_THRESHOLD)
+        advanced = await process_provision_approval(CHANNEL_ID, GOLIVE_MSG, "user-1", SOLO_CHANNEL)
 
     assert advanced is False
     mock_graph.update_state.assert_not_called()
@@ -610,7 +616,7 @@ async def test_governance_approval_commits_and_marks_complete():
     state = _governance_state({GOV_MSG: {"proposal": proposal, "approved_by": []}})
     with patch("src.agent.brainstorming.voting.graph") as mock_graph:
         mock_graph.get_state.return_value = state
-        merged = await process_governance_approval(CHANNEL_ID, GOV_MSG, "user-1", MAJORITY_THRESHOLD)
+        merged = await process_governance_approval(CHANNEL_ID, GOV_MSG, "user-1", SOLO_CHANNEL)
 
     assert merged["custodian_display_name"] == "Ama"
     assert merged["hosting_tier"] == "hosted"
@@ -627,7 +633,7 @@ async def test_governance_approval_stays_in_progress_while_answers_are_missing()
     state = _governance_state({GOV_MSG: {"proposal": {"custodian_display_name": "Ama"}, "approved_by": []}})
     with patch("src.agent.brainstorming.voting.graph") as mock_graph:
         mock_graph.get_state.return_value = state
-        merged = await process_governance_approval(CHANNEL_ID, GOV_MSG, "user-1", MAJORITY_THRESHOLD)
+        merged = await process_governance_approval(CHANNEL_ID, GOV_MSG, "user-1", SOLO_CHANNEL)
 
     assert merged["custodian_display_name"] == "Ama"
     assert _payloads(mock_graph, "lifecycle_status")[-1] == "in_progress"
@@ -642,7 +648,7 @@ async def test_governance_approval_merges_over_earlier_answers():
     )
     with patch("src.agent.brainstorming.voting.graph") as mock_graph:
         mock_graph.get_state.return_value = state
-        merged = await process_governance_approval(CHANNEL_ID, GOV_MSG, "user-1", MAJORITY_THRESHOLD)
+        merged = await process_governance_approval(CHANNEL_ID, GOV_MSG, "user-1", SOLO_CHANNEL)
 
     assert merged["handle_choice"] == "wellness-watch.bsky.social"
     assert merged["appeals_contact"] == "the mod team"
@@ -655,7 +661,7 @@ async def test_governance_approval_noop_once_committed():
     )
     with patch("src.agent.brainstorming.voting.graph") as mock_graph:
         mock_graph.get_state.return_value = state
-        merged = await process_governance_approval(CHANNEL_ID, GOV_MSG, "user-2", MAJORITY_THRESHOLD)
+        merged = await process_governance_approval(CHANNEL_ID, GOV_MSG, "user-2", SOLO_CHANNEL)
 
     assert merged is None
     mock_graph.update_state.assert_not_called()
@@ -669,7 +675,7 @@ async def test_governance_approval_ignored_outside_provision():
     )
     with patch("src.agent.brainstorming.voting.graph") as mock_graph:
         mock_graph.get_state.return_value = state
-        merged = await process_governance_approval(CHANNEL_ID, GOV_MSG, "user-1", MAJORITY_THRESHOLD)
+        merged = await process_governance_approval(CHANNEL_ID, GOV_MSG, "user-1", SOLO_CHANNEL)
 
     assert merged is None
     mock_graph.update_state.assert_not_called()

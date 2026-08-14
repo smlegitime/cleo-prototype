@@ -1,9 +1,10 @@
 """
 Tests for the per-channel agent scheduler / coalescing layer in agent_runner.py.
 
-Covers: idle-start (runs immediately), addressed-coalesce (a burst during a run collapses to exactly
-one catch-up, not one reply per message), unaddressed-drop (chatter during a run is ignored), clean
-release (the channel is freed after a cycle so the next trigger starts fresh), and the debounce wait.
+Covers: idle-start (runs immediately), coalesce (a burst during a run collapses to exactly one
+catch-up, not one reply per message), forcing (the catch-up bypasses the router only if something
+in the burst addressed CLEO), clean release (the channel is freed after a cycle so the next trigger
+starts fresh), and the debounce wait.
 
 _run_ai_agent is mocked, so these exercise ONLY the scheduling logic, never the graph.
 STREAM_* are set before importing agent_runner, which requires them at module load.
@@ -29,6 +30,7 @@ def _reset_scheduler_state():
     """Isolate each test: clear coalescing state and default to a zero debounce (instant catch-up)."""
     agent_runner._active_channels.clear()
     agent_runner._pending_rerun.clear()
+    agent_runner._pending_forced.clear()
     agent_runner._last_trigger_ts.clear()
     agent_runner._after_run_hooks.clear()
     saved = agent_runner.AGENT_DEBOUNCE_SECONDS
@@ -36,6 +38,7 @@ def _reset_scheduler_state():
     yield
     agent_runner._active_channels.clear()
     agent_runner._pending_rerun.clear()
+    agent_runner._pending_forced.clear()
     agent_runner._last_trigger_ts.clear()
     agent_runner._after_run_hooks.clear()
     agent_runner.AGENT_DEBOUNCE_SECONDS = saved
@@ -103,7 +106,14 @@ async def test_addressed_triggers_during_run_coalesce_into_one_catchup(monkeypat
 
 
 @pytest.mark.asyncio
-async def test_unaddressed_trigger_during_run_is_dropped(monkeypatch):
+async def test_unaddressed_trigger_during_run_gets_an_unforced_catch_up(monkeypatch):
+    """Chatter during a run earns a catch-up, but an unforced one — the router still gates it.
+
+    An idle channel already runs the graph on unaddressed messages, so dropping them mid-run made
+    the same message answered or ignored depending on CLEO's timing. What must NOT change is the
+    catch-up bypassing the router: force_respond stays False, or unaddressed chatter would start
+    provoking replies it never did before.
+    """
     agent = _FakeAgent(gate_first=True)
     monkeypatch.setattr(agent_runner, "_run_ai_agent", agent)
 
@@ -111,12 +121,33 @@ async def test_unaddressed_trigger_during_run_is_dropped(monkeypatch):
     await agent.started.wait()
 
     agent_runner._schedule_agent(CH_TYPE, CH, force_respond=False)  # unaddressed chatter
-    assert CH not in agent_runner._pending_rerun
+    assert CH in agent_runner._pending_rerun
+    assert CH not in agent_runner._pending_forced
 
     agent.release.set()
     await _drain()
 
-    assert agent.calls == [True]  # no catch-up for unaddressed chatter
+    assert agent.calls == [True, False]
+
+
+@pytest.mark.asyncio
+async def test_one_addressed_message_forces_the_whole_coalesced_catch_up(monkeypatch):
+    """A burst is one catch-up, so a single addressed message in it has to carry the whole burst."""
+    agent = _FakeAgent(gate_first=True)
+    monkeypatch.setattr(agent_runner, "_run_ai_agent", agent)
+
+    agent_runner._schedule_agent(CH_TYPE, CH, force_respond=True)  # run 1 starts, blocks
+    await agent.started.wait()
+
+    agent_runner._schedule_agent(CH_TYPE, CH, force_respond=False)
+    agent_runner._schedule_agent(CH_TYPE, CH, force_respond=True)
+    agent_runner._schedule_agent(CH_TYPE, CH, force_respond=False)
+
+    agent.release.set()
+    await _drain()
+
+    assert agent.calls == [True, True]  # one catch-up, forced by the addressed message in the burst
+    assert CH not in agent_runner._pending_forced
 
 
 @pytest.mark.asyncio

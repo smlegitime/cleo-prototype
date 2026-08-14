@@ -1,0 +1,414 @@
+[2026-08-03 14:23] AI Assistant
+Ava T joined the channel
+
+[2026-08-03 14:23] AI Assistant
+Hey Ava T, welcome! I'm CLEO, and I'm here to help guide this group through designing your labeler together. Just mention @CLEO, say my name, or react 🤖 to any message if you want me to jump in!
+
+[2026-08-03 14:23] AI Assistant
+Abel-J joined the channel
+
+[2026-08-03 14:23] AI Assistant
+Dashiell S joined the channel
+
+[2026-08-03 14:23] AI Assistant
+Hey Abel-J, welcome! I'm CLEO, and I'm here to help guide this group through designing your Bluesky labeler together. Feel free to mention @CLEO, say my name, or react 🤖 to any message whenever you want me to jump in!
+
+[2026-08-03 14:23] AI Assistant
+Hey Dashiell S, welcome! I'm CLEO, and I'm here to help guide this group through designing your Bluesky labeler together. Just mention @CLEO, say my name, or react 🤖 to any message whenever you want me to jump in!
+
+[2026-08-03 14:23] AI Assistant
+harini s joined the channel
+
+[2026-08-03 14:23] AI Assistant
+Hey Harini, welcome! I'm CLEO, and I'm here to help guide this group through designing your Bluesky labeler together. Just mention @CLEO, say my name, or react 🤖 to any message whenever you want me to jump in!
+
+[2026-08-03 14:24] AI Assistant
+William A joined the channel
+
+[2026-08-03 14:24] AI Assistant
+Hey William A, welcome! I'm CLEO, and I'm here to help guide your group through designing a content moderation labeler together. Feel free to reach out anytime by mentioning @CLEO, saying my name, or reacting 🤖 to a message—happy to help!
+
+[2026-08-03 14:24] AI Assistant
+Aiden-j joined the channel
+
+[2026-08-03 14:24] AI Assistant
+Hey Aiden-j, welcome! I'm CLEO, and I'm here to help guide this group through designing your labeler together. Feel free to reach out anytime by saying my name, mentioning @CLEO, or reacting 🤖 to a message—I'm all ears!
+
+[2026-08-03 14:27] Abel-J
+Hi Cleo,
+
+[2026-08-03 14:27] AI Assistant
+Hi! Ready to get started on your labeler? 
+
+First, let's talk about **purpose**: Who is this labeler for, and what do you want it to accomplish? Tell me about your community and what kinds of content you're looking to address.
+
+[2026-08-03 14:27] Dashiell S
+@CLEO can we get started?
+
+[2026-08-03 14:27] AI Assistant
+We're already underway! Right now we're in the **purpose stage** — I need to understand who this labeler is for and what you want it to do.
+
+Tell me:
+- What community is this labeler serving?
+- Who will be subscribing to these labels?
+- What kinds of content are you looking to flag or filter?
+
+Once we settle on those answers, I'll draft a name and description for the labeler. When the group approves that with a 👍🏾, we'll move on to defining the actual labels.
+
+[2026-08-03 14:28] Aiden-j
+@cleo can we get started
+
+[2026-08-03 14:28] AI Assistant
+We're already in progress! You're in the **purpose stage** right now.
+
+I need the group to tell me:
+- What community is this labeler for?
+- Who are the subscribers (who will use these labels)?
+- What do you want the labeler to accomplish?
+
+Once you share those details, I'll draft a name and description for your labeler. When the majority of voting members approve it with 👍🏾, we'll move to the next stage and start defining the actual labels.
+
+[2026-08-03 14:33] Dashiell S
+@CLEO the Libra is for the activism community on Bluesky, and our subscribers are activists, organizers, volunteers, and supporters who use the platform to share campaigns, organize events about tech and all that. We want the Libra to identify harassment, hate speech, misinformation, threats, spam, while allowing respectful debate and constructive discussion.
+
+[2026-08-03 14:33] AI Assistant
+Perfect! I've got it — the Libra is for the activism community, helping activists and organizers spot harassment, hate speech, misinformation, threats, and spam while keeping space open for respectful debate.
+
+Now let's decide **what gets flagged**. You mentioned harassment, hate speech, misinformation, threats, and spam. For each of these, how should subscribers see it — should the post be hidden behind a warning they can click through, should just images be blurred, or should it stay visible with a label attached? A quick answer for each category is all I need.
+
+[2026-08-03 14:40] Ava T
+the post be hidden behind a warning they can click through
+
+[2026-08-03 14:40] AI Assistant
+Got it — each of those posts will be hidden behind a warning that subscribers can click through to view.
+
+I've staged a proposal with five labels:
+- **Harassment** — targeting individuals or groups with hostile or intimidating behavior
+- **Hate Speech** — attacks based on identity (race, ethnicity, religion, gender, sexual orientation, disability)
+- **Misinformation** — false or misleading information that could cause harm
+- **Threats** — content threatening violence or harm
+- **Spam** — repetitive or unsolicited promotional content
+
+All five hide the post behind a warning. Once this is approved, the next step will be defining the specific signals — keywords, patterns, and account traits — that trigger each label.
+
+📋 **Proposed update**
+───────────────
+
+
+**Labeler name:** The Libra
+
+**Description:** A labeler for the activism community that flags harassment, hate speech, misinformation, threats, and spam while preserving space for respectful debate and constructive discussion.
+
+**Labels:**
+
+• **Harassment**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Content that targets individuals or groups with hostile, abusive, or intimidating behavior*
+
+• **Hate Speech**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Content that attacks people based on identity, including race, ethnicity, religion, gender, sexual orientation, or disability*
+
+• **Misinformation**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Content that spreads false or misleading information that could cause harm*
+
+• **Threats**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Content that threatens violence or harm against individuals or groups*
+
+• **Spam**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Repetitive, unsolicited, or promotional content that disrupts community discussion*
+
+React with 👍🏾 to approve this change.
+──────────────────────────────
+
+— ⤵️ *Replaced by a revised version below. Approve that one instead.*
+
+[2026-08-03 14:40] Dashiell S
+@CLEO Here is how each category should be displayed: Threats: Hide post behind a warning
+Hate Speech: Hide post behind a warning
+
+[2026-08-03 14:41] AI Assistant
+I see you've confirmed **Threats** and **Hate Speech** should hide posts behind a warning — that's already how I have them set up in the proposal.
+
+Just to confirm: should **Harassment**, **Misinformation**, and **Spam** also hide posts behind a warning (like the other two), or would you like those handled differently?
+
+📌 Still waiting on the group: the labeler proposal above — no approvals yet — it needs 4.
+
+[2026-08-03 14:45] Abel-J
+@cleo help as get started with creating a model for anti-bot social media harassment  campaign
+
+[2026-08-03 14:45] AI Assistant
+I want to make sure I understand — are you asking to add a new label specifically for **bot-driven harassment campaigns** (coordinated attacks using automated or fake accounts), or are you looking to adjust one of the existing categories to cover this?
+
+And to finish up the current set: should **Harassment**, **Misinformation**, and **Spam** also hide posts behind a warning like Threats and Hate Speech do?
+
+📌 Still waiting on the group: the labeler proposal above — no approvals yet — it needs 4.
+
+[2026-08-03 14:49] Aiden-j
+@CLEO Yes, please keep Harassment, Misinformation, and Spam hidden behind a warning as well can you update the proposal?
+
+[2026-08-03 14:49] AI Assistant
+Done! I've updated the proposal — all five labels (Harassment, Hate Speech, Misinformation, Threats, and Spam) now hide posts behind a warning that subscribers can click through.
+
+Once this is approved, we'll move on to defining the classification rules — the specific keywords, patterns, and account signals that trigger each label.
+
+📋 **Proposed update**
+───────────────
+
+
+**Labeler name:** The Libra
+
+**Description:** A labeler for the activism community that flags harassment, hate speech, misinformation, threats, and spam while preserving space for respectful debate and constructive discussion.
+
+**Labels:**
+
+• **Harassment**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Targeting individuals or groups with hostile or intimidating behavior*
+
+• **Hate Speech**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Attacks based on identity, including race, ethnicity, religion, gender, sexual orientation, or disability*
+
+• **Misinformation**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *False or misleading information that could cause harm*
+
+• **Threats**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Content threatening violence or harm*
+
+• **Spam**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Repetitive or unsolicited promotional content*
+
+React with 👍🏾 to approve this change.
+──────────────────────────────
+
+— ⤵️ *Replaced by a revised version below. Approve that one instead.*
+
+[2026-08-03 14:51] Dashiell S
+@CLEO Can we add a specific label for "Bot Harassment" coordinated attacks from automated/fake accounts)alongside the standard Harassment label?
+
+[2026-08-03 14:51] AI Assistant
+Absolutely! I've added **Bot Harassment** as a separate label alongside the standard Harassment label. It will flag coordinated attacks from automated or fake accounts, and like the others, it hides posts behind a warning.
+
+The updated proposal now includes six labels:
+- **Harassment** — targeting individuals or groups with hostile or intimidating behavior
+- **Bot Harassment** — coordinated attacks from automated or fake accounts
+- **Hate Speech** — attacks based on identity
+- **Misinformation** — false or misleading information that could cause harm
+- **Threats** — content threatening violence or harm
+- **Spam** — repetitive or unsolicited promotional content
+
+Once approved, we'll define the signals that trigger each one.
+
+📋 **Proposed update**
+───────────────
+
+
+**Labeler name:** The Libra
+
+**Description:** A labeler for the activism community that flags harassment, hate speech, misinformation, threats, and spam while preserving space for respectful debate and constructive discussion.
+
+**Labels:**
+
+• **Harassment**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Targeting individuals or groups with hostile or intimidating behavior*
+
+• **Bot Harassment**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Coordinated attacks from automated or fake accounts*
+
+• **Hate Speech**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Attacks based on identity, including race, ethnicity, religion, gender, sexual orientation, or disability*
+
+• **Misinformation**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *False or misleading information that could cause harm*
+
+• **Threats**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Content threatening violence or harm*
+
+• **Spam**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Repetitive or unsolicited promotional content*
+
+React with 👍🏾 to approve this change.
+──────────────────────────────
+
+— ⤵️ *Replaced by a revised version below. Approve that one instead.*
+
+[2026-08-03 14:51] Aiden-j
+👍🏾
+
+[2026-08-03 14:53] Aiden-j
+@CLEO The proposal looks great! Now that Bot Harassment is included, what specific signals, keywords, or account behaviors should we use to detect and trigger these labels?
+
+[2026-08-03 14:53] AI Assistant
+Perfect! Now we'll define the **classification rules** — the specific signals that trigger each label.
+
+For each of the six labels, I need to know what should fire it. This can include:
+
+- **Keywords or phrases** (e.g., slurs, specific threatening language, spam phrases)
+- **Patterns** (e.g., posts with excessive caps, repeated characters, certain URL structures)
+- **Account behaviors** (e.g., brand-new accounts, accounts with no profile picture, high posting frequency)
+
+Let's start with **Bot Harassment** since that's fresh in mind. What signals should trigger it? For example:
+- New accounts (created within X days)?
+- Accounts with default/no profile pictures?
+- High-frequency posting patterns?
+- Specific coordinated language or hashtags?
+- Repetitive replies targeting the same user?
+
+And then we'll work through the others — Harassment, Hate Speech, Misinformation, Threats, and Spam. What signals do you want for each?
+
+📌 Still waiting on the group: the labeler proposal above — no approvals yet — it needs 4.
+
+[2026-08-03 14:57] Dashiell S
+@CLEO For Bot Harassment: target accounts under 7 days old, default avatars, high posting frequency, and duplicate copy-pasted replies.
+
+[2026-08-03 14:57] AI Assistant
+Perfect — I've captured those signals for Bot Harassment (accounts under 7 days old, default avatars, high posting frequency, and duplicate copy-pasted replies).
+
+Now for the other five labels — **Harassment**, **Hate Speech**, **Misinformation**, **Threats**, and **Spam** — what keywords, phrases, patterns, or account behaviors should trigger each one?
+
+📌 Still waiting on the group: the labeler proposal above — no approvals yet — it needs 4.
+
+[2026-08-03 14:58] Aiden-j
+@CLEO Standard Harassment: repeated targeted insults, dogpiling, and aggressive tagging.
+
+[2026-08-03 14:58] AI Assistant
+Got it — **Standard Harassment** will flag repeated targeted insults, dogpiling, and aggressive tagging.
+
+Now for the remaining four: **Hate Speech**, **Misinformation**, **Threats**, and **Spam** — what signals should trigger each of those?
+
+📌 Still waiting on the group: the labeler proposal above — no approvals yet — it needs 4.
+
+[2026-08-03 14:58] Facilitator
+@CLEO, let's just keep the Bot harassment label and the rules we talked about. Please remove the other labels
+
+[2026-08-03 14:58] AI Assistant
+Done! I've updated the proposal to keep only the **Bot Harassment** label and removed the others. The labeler now focuses specifically on flagging coordinated attacks from automated or fake accounts, hiding those posts behind a warning.
+
+Once this is approved, we'll finalize the classification rules using the signals you specified: accounts under 7 days old, default avatars, high posting frequency, and duplicate copy-pasted replies.
+
+📋 **Proposed update**
+───────────────
+
+
+**Labeler name:** The Libra
+
+**Description:** A labeler for the activism community that flags bot-driven harassment campaigns while preserving space for respectful debate and constructive discussion.
+
+**Labels:**
+
+• **Bot Harassment**
+  ❌ Whole post hidden behind a ⚠️ danger warning — subscribers tap to view it
+  *Coordinated attacks from automated or fake accounts*
+
+React with 👍🏾 to approve this change.
+──────────────────────────────
+
+[2026-08-03 15:00] Dashiell S
+@CLEO The updated proposal looks great. Can you finalize the classification rules using our Bot Harassment signals so everyone can vote
+
+[2026-08-03 15:00] AI Assistant
+I need to adjust the approach. The system can enforce account age checks, but the other signals you mentioned (default avatars, high posting frequency, duplicate copy-pasted replies) require detection capabilities that aren't available yet in this version of the labeler.
+
+Here are your options:
+
+**Option 1:** Start with just **account age** as the enforceable signal for now — flag posts from accounts under 7 days old. This catches the newest bot accounts immediately, and we can expand the detection as more capabilities become available.
+
+**Option 2:** Add **keyword or pattern signals** that are common in bot harassment campaigns — for example, specific coordinated hashtags, repetitive phrases, or spam language patterns you've seen in these attacks.
+
+**Option 3:** Hold off on Bot Harassment rules until the labeler supports more sophisticated account behavior detection.
+
+Which direction would you like to go?
+
+📌 Still waiting on the group: the labeler proposal above — no approvals yet — it needs 4.
+
+[2026-08-03 15:04] Ava T
+What steps are remaining towards completing the labeler creation, would you write it as simple steps, what we've done so far and what is yet to be done (what do we provide to finish these remaining steps)
+
+[2026-08-03 15:04] AI Assistant
+## What We've Done So Far ✅
+
+**Step 1: Define Purpose** ✅ COMPLETE
+- Community: Activism community on Bluesky
+- Subscribers: Activists, organizers, volunteers, and supporters
+- Goal: Identify bot-driven harassment while allowing respectful debate
+
+**Step 2: Name & Description** ✅ COMPLETE
+- Name: **The Libra**
+- Description: A labeler for the activism community that flags bot-driven harassment campaigns while preserving space for respectful debate and constructive discussion
+
+**Step 3: Define Labels** ✅ COMPLETE
+- **Bot Harassment** — Coordinated attacks from automated or fake accounts
+- Action: Whole post hidden behind a ⚠️ danger warning (subscribers tap to view)
+
+---
+
+## What's Left To Do 📋
+
+**Step 4: Finalize Classification Rules** ⏳ IN PROGRESS
+- You wanted: accounts under 7 days old, default avatars, high posting frequency, duplicate replies
+- **Problem:** Only account age is currently supported
+- **What you need to provide:** Choose Option 1, 2, or 3:
+  - **Option 1:** Use just account age (under 7 days old)
+  - **Option 2:** Add keyword/pattern signals for bot campaigns
+  - **Option 3:** Wait for more detection capabilities
+
+**Step 5: Approve the Labeler** ⏳ WAITING
+- Current proposal needs 4 👍🏾 reactions to be approved
+- No approvals yet
+
+**Step 6: Deploy** ⏳ NOT STARTED
+- After approval and rules are finalized, the labeler goes live
+
+---
+
+### Current Status
+**Waiting on:** Your choice (Option 1, 2, or 3) + group approval (4 votes)
+
+[2026-08-03 15:10] Ava T
+2
+
+[2026-08-03 15:10] AI Assistant
+## Where You Are: Simple Steps
+
+### ✅ What's Complete
+
+1. **Defined the labeler's purpose** — who it's for (activism community), what it does (flag bot harassment while preserving respectful debate)
+
+2. **Created the label** — "Bot Harassment" that hides posts behind a warning subscribers can click through
+
+3. **Identified the signals you want** — accounts under 7 days old, default avatars, high posting frequency, duplicate copy-pasted replies
+
+### ⏳ What's Left
+
+**Step 4: Finalize the classification rules** — the specific, enforceable signals that trigger the Bot Harassment label
+
+   **What you need to provide:**
+   - Choose which signals to use from the options I gave you (account age only, or add keyword/pattern signals)
+   - If adding keywords/patterns: tell me specific phrases, hashtags, or language patterns common in the bot campaigns you want to catch
+
+**Step 5: Approve the rules** — once I stage them, the group votes to confirm
+
+**Step 6: Deploy** — after approval, the labeler goes live on Bluesky
+
+---
+
+**Right now you're at Step 4.** Which option would you like to go with — start with account age only, add keyword signals, or wait for more detection capabilities?
+
+📌 Still waiting on the group: the labeler proposal above — 3 of 4 approvals so far.
+
+[2026-08-03 15:43] Dashiell S
+hi
+

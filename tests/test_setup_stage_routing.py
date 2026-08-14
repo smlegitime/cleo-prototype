@@ -905,13 +905,42 @@ def test_stage_context_reports_the_live_tally():
     assert "👍🏾" in context
 
 
-def test_stage_context_says_a_single_approval_carries_a_small_channel():
-    context = _stage_context(_pending_anchor_state([], needed=1))
+def test_stage_context_says_a_single_approval_carries_a_solo_channel():
+    state = _pending_anchor_state([], needed=1)
+    state["voting_member_count"] = 1
+    context = _stage_context(state)
 
     # Phrased by _anchor_what_and_tally, the same helper the group-facing messages use, so the
     # prompt can't describe the vote one way while the reply describes it another.
     assert "no approvals yet — it needs 1" in context
     assert "a single 👍🏾 carries it" in context
+
+
+def test_stage_context_tells_a_pair_that_everyone_has_to_vote():
+    """2-of-2 and 2-of-3 are the same number under different rules, so the count alone can't say
+    which. A pair told 'a majority' would reasonably conclude one of them could carry it."""
+    state = _pending_anchor_state([], needed=2)
+    state["voting_member_count"] = 2
+    context = _stage_context(state)
+
+    assert "everyone voting has to 👍🏾" in context
+    assert "a majority" not in context
+
+
+def test_stage_context_calls_the_same_number_a_majority_in_a_larger_group():
+    state = _pending_anchor_state([], needed=2)
+    state["voting_member_count"] = 3
+    context = _stage_context(state)
+
+    assert "a majority of the members" in context
+    assert "everyone voting" not in context
+
+
+def test_stage_context_falls_back_to_majority_without_a_roster_size():
+    """Checkpoints written before voting_member_count existed still have to describe themselves."""
+    context = _stage_context(_pending_anchor_state([], needed=2))
+
+    assert "a majority of the members" in context
 
 
 def test_lifecycle_stage_takes_over_once_setup_is_complete():

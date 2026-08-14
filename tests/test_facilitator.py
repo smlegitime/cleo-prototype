@@ -50,6 +50,24 @@ def test_facilitator_does_not_raise_the_threshold(with_facilitator):
     assert approvals_needed(6) == 4
 
 
+def test_a_pair_plus_a_facilitator_still_needs_both_participants(with_facilitator):
+    """Two participants plus a facilitator: the exclusion changes which RULE is in force, even
+    though both rules happen to land on 2. Counted, it is a majority of three — and a majority of
+    three can be assembled from the facilitator plus ONE participant, which is a decision the pair
+    never made. Excluded, the pair stays a pair, and the only two people who can supply those two
+    approvals are the participants themselves.
+
+    The count is only half of that guarantee; the other half is the numerator gate in
+    reactions._process_approval_reaction, which is what stops the facilitator supplying one.
+    """
+    members = ["dev3-dev1", "dev3-dev2", FACILITATOR, "ai-assistant"]
+    voting = [m for m in members if is_voting_member(m)]
+
+    assert len(voting) == 2
+    assert approvals_needed(len(voting)) == 2
+    assert not any(is_voting_member(m) for m in [FACILITATOR, "ai-assistant"])
+
+
 def test_unset_facilitator_list_leaves_the_tally_unchanged(monkeypatch):
     """Default deployment: no facilitators configured, so only CLEO is excluded."""
     monkeypatch.setattr(stream_mod, "FACILITATOR_USER_IDS", set())

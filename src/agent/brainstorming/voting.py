@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 from langchain_core.messages import HumanMessage
 
 from src.agent.brainstorming.graph import graph
-from src.agent.brainstorming.nodes import _advance_setup_stage
+from src.agent.brainstorming.nodes import _ANCHOR_SOURCES, _advance_setup_stage
 from src.agent.feedback.tools import commit_proposal, commit_rules
 from src.agent.lifecycle.provision import is_complete, merge_governance
 from src.agent.spec import build_spec
@@ -23,7 +23,7 @@ from src.agent.spec import build_spec
 logger = logging.getLogger(__name__)
 
 APPROVAL_REACTION = "like"   # 👍🏾
-MAJORITY_THRESHOLD = 2       # channels with more than this many non-AI users require majority vote
+MAJORITY_THRESHOLD = 2       # above this many voting members, a majority decides; at or below, everyone does
 
 
 def _approval_marker(kind: str) -> HumanMessage:
@@ -60,19 +60,54 @@ def _advance_setup_stage_fully(setup_stage: str | None, config: dict, classifica
 
 
 def approvals_needed(voting_member_count: int) -> int:
-    """How many approvals carry a vote: a majority of voting members, or one in small channels.
+    """How many approvals carry a vote: a majority above MAJORITY_THRESHOLD, everyone at or below.
+
+    Small channels are UNANIMOUS, not single-approval. A majority of two is one, so the old rule
+    let either member of a pair commit the group's design alone — and a channel reaches two the
+    ordinary way, by someone not turning up. Nothing announced that: a session where one
+    participant was absent ran with no vote at all while reading, in the transcript, exactly like
+    one that had been agreed. Requiring both makes a channel too small to have a majority say so
+    by stalling, which is visible, instead of by deciding, which is not.
 
     The counterpart of _threshold_met — same rule, stated as a number so CLEO can tell the group
     what a pending vote is still waiting on.
     """
     if voting_member_count > MAJORITY_THRESHOLD:
         return voting_member_count // 2 + 1
-    return 1
+    # An empty or unknown roster still has to need SOMETHING: a threshold of 0 is met by the vote
+    # that hasn't happened yet, so every card would commit itself the moment it was staged.
+    return max(voting_member_count, 1)
 
 
 def _threshold_met(approved_by: list, voting_member_count: int) -> bool:
-    """Majority of non-AI members, or a single approval in small channels."""
+    """Majority of the voting members, or all of them in channels too small to have a majority."""
     return len(approved_by) >= approvals_needed(voting_member_count)
+
+
+def anchor_vote_progress(state_values: dict, message_id: str) -> tuple[str, int] | None:
+    """(anchor kind, approvals recorded so far) for the still-live card `message_id` is, else None.
+
+    None covers every "nothing to report" case at once: the message is not an anchor (a 👍🏾 on
+    ordinary chat), or it is one that has already been committed or superseded and whose own
+    handler has said so. Reads the same _ANCHOR_SOURCES the pending-vote reporting does, so a
+    tally quoted here can't disagree with the one CLEO gives when asked.
+
+    Exists because every process_* gate returns the same falsy value whether it ignored a reaction
+    or recorded it and is still waiting — a distinction the group needs and the return type can't
+    make (see reactions._report_vote_progress).
+    """
+    for kind, key, shape in _ANCHOR_SOURCES:
+        store = state_values.get(key)
+        if not store:
+            continue
+        if shape == "one":
+            entry = store if store.get("message_id") == message_id else None
+        else:
+            entry = store.get(message_id)
+        if not entry or entry.get("committed") or entry.get("superseded"):
+            continue
+        return kind, len(entry.get("approved_by") or [])
+    return None
 
 
 def superseded_entries(suggestions: dict | None, keep_message_id: str) -> dict:

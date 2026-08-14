@@ -243,10 +243,18 @@ class BrainstormingAgentState(TypedDict):
     # Must be set explicitly on every invocation — checkpointed values persist otherwise.
     force_respond: bool | None
 
-    # How many approvals a pending suggestion currently needs (derived from the channel's non-AI
-    # member count by voting.approvals_needed, passed in per run because the graph can't see the
-    # Stream roster). Only read when telling the group what a pending vote is still waiting on.
+    # How many approvals a pending suggestion currently needs (derived from voting_member_count by
+    # voting.approvals_needed, passed in per run because the graph can't see the Stream roster).
+    # Only read when telling the group what a pending vote is still waiting on.
     approvals_needed: int | None
+
+    # The denominator that produced it: members who both set the threshold and can carry it —
+    # everyone except CLEO and any facilitator (stream.is_voting_member). Carried alongside the
+    # derived figure because the figure alone doesn't determine the RULE in force: 2 of 3 is a
+    # majority, 2 of 2 is unanimity, and CLEO has to be able to say which. Also the only record of
+    # roster size in an exported checkpoint, which is what a transcript needs to be interpretable
+    # after the fact — a card carried by one 👍🏾 means something different in a group of two.
+    voting_member_count: int | None
 
     # Community guidelines validation
     validation: CommunityGuidelinesValidation | None

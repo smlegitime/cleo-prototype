@@ -13,6 +13,8 @@ import logging
 
 from src.agent.brainstorming.graph import graph
 from src.agent.brainstorming.voting import (
+    anchor_vote_progress,
+    approvals_needed,
     close_other_path,
     is_superseded,
     process_approval_vote,
@@ -33,6 +35,7 @@ from src.api.messages import (
     RULES_STAGE_INTRO,
     SANDBOX_STAGE_INTRO,
     SUPERSEDED_VOTE_MSG,
+    VOTE_PROGRESS_MSG,
     preview_stage_intro,
 )
 from src.api.reporters import (
@@ -60,6 +63,41 @@ logger = logging.getLogger(__name__)
 # the vote tally (approved_by), which otherwise races when two members react at nearly the same time:
 # both read the same approved_by, each writes back its own voter, and the second write clobbers the first.
 _vote_locks: dict[str, asyncio.Lock] = collections.defaultdict(asyncio.Lock)
+
+
+async def _report_vote_progress(
+    channel, channel_id: str, message_id: str, voting_count: int
+) -> None:
+    """Say where a counted-but-sub-threshold vote stands.
+
+    The last thing tried, after every gate has declined the reaction. Two very different outcomes
+    arrive here identically: a 👍🏾 on ordinary chat (nothing to say) and a 👍🏾 that was recorded on
+    a live card still short of the threshold. Only the second gets a reply, and it has to come
+    from somewhere — set_approval_state only ever fires on APPROVED, and the card carries no count,
+    so the group's first vote of two otherwise changes nothing they can see.
+    """
+    state = await asyncio.to_thread(graph.get_state, {"configurable": {"thread_id": channel_id}})
+    progress = anchor_vote_progress(state.values, message_id)
+    if progress is None:
+        return
+
+    kind, approved = progress
+    needed = approvals_needed(voting_count)
+    if approved >= needed:
+        # Carried on this very reaction, and some gate above already announced it. Reporting a
+        # count now would follow that confirmation with a card that still sounds unfinished.
+        return
+
+    logger.info(
+        "Sub-threshold vote on %s (%s): %d/%d in %s", message_id, kind, approved, needed, channel_id
+    )
+    await asyncio.to_thread(
+        channel.send_message,
+        {"text": VOTE_PROGRESS_MSG.format(
+            approved=approved, needed=needed, remaining=needed - approved
+        )},
+        AI_USER_ID,
+    )
 
 
 async def _process_approval_reaction(
@@ -204,3 +242,7 @@ async def _process_approval_reaction(
                         f"\n\nStill to settle: {remaining}."
                     )
                 await asyncio.to_thread(channel.send_message, {"text": text}, AI_USER_ID)
+            else:
+                # No gate claimed the reaction. Either it wasn't on a votable card, or one of them
+                # counted it and is still waiting — only the tally can tell the two apart.
+                await _report_vote_progress(channel, channel_id, message_id, voting_count)

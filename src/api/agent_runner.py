@@ -5,8 +5,8 @@ Two layers:
   * _run_ai_agent — one run: fetch recent history, stream the graph, keep a single Stream message
     updated as tokens arrive, then promote any pending proposal/rules into vote-able suggestions.
   * _schedule_agent / _agent_runner — when runs happen. A channel gets at most one runner at a
-    time; triggers that land mid-run COALESCE into a single debounced catch-up, and only when the
-    trigger actually addressed CLEO, so unaddressed chatter never provokes a reply.
+    time; triggers that land mid-run COALESCE into a single debounced catch-up. Whether the burst
+    addressed CLEO decides only if that catch-up bypasses the router, never whether it happens.
 
 The scheduler relies on a single event-loop worker: the active-check and the add happen with no
 await between them, so two triggers can't both start a runner.
@@ -42,11 +42,13 @@ _channel_locks: dict[str, asyncio.Lock] = collections.defaultdict(asyncio.Lock)
 
 # Coalescing state (relies on a single event-loop worker; see _schedule_agent). A channel is
 # "active" for the WHOLE lifetime of its runner, including the debounce wait between runs so a
-# second trigger can never start a parallel run. _pending_rerun marks that an ADDRESSED message
-# arrived while a run was in flight and therefore owes a single catch-up run; _last_trigger_ts
-# drives the debounce (wait for the addressed burst to go quiet before the catch-up fires).
+# second trigger can never start a parallel run. _pending_rerun marks that a message arrived while
+# a run was in flight and therefore owes a single catch-up run; _pending_forced records whether any
+# of those messages ADDRESSED CLEO, which decides only whether the catch-up bypasses the router;
+# _last_trigger_ts drives the debounce (wait for the burst to go quiet before the catch-up fires).
 _active_channels: set[str] = set()
 _pending_rerun: set[str] = set()
+_pending_forced: set[str] = set()
 _last_trigger_ts: dict[str, float] = {}
 # How long the channel must be quiet (no new addressed trigger) before a coalesced catch-up runs.
 AGENT_DEBOUNCE_SECONDS = float(os.environ.get("AGENT_DEBOUNCE_SECONDS", "1.5"))
@@ -133,8 +135,11 @@ async def _run_ai_agent(channel_type: str, channel_id: str, force_respond: bool 
                 graph_input = {
                     "messages": langchain_messages,
                     "force_respond": force_respond,
-                    # Roster-derived, so it can't be read from the checkpoint — recomputed per run.
+                    # Roster-derived, so they can't be read from the checkpoint — recomputed per
+                    # run. The count travels with the figure it produced: 2 of 3 and 2 of 2 are
+                    # the same number under different rules (see state.voting_member_count).
                     "approvals_needed": approvals_needed(voting_member_count),
+                    "voting_member_count": voting_member_count,
                 }
 
                 if not existing_state.values:
@@ -278,8 +283,8 @@ async def _run_ai_agent(channel_type: str, channel_id: str, force_respond: bool 
 
 
 async def _await_quiet(channel_id: str) -> None:
-    """Block until no addressed trigger has landed for AGENT_DEBOUNCE_SECONDS, so a burst of
-    messages coalesces into one catch-up run instead of firing on the first one."""
+    """Block until no trigger has landed for AGENT_DEBOUNCE_SECONDS, so a burst of messages
+    coalesces into one catch-up run instead of firing on the first one."""
     while True:
         remaining = AGENT_DEBOUNCE_SECONDS - (time.monotonic() - _last_trigger_ts.get(channel_id, 0.0))
         if remaining <= 0:
@@ -330,12 +335,16 @@ async def _agent_runner(channel_type: str, channel_id: str, force_respond: bool)
                 _active_channels.discard(channel_id)
                 return
             _pending_rerun.discard(channel_id)
-            force_respond = True  # the catch-up exists to serve the addressed messages that queued it
+            # Bypass the router only if something in the coalesced burst actually addressed CLEO.
+            # An unaddressed burst still earns its catch-up; the router decides whether to answer.
+            force_respond = channel_id in _pending_forced
+            _pending_forced.discard(channel_id)
             await _await_quiet(channel_id)  # debounce: let the message burst settle before responding
     except BaseException:
         logger.exception("Agent runner crashed for channel %s", channel_id)
         _active_channels.discard(channel_id)
         _pending_rerun.discard(channel_id)
+        _pending_forced.discard(channel_id)
         raise
 
 
@@ -346,23 +355,31 @@ def _schedule_agent(
     after_run: AfterRunHook | None = None,
 ) -> None:
     """Entry point for every agent trigger. Starts a run immediately if the channel is idle; if a
-    run is already in flight it COALESCES — but only when the new trigger *addressed* CLEO
-    (force_respond), so unaddressed chatter during a run is dropped rather than provoking a reply.
-    Synchronous on purpose: the active-check and the add happen with no await between them, so on the
-    single-worker event loop two triggers can never both start a runner.
+    run is already in flight it COALESCES into one debounced catch-up. Synchronous on purpose: the
+    active-check and the add happen with no await between them, so on the single-worker event loop
+    two triggers can never both start a runner.
+
+    EVERY trigger coalesces, addressed or not. Unaddressed ones used to be dropped outright, to
+    keep CLEO from replying to chatter — but an idle channel already runs the graph on unaddressed
+    messages and lets the router decide, so the only thing being dropped was the router's *chance*
+    to see them. That made whether a question got answered depend on whether CLEO happened to be
+    mid-reply: a group talking over each other (the normal case, and the one a study observes)
+    loses exactly the beginner questions asked while CLEO is busy. force_respond is still carried
+    separately via _pending_forced, so an unaddressed catch-up faces the router like any other
+    unaddressed message and a catch-up with nothing to say stays silent.
 
     `after_run` queues follow-up work that writes graph state, to be run once this channel's runs
-    have finished rather than alongside them. Callers must pair it with force_respond=True: that's
-    what guarantees a coalesced trigger sets _pending_rerun, so the owning runner loops again and
-    reaches the drain instead of leaving the hook queued until the next message.
+    have finished rather than alongside them. Callers must pair it with force_respond=True: the
+    hooks are gated on an addressed trigger, and pairing keeps the queued hook and the run that
+    drains it describing the same event.
     """
     if after_run is not None:
         _after_run_hooks[channel_id].append(after_run)
-    if force_respond:
-        _last_trigger_ts[channel_id] = time.monotonic()
+    _last_trigger_ts[channel_id] = time.monotonic()
     if channel_id in _active_channels:
+        _pending_rerun.add(channel_id)
         if force_respond:
-            _pending_rerun.add(channel_id)
+            _pending_forced.add(channel_id)
         return
     _active_channels.add(channel_id)
     asyncio.create_task(_agent_runner(channel_type, channel_id, force_respond))

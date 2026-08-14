@@ -44,6 +44,24 @@ SUPERSEDED_VOTE_MSG = (
     "React to the newest proposal instead."
 )
 
+# Replied when an approval IS counted but the card still needs more. Same failure as the superseded
+# case and a much more common one: a first 👍🏾 of two changes nothing the group can see — the card
+# stays amber and carries no count — so the vote that is working looks identical to the vote that
+# was ignored. The running tally exists in state; this is the only thing that volunteers it.
+VOTE_PROGRESS_MSG = (
+    "👍🏾 Counted — that's {approved} of {needed}. {remaining} more and this is approved."
+)
+
+# Posted when someone joining changes how many 👍🏾 a card needs. The figure CLEO quotes is refreshed
+# once per agent run while enforcement recomputes it live on every reaction, so between a join and
+# the next run the two disagree — and the stale number is already in the scroll, under cards the
+# group can still vote on. Saying it out loud is what stops a group reacting once to a card they
+# were told a single 👍🏾 would carry.
+THRESHOLD_CHANGED_MSG = (
+    "👥 There are {voting_count} of you voting now, so a card needs {needed} 👍🏾 to be approved. "
+    "Anything further up that says otherwise is out of date."
+)
+
 # Sent once the preview is approved and the group advances to generate (bundle + sandbox test).
 # The irreversible provisioning step (real account/identity) comes later, only after the sandbox run.
 SANDBOX_STAGE_INTRO = (

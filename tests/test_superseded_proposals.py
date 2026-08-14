@@ -32,6 +32,9 @@ from src.agent.brainstorming.voting import (
 PROPOSAL = {"display_name": "Test Labeler", "description": "A test labeler", "labels": []}
 RULES = {"spam": {"label_identifier": "spam", "include_groups": [], "exclude_signals": [], "notes": None}}
 CHANNEL_ID = "channel-test"
+# One voting member, so a single 👍🏾 is already unanimous and the threshold is out of the way for
+# tests about superseding rather than counting. See test_voting.SOLO_CHANNEL.
+SOLO_CHANNEL = 1
 
 
 def _state(**values):
@@ -86,7 +89,7 @@ async def test_approving_a_superseded_proposal_commits_nothing():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal") as mock_commit:
         mock_graph.get_state.return_value = _state(pending_suggestions=suggestions)
-        result = await process_approval_vote(CHANNEL_ID, "msg-old", "user-1", MAJORITY_THRESHOLD)
+        result = await process_approval_vote(CHANNEL_ID, "msg-old", "user-1", SOLO_CHANNEL)
 
     assert result is None
     mock_commit.assert_not_called()
@@ -103,7 +106,7 @@ async def test_the_newest_proposal_still_commits_normally():
     with patch("src.agent.brainstorming.voting.graph") as mock_graph, \
          patch("src.agent.brainstorming.voting.commit_proposal", return_value=PROPOSAL) as mock_commit:
         mock_graph.get_state.return_value = _state(pending_suggestions=suggestions)
-        result = await process_approval_vote(CHANNEL_ID, "msg-new", "user-1", MAJORITY_THRESHOLD)
+        result = await process_approval_vote(CHANNEL_ID, "msg-new", "user-1", SOLO_CHANNEL)
 
     assert result == "proposal"
     mock_commit.assert_called_once()
@@ -125,10 +128,24 @@ async def test_is_superseded_distinguishes_replaced_from_live():
 # --- approvals_needed ---
 
 def test_approvals_needed_matches_the_threshold_rule():
-    assert approvals_needed(1) == 1
-    assert approvals_needed(2) == 1
+    assert approvals_needed(1) == 1   # unanimity and a single vote are the same thing here
+    assert approvals_needed(2) == 2   # too small for a majority, so both
     assert approvals_needed(3) == 2   # majority of 3
     assert approvals_needed(5) == 3   # majority of 5
+
+
+def test_a_pair_cannot_be_carried_by_one_member():
+    """The rule change this pins. A majority of two is one, so the old threshold let either member
+    of a pair commit the group's design alone — reached the ordinary way, by someone not turning
+    up. A group too small to have a majority must stall, which is visible, rather than decide."""
+    assert approvals_needed(2) == 2
+
+
+def test_an_empty_roster_still_needs_a_vote():
+    """A threshold of 0 is met by the vote that hasn't happened, so every card staged would commit
+    itself. Only reachable through a roster read that returned nothing, which is exactly when a
+    silent auto-approve would be hardest to notice."""
+    assert approvals_needed(0) == 1
 
 
 # --- _live_pending_anchor ---
@@ -242,7 +259,7 @@ async def test_approving_labels_clears_the_parked_details():
         mock_graph.get_state.return_value = _state(
             pending_suggestions=suggestions, setup_stage="content"
         )
-        await process_approval_vote(CHANNEL_ID, "msg-1", "user-1", MAJORITY_THRESHOLD)
+        await process_approval_vote(CHANNEL_ID, "msg-1", "user-1", SOLO_CHANNEL)
 
     payloads = [c.args[1] for c in mock_graph.update_state.call_args_list if len(c.args) > 1]
     commit = next(p for p in payloads if "labeler_config" in p)

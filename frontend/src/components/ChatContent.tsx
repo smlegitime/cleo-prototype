@@ -16,10 +16,13 @@ import { ChannelMembers } from "./ChannelMembers";
 import { ClearChannelButton } from "./ClearChannelButton";
 import { ChannelListItem } from "./ChannelListItem";
 
+// Only reactions the backend acts on. ❤️ used to sit next to 👍🏾 here and did nothing: the webhook
+// drops every type but "like", silently, so someone who hearted a proposal believed they had
+// approved it while the tally recorded an abstention. A picker with no inert options can't
+// misreport consent that way.
 const reactionOptions = [
 	// { type: "upvote", Component: () => <>⬆️</> },
 	// { type: "question", Component: () => <>❓</> },
-	{ type: "love", Component: () => <>❤️</> },
 	{ type: "like", Component: () => <>👍🏾</> },
 	{ type: "summon", Component: () => <>🤖</> },
 ];
