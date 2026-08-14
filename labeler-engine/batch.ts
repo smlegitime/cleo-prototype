@@ -2,13 +2,18 @@
  * Batch evaluation entrypoint — the ONE canonical interpreter run over a corpus.
  *
  * Reads `{ spec, posts }` JSON from stdin, evaluates every post against the spec's compiled labels,
- * and writes `{ results: [{ fired: string[]; matched: Record<string, string[]> }] }` to stdout,
+ * and writes `{ results: [{ fired: string[]; why: Record<string, string[]> }] }` to stdout,
  * aligned by index to the input posts.
  *
- * `matched` carries WHY each label fired — the signal descriptions evaluateLabel already computes
- * (e.g. "cortisol + detox") — keyed by label identifier. It used to be dropped here, which left the
- * rule-quality report able to say a rule fired 99 times but not which word did it: the one fact
- * that makes a bad rule fixable, discarded one line from where it was produced.
+ * `why` carries the reason each label fired — the signal descriptions evaluateLabel already
+ * computes (e.g. "cortisol + detox") — keyed by label identifier. It used to be dropped here, which
+ * left the rule-quality report able to say a rule fired 99 times but not which word did it: the one
+ * fact that makes a bad rule fixable, discarded one line from where it was produced.
+ *
+ * Named `why`, not `matched`: at THIS level `fired` already means "which labels", so the reason
+ * needs its own word — and `matched` is spoken for by EvalResult.near, where it means the signals
+ * that hit inside a group that only partly landed. Three senses of one word in two files is how
+ * a caller ends up reading the wrong half of the result.
  *
  * This is the same compileLabel/evaluateLabel that the preview UI and the deployed labeler use — the
  * Python `generate` step shells out to it so rule quality is measured by the real interpreter and
@@ -49,15 +54,15 @@ async function main(): Promise<void> {
   const results = (input.posts || []).map((post) => {
     const subject = { text: post.text || "", account: post.account };
     const fired: string[] = [];
-    const matched: Record<string, string[]> = {};
+    const why: Record<string, string[]> = {};
     for (const label of compiled) {
       const result = evaluateLabel(label, subject);
       if (result.fired.length > 0) {
         fired.push(label.identifier);
-        matched[label.identifier] = result.fired;
+        why[label.identifier] = result.fired;
       }
     }
-    return { fired, matched };
+    return { fired, why };
   });
   process.stdout.write(JSON.stringify({ results }));
 }

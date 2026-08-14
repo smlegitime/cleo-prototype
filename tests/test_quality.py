@@ -27,7 +27,7 @@ def _post(text, handle="u", bucket="trigger", query="q"):
 
 
 def _evaluated(*fired_per_post):
-    """Engine results in the (fired, matched) shape, with a stock reason for each fired label."""
+    """Engine results in the (fired, why) shape, with a stock reason for each fired label."""
     return [
         (fired, {lid: [f"{lid} signal"] for lid in fired})
         for fired in fired_per_post
@@ -63,7 +63,7 @@ def test_examples_carry_why_they_fired():
 
 
 def test_a_stale_engine_build_degrades_to_counts_without_explanations():
-    """`matched` postdates the report; an older dist/batch.js omits it. The counts must survive."""
+    """`why` postdates the report; an older dist/batch.js omits it. The counts must survive."""
     with patch("src.agent.lifecycle.quality.evaluate_corpus", return_value=[(["misinfo"], {})]):
         report = build_quality_report(SPEC, [_post("a")])
     assert report["per_label"]["misinfo"]["count"] == 1

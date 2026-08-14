@@ -64,7 +64,7 @@ def evaluate_corpus(
 
     `why` maps a fired label id to the signal descriptions that carried it (e.g. ["cortisol +
     detox"]) — what the report needs to name the actual word behind a fire. Older engine builds
-    predate the field, so a missing `matched` degrades to an empty dict rather than raising: the
+    predate the field, so a missing `why` degrades to an empty dict rather than raising: the
     counts stay correct and only the explanations go quiet.
 
     Raises FileNotFoundError if the engine isn't built, or RuntimeError if the subprocess fails.
@@ -82,7 +82,7 @@ def evaluate_corpus(
     if proc.returncode != 0:
         raise RuntimeError(f"labeler-engine batch eval failed: {proc.stderr.strip()[:500]}")
     data = json.loads(proc.stdout)
-    return [(r.get("fired", []), r.get("matched") or {}) for r in data.get("results", [])]
+    return [(r.get("fired", []), r.get("why") or {}) for r in data.get("results", [])]
 
 
 def _humanize(identifier: str) -> str:
@@ -123,7 +123,7 @@ def _example(post: dict, why: list[str] | None = None) -> dict:
         "query": post.get("query"),
         "bucket": post.get("bucket"),
         # What actually carried the fire, e.g. ["cortisol + detox"]. Empty when the engine build
-        # predates the `matched` field (see evaluate_corpus).
+        # predates the `why` field (see evaluate_corpus).
         "why": list(why or []),
     }
 
