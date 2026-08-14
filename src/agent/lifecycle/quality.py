@@ -57,8 +57,15 @@ def _subject(post: dict) -> dict:
     return subject
 
 
-def evaluate_corpus(spec: LabelerSpec, posts: list[dict], *, timeout: float = 60.0) -> list[list[str]]:
-    """Run the canonical interpreter over `posts`, returning the fired label ids per post (by index).
+def evaluate_corpus(
+    spec: LabelerSpec, posts: list[dict], *, timeout: float = 60.0
+) -> list[tuple[list[str], dict[str, list[str]]]]:
+    """Run the canonical interpreter over `posts`, returning (fired label ids, why) per post.
+
+    `why` maps a fired label id to the signal descriptions that carried it (e.g. ["cortisol +
+    detox"]) — what the report needs to name the actual word behind a fire. Older engine builds
+    predate the field, so a missing `matched` degrades to an empty dict rather than raising: the
+    counts stay correct and only the explanations go quiet.
 
     Raises FileNotFoundError if the engine isn't built, or RuntimeError if the subprocess fails.
     """
@@ -75,45 +82,93 @@ def evaluate_corpus(spec: LabelerSpec, posts: list[dict], *, timeout: float = 60
     if proc.returncode != 0:
         raise RuntimeError(f"labeler-engine batch eval failed: {proc.stderr.strip()[:500]}")
     data = json.loads(proc.stdout)
-    return [r.get("fired", []) for r in data.get("results", [])]
+    return [(r.get("fired", []), r.get("matched") or {}) for r in data.get("results", [])]
 
 
-def _example(post: dict) -> dict:
+def _humanize(identifier: str) -> str:
+    """`ratified_win` -> `Ratified Win`. The fallback when a label carries no locale name."""
+    return identifier.replace("_", " ").title()
+
+
+def _label_name(label: dict) -> str:
+    """The group's own name for a label, preferring the English locale, else its identifier."""
+    locales = label.get("locales") or []
+    loc = next((l for l in locales if l.get("lang") == "en"), None) or (locales[0] if locales else {})
+    return (loc.get("name") or "").strip() or _humanize(label.get("identifier") or "label")
+
+
+def _snippet(text: str) -> str:
+    """Trim a post to _SNIPPET characters at a WORD boundary, with an ellipsis if anything was cut.
+
+    Slicing blind produced quotes that ended mid-word ("a better work-", "coming from the bar"),
+    which a group reads as a broken system rather than a truncated quote — and "the bar" for
+    "the bargaining table" actively changes what the post appears to say.
+    """
+    flat = (text or "").replace("\n", " ").strip()
+    if len(flat) <= _SNIPPET:
+        return flat
+    cut = flat[:_SNIPPET]
+    # Only honour the word boundary if one is reasonably near the end; a long unbroken run
+    # (a URL, say) would otherwise lose most of the snippet to the last space far behind it.
+    space = cut.rfind(" ")
+    if space > _SNIPPET * 0.6:
+        cut = cut[:space]
+    return cut.rstrip(" ,.;:—-") + "…"
+
+
+def _example(post: dict, why: list[str] | None = None) -> dict:
     return {
         "handle": post.get("handle"),
-        "text": (post.get("text") or "").replace("\n", " ")[:_SNIPPET],
+        "text": _snippet(post.get("text") or ""),
         "query": post.get("query"),
         "bucket": post.get("bucket"),
+        # What actually carried the fire, e.g. ["cortisol + detox"]. Empty when the engine build
+        # predates the `matched` field (see evaluate_corpus).
+        "why": list(why or []),
     }
 
 
 def build_quality_report(spec: LabelerSpec, posts: list[dict]) -> dict:
     """Evaluate the corpus and aggregate into a report dict (see format_report_summary for the shape)."""
-    fired_per_post = evaluate_corpus(spec, posts)
-    n = min(len(posts), len(fired_per_post))
+    evaluated = evaluate_corpus(spec, posts)
+    n = min(len(posts), len(evaluated))
 
-    label_ids = [l["identifier"] for l in (spec.get("labels") or []) if l.get("rule")]
-    per_label: dict[str, dict] = {lid: {"count": 0, "examples": []} for lid in label_ids}
+    rule_labels = [l for l in (spec.get("labels") or []) if l.get("rule")]
+    # The group's own wording for each label, so the report can say "Ratified Win" rather than
+    # `ratified_win`. Resolved here because this is where the spec is in scope; the formatter
+    # only ever sees the report dict.
+    per_label: dict[str, dict] = {
+        l["identifier"]: {"name": _label_name(l), "count": 0, "examples": []} for l in rule_labels
+    }
     matched_any = 0
     fp_candidates: list[dict] = []
 
+    def slot_for(lid: str) -> dict:
+        return per_label.setdefault(lid, {"name": _humanize(lid), "count": 0, "examples": []})
+
     for i in range(n):
-        fired = fired_per_post[i]
+        fired, why_by_label = evaluated[i]
         if not fired:
             continue
         matched_any += 1
         post = posts[i]
         for lid in fired:
-            slot = per_label.setdefault(lid, {"count": 0, "examples": []})
+            slot = slot_for(lid)
             slot["count"] += 1
             if len(slot["examples"]) < _MAX_EXAMPLES:
-                slot["examples"].append(_example(post))
+                slot["examples"].append(_example(post, why_by_label.get(lid)))
         # A 'context' post is an on-topic/benign query result; firing there is a possible false
         # positive. NOTE: this heuristic assumes TEXT-matching semantics and is misleading for
         # account-threshold rules — a context post firing 'follower_count >= 100' is a correct fire,
         # not an FP. See the module docstring's KNOWN LIMITATION; revisit with a distributional report.
         if post.get("bucket") == "context" and len(fp_candidates) < _MAX_FP_CANDIDATES:
-            fp_candidates.append({**_example(post), "labels": fired})
+            fp_candidates.append({
+                **_example(post),
+                "labels": [per_label[lid]["name"] for lid in fired if lid in per_label],
+                # Flattened across labels: on a false-positive candidate the question is which
+                # wording caught an ordinary post, not which label it was filed under.
+                "why": [w for lid in fired for w in why_by_label.get(lid, [])],
+            })
 
     return {
         "total": n,
@@ -124,27 +179,86 @@ def build_quality_report(spec: LabelerSpec, posts: list[dict]) -> dict:
     }
 
 
+# How the corpus was built, in the group's terms. Load-bearing, not throat-clearing: derive_queries
+# stocks the corpus from the rules' OWN signal text (up to 32 trigger queries against 8 context
+# ones), so "fired on 99 of 200" is 99 of the posts most likely to fire — not 99 of Bluesky. Without
+# this line a group reads its labeler as vastly wider-reaching than it is, and any fire count looks
+# alarming or reassuring for the wrong reason.
+_CORPUS_NOTE = (
+    "I searched Bluesky for posts using the words your rules look for, then ran your rules "
+    "over the **{total} posts** that came back. These aren't random posts — they're the ones "
+    "most likely to be caught, so the numbers run high on purpose."
+)
+
+# The one verdict this report can honestly reach. A high fire count proves nothing (see
+# _CORPUS_NOTE), but a label that fired ZERO times failed on a corpus stocked with its own search
+# terms — which is close to conclusive that the rule is looking for wording nobody writes. This is
+# the failure that currently renders identically to success, and the one groups can't spot unaided.
+_NEVER_FIRED = (
+    "⚠️ **{name} didn't catch anything.** I went looking for posts using its own words and it "
+    "still didn't fire on a single one — that usually means the rule is looking for wording "
+    "people don't actually use. Worth fixing before you go further."
+)
+
+_MAX_SHOWN_EXAMPLES = 1   # per label, in chat — the report keeps more for the quality screen
+
+
+def _why_suffix(why: list[str] | None) -> str:
+    """` — matched “cortisol + detox”`, or empty when the engine build didn't report it.
+
+    Kept on the attribution line rather than given its own: a bare newline is a SOFT break in
+    markdown and collapses into the line above, so anything that must stand alone has to be a
+    list item or a paragraph. Trailing the attribution costs nothing and can't collapse wrongly.
+    """
+    parts = [w for w in (why or []) if w]
+    return f" — matched “{'”, “'.join(parts)}”" if parts else ""
+
+
 def format_report_summary(report: dict) -> str:
-    """Render a report dict as a concise chat message."""
+    """Render a report dict as a chat message a non-technical group can actually read.
+
+    Every block is a separate paragraph, because the chat renders standard markdown: a single
+    newline is a soft break that collapses into the line above, which is what turned the previous
+    version into a wall. Anything that must stand on its own line is a list item or a paragraph.
+    Emphasis is **double-asterisk** for the same reason — a single asterisk is italic there.
+    """
     total = report["total"]
-    lines = [f"🔎 *Rule-quality check* on {total} real Bluesky posts:"]
-    for lid, slot in report["per_label"].items():
-        lines.append(f"• `{lid}` — fired on {slot['count']}/{total}")
-    lines.append(f"• {report['matched_none']}/{total} matched no label")
+    per_label = report["per_label"]
+
+    blocks = ["**🔎 Rule-quality check**", _CORPUS_NOTE.format(total=total)]
+
+    counts = [f"- **{slot['name']}** — {slot['count']} of {total}" for slot in per_label.values()]
+    counts.append(f"- Caught by nothing — {report['matched_none']} of {total}")
+    blocks.append("**What each label caught**")
+    blocks.append("\n".join(counts))
+
+    silent = [slot["name"] for slot in per_label.values() if not slot["count"]]
+    blocks.extend(_NEVER_FIRED.format(name=name) for name in silent)
 
     examples = []
-    for lid, slot in report["per_label"].items():
-        for ex in slot["examples"][:2]:
-            examples.append(f"  – `{lid}` ← @{ex['handle']}: “{ex['text']}”")
+    for slot in per_label.values():
+        for ex in slot["examples"][:_MAX_SHOWN_EXAMPLES]:
+            examples.append(
+                f"**{slot['name']}** · @{ex['handle']}{_why_suffix(ex.get('why'))}\n> {ex['text']}"
+            )
     if examples:
-        lines.append("\n*Examples that fired:*")
-        lines.extend(examples)
+        blocks.append("**A couple it caught**")
+        blocks.extend(examples)
 
     fps = report["false_positive_candidates"]
     if fps:
-        lines.append("\n⚠️ *On-topic posts that fired* (check these for false positives):")
-        for fp in fps[:3]:
-            lines.append(f"  – @{fp['handle']}: “{fp['text']}” → {', '.join(fp['labels'])}")
+        blocks.append(
+            "**⚠️ These were ordinary on-topic posts, and got caught anyway.** "
+            "Worth checking whether you'd want them labelled."
+        )
+        blocks.extend(
+            f"@{fp['handle']} → {', '.join(fp['labels'])}"
+            f"{_why_suffix(fp.get('why'))}\n> {fp['text']}"
+            for fp in fps[:3]
+        )
 
-    lines.append("\nWant to adjust anything? Tell me and we'll update the rules, then re-check.")
-    return "\n".join(lines)
+    blocks.append(
+        "Does this look like what you meant to catch? Tell me what's off and I'll update the "
+        "rules and run this again."
+    )
+    return "\n\n".join(blocks)
