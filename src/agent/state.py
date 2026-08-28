@@ -304,6 +304,12 @@ class BrainstormingAgentState(TypedDict):
     # Classification rules staged by the agent, waiting for group approval
     pending_classification_rules: dict[str, ClassificationRule] | None
 
+    # Why a finalize_rules call this turn staged NOTHING, in the group's words — every rule in it
+    # was unenforceable, or it arrived carrying no rules at all. Set only when the agent tried and
+    # failed, so the reply can say so instead of going quiet about a card the group is expecting.
+    # Cleared at the top of every responding turn, like feedback_response.
+    rules_staging_error: str | None
+
     # Rule proposals keyed by Stream message_id — merged on update, voted on like labeler proposals
     pending_rule_suggestions: Annotated[dict[str, PendingRuleSuggestion], _merge_dicts]
 

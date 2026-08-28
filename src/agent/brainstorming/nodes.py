@@ -1,4 +1,5 @@
 import logging
+import re
 from typing import Literal
 from langgraph.graph import END
 from langgraph.types import interrupt, Command
@@ -18,6 +19,13 @@ PENDING_APPROVAL_MSG = (
 # and the next step but dropped the tally in both samples), and its reply is passed through
 # verbatim — so on that path the vote is stated deterministically rather than left to the model.
 PENDING_VOTE_FOOTER = "📌 Still waiting on the group: the {what} above — {tally}."
+
+# Said under a reply that invited a 👍🏾 without staging anything (see _strip_approval_invite).
+# Replaces the invitation with the gesture that actually produces a votable card.
+NOT_STAGED_FOOTER = (
+    "📝 This is the working draft — nothing is up for a vote yet. Summon me like you would with "
+    "\"@CLEO\" or \"cleo, build the {what} proposal\" when you want me to put this to the group."
+)
 
 # Defensive only: acknowledge_pending is routed to on the strength of a live anchor, so this
 # should be unreachable. An explicit summon still has to say something.
@@ -113,6 +121,98 @@ def _approval_rule(state: BrainstormingAgentState) -> str:
     if needed == 1:
         return "a single 👍🏾 carries it"
     return "a majority of the members"
+
+
+# The 👍🏾 invitation belongs to a card, and a card only exists on a turn that called
+# finalize_rules/finalize_proposal. The rules prompt hands the model that closing line, and it
+# reproduces the line on turns where it never made the call — measured in a pilot session on two
+# consecutive turns, the second one straight after an explicit "build a proposal". The reaction
+# then lands on a message no anchor was ever registered for (see agent_runner, which promotes a
+# staged card into pending_rule_suggestions AFTER the run), so reactions._report_vote_progress
+# finds nothing to tally and answers with silence: a button wired to nothing.
+#
+# Prompt wording alone can't hold that invariant — the prose half of the instruction is far easier
+# for the model to satisfy than the tool-call half — so it is enforced on the way out instead: no
+# card in this reply, no invitation in it either.
+_APPROVAL_EMOJI = "👍"
+# A sentence boundary, with any closing markdown left on the sentence it belongs to: the
+# invitation is usually bolded, and "…to adjust.** For example" has to split after the ** or the
+# rest of the paragraph goes down with it.
+_SENTENCE_END = re.compile(r"(?<=[.!?])((?:\*\*|__|[*_)\]\"\'”])*)\s+")
+# What's left of a line once its only real sentence is gone: bold markers, a dangling dash, a
+# bullet. Nothing a reader would miss.
+_MARKUP_ONLY = " *_-—–:•·"
+
+
+def _sentences(line: str) -> list[str]:
+    """`line` split at sentence boundaries, closing markdown kept with the sentence it closes."""
+    out, start = [], 0
+    for match in _SENTENCE_END.finditer(line):
+        out.append(line[start:match.end(1)])
+        start = match.end()
+    out.append(line[start:])
+    return out
+
+
+def _strip_approval_invite(text: str) -> str:
+    """The reply with any 'react 👍🏾 to approve' invitation removed.
+
+    Scrubbed per sentence, not per line: the invitation usually shares its line with content
+    worth keeping ("I've staged these — **react 👍🏾 to approve.** For example, if there are
+    specific venues…"). Dropping the sentence takes the false 'staged' claim with it, which is
+    the other half of the same mistake.
+    """
+    kept = []
+    for line in text.splitlines():
+        if _APPROVAL_EMOJI not in line:
+            kept.append(line)
+            continue
+        rebuilt = " ".join(
+            part.strip() for part in _sentences(line)
+            if _APPROVAL_EMOJI not in part and part.strip()
+        )
+        if rebuilt.strip(_MARKUP_ONLY):
+            kept.append(rebuilt)
+    # Whole lines removed from the middle leave blank runs behind.
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(kept)).strip()
+
+
+# Trailing markdown/quote characters between the question mark and the end of the line.
+_TRAILING_MARKUP = "*_`\"')]}» "
+
+
+def _ends_by_asking_the_group(text: str) -> bool:
+    """True when the reply's last line puts a question to the group.
+
+    CLEO asking "which approach do you want?" is itself a request for the group to act, and the
+    vote footer stapled underneath competes with it — two asks in one message, the second about
+    something else entirely (measured: a rules clarification carrying the ship-gate tally). The
+    open vote is still open; it gets reported on the next turn that isn't a question.
+    """
+    last = next((line for line in reversed(text.splitlines()) if line.strip()), "")
+    return last.rstrip(_TRAILING_MARKUP).endswith("?")
+
+
+# Lifecycle stages where a request is about what a label CATCHES rather than about the labeler's
+# shape, so CLEO reasons from RULES_DERIVATION_PROMPT instead of the general design prompt. Each is
+# a place the product itself invites rule edits: the preview screen at 'preview'; "want to tweak a
+# rule first? Tell me what to change and we'll re-check before you approve" on the ship gate at
+# 'generate' (messages.DEPLOY_APPROVAL_PROMPT); maintenance edits after the sandbox run at 'deploy'.
+#
+# 'provision' is deliberately absent — it is a governance conversation and never reaches the
+# feedback agent at all (see validate_and_classify).
+_RULES_LIFECYCLE_STAGES = frozenset({'preview', 'generate', 'deploy'})
+
+
+def _is_deriving_rules(setup_stage: str | None, lifecycle_stage: str | None) -> bool:
+    """Whether this turn's work is classification rules rather than the labeler's configuration."""
+    return setup_stage == 'rules' or lifecycle_stage in _RULES_LIFECYCLE_STAGES
+
+
+def _unstaged_footer(state: BrainstormingAgentState) -> str:
+    """NOT_STAGED_FOOTER naming whatever this stage stages."""
+    deriving_rules = _is_deriving_rules(state.get('setup_stage'), state.get('lifecycle_stage'))
+    return NOT_STAGED_FOOTER.format(what="rules" if deriving_rules else "labeler")
 
 
 def _live_entry(value, shape: str) -> dict | None:
@@ -397,6 +497,7 @@ def validate_and_classify(state: BrainstormingAgentState) -> Command[Literal["se
             "validation": validation,
             "classification": classification,
             "feedback_response": None,
+            "rules_staging_error": None,
         },
         goto=goto,
     )
@@ -459,6 +560,41 @@ def _tool_call_args(messages: list, name: str) -> list[dict]:
         for tool_call in (getattr(msg, 'tool_calls', None) or [])
         if tool_call.get('name') == name
     ]
+
+
+def _label_name(identifier: str) -> str:
+    """'unverified_info' -> 'Unverified Info', the way the rules card writes it."""
+    return (identifier or "label").replace("_", " ").title()
+
+
+def _rules_staging_error(args: dict, errors: list[str]) -> str:
+    """Why a finalize_rules call staged nothing, written for the group.
+
+    Both causes end the same way for them — no card, no vote — but they call for different next
+    moves, so they are not collapsed into one message. The validator's own error strings stay out
+    of it: they name signal types and regexes, which is exactly what the group never sees.
+    """
+    submitted = args.get('rules') or []
+    if not submitted:
+        # The tool fired with an empty payload. Historically this is a truncated tool call whose
+        # tail was lost (see TOOL_MODEL_MAX_TOKENS in src/config.py) — nothing the group did.
+        return (
+            "⚠️ Something went wrong on my end writing these up — the rules came back empty, so "
+            "there's nothing for the group to vote on yet. Ask me to build the rules proposal "
+            "again and I'll have another go."
+        )
+
+    names = ", ".join(f"**{_label_name(r.get('label_identifier'))}**" for r in submitted)
+    one = len(submitted) == 1
+    subject = f"a rule for {names}" if one else f"rules for {names}"
+    looks_for = "What it needs to look for" if one else "What each one needs to look for"
+    return (
+        f"⚠️ I couldn't stage {subject}. {looks_for} can't be checked with "
+        "words, text patterns, or account traits — the only things this labeler can see — so "
+        "there's nothing for the group to vote on yet.\n\n"
+        "Tell me a word, a phrase, or something about the account that would actually show up in "
+        "a post you'd want flagged, and I'll build the proposal around that instead."
+    )
 
 
 # Purpose-stage escape hatch: after this many CLEO turns the stage advances even without a recorded
@@ -551,11 +687,14 @@ def provide_feedback(state: BrainstormingAgentState) -> Command[Literal['draft_r
         context_messages = prior_feedback + new_humans
 
         # RULES_DERIVATION_PROMPT used directly by feedback agent when classification rules are
-        # being built. That's the 'rules' setup stage and also the 'preview' lifecycle stage,
-        # where the group reviews the labeler and asks for rule tweaks before approving.
+        # being built: the 'rules' setup stage, and every lifecycle stage where the group is
+        # invited to tweak what a label catches (see _RULES_LIFECYCLE_STAGES). Without it a rule
+        # edit at 'generate' — the stage whose own ship-gate card asks "want to tweak a rule
+        # first?" — is answered from the general design prompt, which knows about labels and
+        # finalize_proposal but carries none of the signal syntax or enforceability limits.
         setup_stage = state.get('setup_stage')
         lifecycle_stage = state.get('lifecycle_stage')
-        deriving_rules = setup_stage == 'rules' or lifecycle_stage == 'preview'
+        deriving_rules = _is_deriving_rules(setup_stage, lifecycle_stage)
         # What the feedback subgraph sees, so its own stage-based logic matches the prompt.
         effective_stage = 'rules' if deriving_rules else setup_stage
         logger.info(
@@ -668,33 +807,39 @@ def provide_feedback(state: BrainstormingAgentState) -> Command[Literal['draft_r
         update['feedback_response'] = feedback_text
 
         # extract classification rules from finalize_rules tool call args in the message history
+        #
+        # There can be more than one call in a turn: the tool rejects unenforceable signals and
+        # hands the reasons back, and the agent then calls again with corrections. The LAST call
+        # wins in both directions — a corrected call supersedes the partial rules of the one it
+        # replaces, and a call that stages nothing supersedes an earlier success the agent has
+        # just moved past. Whatever the agent said last is what its reply describes.
         pending_classification_rules = None
-        for msg in result.get('messages', []):
-            tool_calls = getattr(msg, 'tool_calls', None)
-            if not tool_calls:
+        rules_staging_error = None
+        for args in _tool_call_args(result.get('messages', []), 'finalize_rules'):
+            # Enforcement boundary: drop signals the executor can't run and skip
+            # labels left with no enforceable include signal, so nothing unenforceable
+            # is staged for approval.
+            cleaned_rules, rule_errors = sanitize_rules(args.get('rules') or [])
+            if rule_errors:
+                logger.info("Dropped unenforceable rule signals: %s", "; ".join(rule_errors))
+            if not cleaned_rules:
+                # Nothing enforceable survived — don't stage a phantom rules block, and don't go
+                # quiet about it either. The group asked for a card and there will be none, so
+                # the reason travels back with the reply (see draft_response).
+                pending_classification_rules = None
+                rules_staging_error = _rules_staging_error(args, rule_errors)
+                logger.warning(
+                    "finalize_rules staged nothing (%d rule(s) in, 0 out): %s",
+                    len(args.get('rules') or []), "; ".join(rule_errors) or "call carried no rules",
+                )
                 continue
-            for tc in tool_calls:
-                if tc.get('name') != 'finalize_rules':
-                    continue
-                args = tc.get('args', {})
-                # Enforcement boundary: drop signals the executor can't run and skip
-                # labels left with no enforceable include signal, so nothing unenforceable
-                # is staged for approval.
-                cleaned_rules, rule_errors = sanitize_rules(args.get('rules') or [])
-                if rule_errors:
-                    logger.info("Dropped unenforceable rule signals: %s", "; ".join(rule_errors))
-                if not cleaned_rules:
-                    # Nothing enforceable survived — don't stage a phantom rules block.
-                    # The agent's message (driven by finalize_rules' error) explains why.
-                    continue
-                rules_by_label = dict(state.get('classification_rules') or {})
-                for rule in cleaned_rules:
-                    rules_by_label[rule['label_identifier']] = rule
-                pending_classification_rules = rules_by_label
-                break
-            if pending_classification_rules:
-                break
+            rules_by_label = dict(state.get('classification_rules') or {})
+            for rule in cleaned_rules:
+                rules_by_label[rule['label_identifier']] = rule
+            pending_classification_rules = rules_by_label
+            rules_staging_error = None
         update['pending_classification_rules'] = pending_classification_rules
+        update['rules_staging_error'] = rules_staging_error
 
         # Advance purpose -> content on the purpose being captured, NOT on a proposal (the stage
         # forbids finalize_proposal, so artifact-gating it on display_name/description deadlocks).
@@ -713,6 +858,7 @@ def provide_feedback(state: BrainstormingAgentState) -> Command[Literal['draft_r
             "messages": [{"role": "assistant", "content": error_text}],
             "pending_proposal": None,
             "pending_classification_rules": None,
+            "rules_staging_error": None,
             "setup_stage": state.get('setup_stage'),
             "feedback_response": error_text,
         }
@@ -828,7 +974,15 @@ def draft_response(state: BrainstormingAgentState) -> dict:
     # turn clears it to None first, so `is not None` means "provide_feedback ran on this turn".
     feedback_response = state.get('feedback_response')
     if feedback_response is not None:
-        parts = [feedback_response.strip()]
+        # Nothing staged this turn means no card below this reply, so any 👍🏾 invitation in it is
+        # pointing at a vote that does not exist. Strip it; the footer below says what to do
+        # instead.
+        staged_now = bool(pending_proposal or pending_rules)
+        reply = feedback_response.strip()
+        scrubbed = reply if staged_now else _strip_approval_invite(reply)
+        invited_without_card = scrubbed != reply
+
+        parts = [scrubbed]
         if pending_proposal:
             parts.append(format_proposal_block(pending_proposal))
         if pending_rules:
@@ -843,10 +997,22 @@ def draft_response(state: BrainstormingAgentState) -> dict:
         # card the new one is about to supersede. Reporting its count under a freshly staged card
         # would advertise a vote that stops counting the moment this reply lands — and the new
         # card carries its own "react to approve" line anyway.
+        # A turn that TRIED to stage rules and couldn't. Said first and instead of the others:
+        # it is the reason there is no card, and it carries its own next step.
+        rules_error = state.get('rules_staging_error')
+
         anchor = _live_pending_anchor(state)
-        if anchor and not (pending_proposal or pending_rules):
+        if rules_error and not staged_now:
+            parts.append(rules_error)
+        elif anchor and not staged_now and not _ends_by_asking_the_group(scrubbed):
             what, tally = _anchor_what_and_tally(state, anchor)
             parts.append(PENDING_VOTE_FOOTER.format(what=what, tally=tally))
+        elif invited_without_card:
+            # Only where an invitation was actually removed — a plain question turn is not a
+            # draft and should not be footnoted as one. When the model closes correctly on its
+            # own there is nothing to strip and nothing to add here.
+            logger.info("Stripped a 👍🏾 invitation from a reply that staged nothing")
+            parts.append(_unstaged_footer(state))
 
         return {"draft_response": "\n\n".join(p for p in parts if p)}
 

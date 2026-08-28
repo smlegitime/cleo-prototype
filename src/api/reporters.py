@@ -31,6 +31,7 @@ from src.api.messages import (
     CORPUS_FAILED_MSG,
     CORPUS_SOURCED_MSG,
     DEPLOY_APPROVAL_PROMPT,
+    DEPLOY_GATE_SUPERSEDED_NOTE,
     GO_LIVE_PATH_PROMPT,
     GO_LIVE_REOPENED_MSG,
     GOVERNANCE_CONFIRM_CARD,
@@ -80,6 +81,19 @@ async def _report_unexpected(channel_type: str, channel_id: str) -> None:
         logger.exception("Could not report an unexpected failure into channel %s", channel_id)
 
 
+async def _open_deploy_gate(channel_id: str) -> str | None:
+    """The message id of the ship-gate card still open in this channel, or None.
+
+    None covers both "there has never been one" (first pass through generate) and "the group
+    already used it", so the caller can treat a returned id as a card that genuinely needs closing.
+    """
+    state = await asyncio.to_thread(graph.get_state, {"configurable": {"thread_id": channel_id}})
+    pending = state.values.get("pending_deploy_approval") or {}
+    if pending.get("committed"):
+        return None
+    return pending.get("message_id")
+
+
 async def _run_generate_and_report(channel_type: str, channel_id: str) -> None:
     """Background task: source the rule-quality corpus for a channel entering `generate`, then
     report the outcome in the channel. Recreates its own channel handle (mirrors the welcome task)
@@ -97,6 +111,14 @@ async def _run_generate_and_report(channel_type: str, channel_id: str) -> None:
     if result["status"] == "succeeded" and result.get("report"):
         text = CORPUS_SOURCED_MSG.format(n=result["num_posts"]) + "\n\n" + format_report_summary(result["report"])
         await asyncio.to_thread(channel.send_message, {"text": text}, AI_USER_ID)
+
+        # The gate this re-check replaces, read BEFORE the new anchor overwrites the record. A rule
+        # edit during `generate` re-runs this stage (see reactions), which leaves the earlier
+        # ship-gate card sitting in the scroll under a report that no longer describes the rules.
+        # pending_deploy_approval is a single record, so the old anchor id is simply forgotten —
+        # nothing marks that card closed and nothing answers a 👍🏾 on it.
+        previous = await _open_deploy_gate(channel_id)
+
         # Post the ship-gate anchor and register the pending deploy approval: reacting to THIS message
         # advances generate -> deploy and materializes the bundle. Mirrors the preview-approval anchor.
         resp = await asyncio.to_thread(
@@ -110,6 +132,12 @@ async def _run_generate_and_report(channel_type: str, channel_id: str) -> None:
                 {"configurable": {"thread_id": channel_id}},
                 {"pending_deploy_approval": {"message_id": anchor_id, "approved_by": []}},
             )
+            # Retired only now that its replacement is safely up. Doing it when the re-check STARTS
+            # would strand a group whose re-check then failed with no gate at all — the failure
+            # path posts CORPUS_FAILED_MSG and registers nothing, so the old card is their only
+            # way forward until a later run succeeds.
+            if previous and previous != anchor_id:
+                await close_path_in_stream(previous, DEPLOY_GATE_SUPERSEDED_NOTE)
     else:
         await asyncio.to_thread(channel.send_message, {"text": CORPUS_FAILED_MSG}, AI_USER_ID)
 
@@ -144,12 +172,14 @@ async def _post_path_anchor(channel, channel_id: str, text: str, state_key: str)
 
 
 async def close_path_in_stream(message_id: str | None, note: str) -> None:
-    """Grey out the fork half the group didn't take and say why, once.
+    """Grey out a card the group can no longer act on and say why, once.
 
-    The state flag from voting.close_other_path is what makes the card inert; this is the visible
-    half, so someone scrolling back doesn't react to a card that will never fire. `note` differs by
-    which card is being closed — the two ways back aren't the same (see messages.py). Best-effort:
-    a failed edit costs the note, not the choice.
+    Two callers, same problem: the fork half the group didn't take, and the ship gate a re-check
+    replaced. Something else is what makes the card inert — voting.close_other_path's committed
+    flag for the fork, the overwritten pending_deploy_approval record for the gate — this is the
+    visible half, so someone scrolling back doesn't react to a card that will never fire. `note`
+    differs by which card is being closed; the ways back aren't the same (see messages.py).
+    Best-effort: a failed edit costs the note, not the closure.
     """
     if not message_id:
         return

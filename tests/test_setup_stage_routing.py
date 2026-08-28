@@ -333,6 +333,31 @@ def test_preview_lifecycle_forwards_rules_derivation_prompt():
     assert invoked["setup_stage"] == "rules"  # the subgraph sees the effective (rules) stage
 
 
+@pytest.mark.parametrize("lifecycle_stage", ["preview", "generate", "deploy"])
+def test_every_stage_that_invites_rule_edits_gets_the_rules_prompt(lifecycle_stage):
+    """The ship gate at 'generate' says "want to tweak a rule first? Tell me what to change and
+    we'll re-check before you approve", and 'deploy' is where maintenance edits land. Answering
+    either from the general design prompt loses the signal syntax and the enforceability limits."""
+    state = _state("also require a mutual aid hashtag", setup_stage="complete")
+    state["lifecycle_stage"] = lifecycle_stage
+    with patch(FEEDBACK_GRAPH_PATCH_TARGET) as mock_graph:
+        mock_graph.invoke.return_value = {"messages": [AIMessage(content="ok")]}
+        provide_feedback(state)
+    invoked = mock_graph.invoke.call_args[0][0]
+
+    assert "finalize_rules" in invoked["system_prompt"]
+    assert invoked["setup_stage"] == "rules"
+
+
+def test_provision_is_not_a_rules_stage():
+    """Governance, not design — and it never reaches the feedback agent at all (see
+    validate_and_classify). Pinned so a later stage added to the rules set doesn't sweep it in."""
+    from src.agent.brainstorming.nodes import _is_deriving_rules
+
+    assert _is_deriving_rules("complete", "provision") is False
+    assert _is_deriving_rules("complete", "live") is False
+
+
 def test_rules_stage_feeds_existing_rules_into_prompt_for_revision():
     """On a revision turn, the previously staged rules are injected into the prompt so the
     feedback agent edits them instead of re-deriving from scratch."""
@@ -1133,3 +1158,263 @@ def test_the_drafting_path_does_not_get_the_footer():
 
     assert "Still waiting on the group" not in draft
     assert "1 of 2 approvals so far" in mock_llm.stream.call_args[0][0][0].content
+
+
+# =============================================================================
+# The 👍🏾 invitation: only ever under a card that exists
+# =============================================================================
+
+from src.agent.brainstorming.nodes import _strip_approval_invite
+
+# Verbatim from a pilot session (group B, 2026-08-14 14:42): CLEO described the rules, claimed it
+# had staged them and asked for the reaction, but never called finalize_rules — so no card was
+# rendered, no anchor was registered, and the 👍🏾 the group was invited to give did nothing.
+_UNSTAGED_REPLY = (
+    "These use specific keywords, phrases, and account age. The labeler flags based on what's "
+    "actually in the post text.\n\n"
+    "I've staged these rules — **react 👍🏾 to approve, or tell me what to adjust.** For example, "
+    "if there are specific Providence venues you want added, just let me know!"
+)
+
+
+def _rules_reply(reply: str, staging: bool = False, anchor: dict | None = None) -> str:
+    state = _state("add the account-age signal too", setup_stage="rules")
+    state["approvals_needed"] = 2
+    state["classification"] = {"intent": "feedback", "atproto": "label", "topic": "label"}
+    state["feedback_response"] = reply
+    if anchor is not None:
+        state["pending_rule_suggestions"] = {"msg-1": anchor}
+    if staging:
+        state["pending_classification_rules"] = {"spam": {"label_identifier": "spam"}}
+
+    with patch("src.agent.brainstorming.nodes.llm"):
+        return draft_response(state)["draft_response"]
+
+
+def test_an_invitation_without_a_card_is_replaced_with_how_to_get_one():
+    draft = _rules_reply(_UNSTAGED_REPLY)
+
+    assert "👍" not in draft                       # nothing to react to, so nothing invited
+    assert "I've staged these rules" not in draft  # the false claim goes with the invitation
+    assert "nothing is up for a vote yet" in draft
+    assert "cleo, build the rules proposal" in draft
+    # Only the invitation sentence is dropped — the rest of the reply survives intact.
+    assert "The labeler flags based on what's actually in the post text." in draft
+    assert "specific Providence venues" in draft
+
+
+def test_the_invitation_stands_on_a_turn_that_actually_stages_rules():
+    draft = _rules_reply("Here's what each label will catch.", staging=True)
+
+    assert "React with 👍🏾 to approve these rules." in draft
+    assert "up for a vote yet" not in draft
+
+
+def test_a_reply_that_never_invited_a_reaction_gets_no_footer():
+    """The footer replaces a wrong invitation; it is not a banner on every rules turn."""
+    draft = _rules_reply("Reports go to your moderation team, not to the labeler.")
+
+    assert draft == "Reports go to your moderation team, not to the labeler."
+
+
+def test_a_stray_invitation_points_at_the_card_that_is_actually_open():
+    """With an earlier card still live, the existing tally footer is the better answer — it names
+    a vote the group can still act on, so the not-staged wording would contradict it."""
+    draft = _rules_reply(_UNSTAGED_REPLY, anchor={"proposal": {"spam": {}}, "approved_by": []})
+
+    assert "👍" not in draft
+    assert "set of classification rules above" in draft
+    assert "up for a vote yet" not in draft
+
+
+def test_the_footer_names_the_labeler_outside_the_rules_stage():
+    state = _state("call the second label something softer", setup_stage="content")
+    state["classification"] = {"intent": "feedback", "atproto": "label", "topic": "label"}
+    state["feedback_response"] = "Renamed it. **React 👍🏾 to approve.**"
+
+    with patch("src.agent.brainstorming.nodes.llm"):
+        draft = draft_response(state)["draft_response"]
+
+    assert "cleo, build the labeler proposal" in draft
+
+
+def test_stripping_costs_at_most_the_sentence_the_emoji_is_in():
+    """Deliberately blunt: any sentence carrying the emoji goes, even one that wasn't an
+    invitation. The surrounding reply survives, which is the part worth protecting."""
+    text = "That works 👍🏾. Now, which venues should count?"
+
+    assert _strip_approval_invite(text) == "Now, which venues should count?"
+
+
+# =============================================================================
+# A finalize_rules call that stages nothing says so, instead of going quiet
+# =============================================================================
+
+_GOOD_RULE = {
+    "label_identifier": "spam",
+    "include_groups": [{"all_of": [{"type": "keyword", "value": "buy now"}]}],
+    "exclude_signals": [],
+    "notes": "catches promo spam",
+}
+# Only an unparseable account signal, so sanitize_rules drops the label whole.
+_INFEASIBLE_RULE = {
+    "label_identifier": "unverified_info",
+    "include_groups": [{"all_of": [{"type": "account", "value": "karma > 5"}]}],
+    "exclude_signals": [],
+    "notes": "n",
+}
+
+
+def _rules_update(*calls: dict) -> dict:
+    """provide_feedback's update for a turn holding these finalize_rules calls, in order."""
+    with patch(FEEDBACK_GRAPH_PATCH_TARGET) as mock_graph:
+        mock_graph.invoke.return_value = {
+            "messages": [_ai_message_with_tool_call("finalize_rules", args) for args in calls]
+        }
+        return provide_feedback(_state("derive rules", setup_stage="rules")).update
+
+
+def test_an_all_unenforceable_call_reports_why_nothing_was_staged():
+    update = _rules_update({"rules": [_INFEASIBLE_RULE]})
+
+    assert update["pending_classification_rules"] is None
+    error = update["rules_staging_error"]
+    assert "**Unverified Info**" in error          # named the way the card would name it
+    assert "nothing for the group to vote on" in error
+    # The validator's own wording stays out of it — "account traits" is the group's phrasing.
+    assert "karma" not in error and "include signal" not in error
+
+
+def test_a_call_that_arrives_with_no_rules_is_reported_as_a_glitch_not_a_dead_end():
+    """The truncated-tool-call case (see TOOL_MODEL_MAX_TOKENS): nothing the group can fix by
+    rewording, so it gets 'ask me again', not 'give me better signals'."""
+    update = _rules_update({"rules": []})
+
+    assert update["pending_classification_rules"] is None
+    assert "came back empty" in update["rules_staging_error"]
+    assert "build the rules proposal again" in update["rules_staging_error"]
+
+
+def test_a_successful_staging_carries_no_error():
+    update = _rules_update({"rules": [_GOOD_RULE]})
+
+    assert update["pending_classification_rules"].keys() == {"spam"}
+    assert update["rules_staging_error"] is None
+
+
+def test_the_corrected_second_call_is_what_gets_staged():
+    """The tool hands its rejections back and the agent calls again with fixes. Staging the first
+    call would put up a card missing whatever the second one added — and the reply the group reads
+    describes the second."""
+    fixed = {**_INFEASIBLE_RULE,
+             "include_groups": [{"all_of": [{"type": "keyword", "value": "unconfirmed"}]}]}
+    update = _rules_update({"rules": [_GOOD_RULE, _INFEASIBLE_RULE]},
+                           {"rules": [_GOOD_RULE, fixed]})
+
+    assert update["pending_classification_rules"].keys() == {"spam", "unverified_info"}
+    assert update["rules_staging_error"] is None
+
+
+def test_a_failed_last_call_supersedes_an_earlier_success():
+    """Last call wins in both directions: the agent has moved past what it staged first, and its
+    reply describes the revision, so a card built from the abandoned version would misrepresent it."""
+    update = _rules_update({"rules": [_GOOD_RULE]}, {"rules": [_INFEASIBLE_RULE]})
+
+    assert update["pending_classification_rules"] is None
+    assert "**Unverified Info**" in update["rules_staging_error"]
+
+
+def test_the_group_is_told_why_no_card_appeared():
+    state = _state("flag anything mean-spirited", setup_stage="rules")
+    state["classification"] = {"intent": "feedback", "atproto": "label", "topic": "label"}
+    state["feedback_response"] = "Here's what that label would need to look for."
+    state["rules_staging_error"] = "⚠️ I couldn't stage a rule for **Unverified Info**."
+    # A live card from an earlier turn: the failure is the more urgent thing to say, and the
+    # tally footer would read as though the card below were the one just asked for.
+    state["pending_rule_suggestions"] = {"msg-1": {"proposal": {"spam": {}}, "approved_by": []}}
+
+    with patch("src.agent.brainstorming.nodes.llm"):
+        draft = draft_response(state)["draft_response"]
+
+    assert draft.startswith("Here's what that label would need to look for.")
+    assert "⚠️ I couldn't stage a rule for **Unverified Info**." in draft
+    assert "Still waiting on the group" not in draft
+
+
+def test_no_failure_note_on_a_turn_that_staged_rules():
+    """Belt and braces: the error is cleared on a successful call, but a stale one from the
+    checkpoint must never caption a card that did appear."""
+    state = _state("derive rules", setup_stage="rules")
+    state["classification"] = {"intent": "feedback", "atproto": "label", "topic": "label"}
+    state["feedback_response"] = "Here they are."
+    state["rules_staging_error"] = "⚠️ stale error from an earlier turn"
+    state["pending_classification_rules"] = {"spam": {"label_identifier": "spam"}}
+
+    with patch("src.agent.brainstorming.nodes.llm"):
+        draft = draft_response(state)["draft_response"]
+
+    assert "stale error" not in draft
+    assert "React with 👍🏾 to approve these rules." in draft
+
+
+def test_the_error_is_cleared_at_the_top_of_every_responding_turn():
+    """Same guard as feedback_response: a checkpointed error must not resurface on a later reply."""
+    with patch(VALIDATE_PATCH_TARGET) as mock_validate:
+        mock_validate.return_value = _llm_result("question")
+        cmd = validate_and_classify(_state("what is a labeler?", setup_stage="rules"))
+
+    assert cmd.update["rules_staging_error"] is None
+
+
+# =============================================================================
+# The vote footer stays off turns that put a question to the group
+# =============================================================================
+
+from src.agent.brainstorming.nodes import _ends_by_asking_the_group
+
+# Verbatim tail of a pilot reply (group B): CLEO laying out two ways to build a rule and asking
+# which one the group wants. The ship-gate tally landed underneath it, so the message asked for
+# two unrelated things at once — an answer, and a 👍🏾 on a card from an earlier stage.
+_QUESTION_REPLY = (
+    "Should I keep the original signals as a separate way to trigger the label, or only flag "
+    "posts that combine mutual aid hashtags with union keywords?\n\n"
+    "Which approach do you want?"
+)
+
+
+def _reply_over_a_live_gate(reply: str) -> str:
+    state = _state("let's use mutual aid hashtags too", setup_stage="complete")
+    state["approvals_needed"] = 2
+    state["lifecycle_stage"] = "generate"
+    state["classification"] = {"intent": "feedback", "atproto": "label", "topic": "label"}
+    state["feedback_response"] = reply
+    state["pending_deploy_approval"] = {"message_id": "msg-gate", "approved_by": []}
+
+    with patch("src.agent.brainstorming.nodes.llm"):
+        return draft_response(state)["draft_response"]
+
+
+def test_no_vote_footer_under_a_question_to_the_group():
+    draft = _reply_over_a_live_gate(_QUESTION_REPLY)
+
+    assert draft == _QUESTION_REPLY
+    assert "Still waiting on the group" not in draft
+
+
+def test_the_same_live_gate_is_reported_on_a_turn_that_isnt_a_question():
+    """Suppressed, not dropped: the vote is still open and gets said on the next ordinary turn."""
+    draft = _reply_over_a_live_gate("I've added the mutual aid hashtags to that rule.")
+
+    assert "go-ahead to build and test your labeler above" in draft
+    assert "no approvals yet — it needs 2" in draft
+
+
+@pytest.mark.parametrize("tail,asking", [
+    ("Which approach do you want?", True),
+    ("**Which approach do you want?**", True),        # bolded, as CLEO usually writes it
+    ("Which approach do you want? Let me know.", False),
+    ("I've staged these rules.", False),
+    ("", False),
+])
+def test_what_counts_as_ending_on_a_question(tail, asking):
+    assert _ends_by_asking_the_group(f"Some preamble.\n\n{tail}") is asking

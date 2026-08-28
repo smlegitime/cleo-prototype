@@ -91,6 +91,15 @@ DEPLOY_APPROVAL_PROMPT = (
     "Want to tweak a rule first? Tell me what to change and we'll re-check before you approve."
 )
 
+# Appended to a ship-gate card that a re-check has replaced. The rules changed after that card
+# went up, so the report above it describes a design the group has moved past — reacting to it
+# would be approving a check they never saw the result of. Written on the old card because that is
+# where someone scrolling back will be looking.
+DEPLOY_GATE_SUPERSEDED_NOTE = (
+    "— ⤵️ *The rules changed after this, so I re-checked them. This card is closed — the fresh "
+    "report and go-ahead are further down.*"
+)
+
 # Sent when the ship gate is approved and the lifecycle advances generate -> deploy.
 BUNDLE_STAGE_INTRO = (
     "📦 *Assembling your labeler…* Packaging the approved labels and rules into a bundle for the "
